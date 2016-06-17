@@ -1,0 +1,14 @@
+{
+	"tiles": [
+		{
+			"name": "black",
+			"passability": false
+		}, {
+			"name": "tile",
+			"passability": true
+		}, {
+			"name": "grass",
+			"passability": true
+		}
+	]
+}
