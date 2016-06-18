@@ -26,8 +26,13 @@ var bindMouse = function() {
 		yAboveCenter = e.y < window.innerHeight / 2;
 	};
 
+	var lastOperated = Date.now();
+
 	window.setInterval(function() {
-		viewerLoc.x += xLeftOfCenter ? -0.02 : 0.02;
-		viewerLoc.y += yAboveCenter ? -0.02 : 0.02;
-	}, 1000 / 30);
+		var currTime = Date.now();
+		var scalingFactor = (currTime - lastOperated) / 33;
+		viewerLoc.x += (xLeftOfCenter ? -0.02 : 0.02) * scalingFactor;
+		viewerLoc.y += (yAboveCenter ? -0.02 : 0.02) * scalingFactor;
+		lastOperated = currTime;
+	}, 33);
 };

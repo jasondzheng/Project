@@ -9,6 +9,9 @@
 		}, {
 			"name": "grass",
 			"passability": true
+		}, {
+			"name": "grass2",
+			"passability": true
 		}
 	]
 }

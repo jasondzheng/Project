@@ -31,6 +31,9 @@ MapDrawer.NUM_TILES_TOP;
 // The top row tile width. Deferred calc due to dependency on ScreenProps.
 MapDrawer.TOP_ROW_TILE_WIDTH;
 
+// A canvas to draw onto for individual rows.
+MapDrawer.ROW_CANVAS;
+
 // Deferred initializer
 MapDrawer._deferredConstInit = function() {
 	MapDrawer.NUM_TILES_BOTTOM = ScreenProps.EXP_WIDTH / MapDrawer.TILE_DIM;
@@ -38,6 +41,8 @@ MapDrawer._deferredConstInit = function() {
 			MapDrawer.TOTAL_ROWS * MapDrawer.SHRINKAGE.WIDTH;
 	MapDrawer.TOP_ROW_TILE_WIDTH = ScreenProps.EXP_WIDTH / 
 			MapDrawer.NUM_TILES_TOP;
+	MapDrawer.ROW_CANVAS = document.createElement('canvas');
+	MapDrawer.ROW_CANVAS.height = MapDrawer.TILE_DIM;
 };
 
 
@@ -46,15 +51,13 @@ MapDrawer._deferredConstInit = function() {
 MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 	var viewerXWhole = Math.floor(viewerX), viewerXFrac = viewerX - viewerXWhole,
 			viewerYWhole = Math.floor(viewerY), viewerYFrac = viewerY - viewerYWhole;
-	viewerXFrac *= -1;
-	viewerYFrac *= -1;
 	// Calculate dependent constants if unset
 	if (MapDrawer.NUM_TILES_BOTTOM == undefined) {
 		MapDrawer._deferredConstInit();
 	}
-	var currYPos = MapDrawer._helperCalcScreenY(-1 + viewerYFrac);
+	var currYPos = MapDrawer._helperCalcScreenY(-1 - viewerYFrac);
 	for (var i = -1; i < MapDrawer.TOTAL_ROWS + 2; i++) {
-		var viewerI = i + viewerYFrac;
+		var viewerI = i - viewerYFrac;
 		var nextYPos = MapDrawer._helperCalcScreenY(viewerI + 1);
 		var numTilesToDraw = MapDrawer.NUM_TILES_TOP - 
 				viewerI * MapDrawer.SHRINKAGE.WIDTH;
@@ -63,15 +66,19 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 		var tileBotWidth = MapDrawer.TOP_ROW_TILE_WIDTH * MapDrawer.NUM_TILES_TOP / 
 				(MapDrawer.NUM_TILES_TOP - (viewerI + 1) * MapDrawer.SHRINKAGE.WIDTH);
 		var halfTilesToDraw = Math.ceil(numTilesToDraw / 2);
+		MapDrawer.ROW_CANVAS.width = (halfTilesToDraw + 1) * 2 * MapDrawer.TILE_DIM;
+		var rowCtx = MapDrawer.ROW_CANVAS.getContext('2d');
 		for (var j = -halfTilesToDraw - 1; j < halfTilesToDraw + 1; j++) {
-			var viewerJ = j + viewerXFrac;
-			ImgUtils.drawTrapezium(ctx, MapDrawer._helperGetImgForTileCoords(
-							map, j + viewerXWhole, 
-							i - MapDrawer.TOTAL_ROWS / 2 + viewerYWhole), 
-					ScreenProps.EXP_WIDTH / 2 + tileTopWidth * viewerJ, 
-					ScreenProps.EXP_WIDTH / 2 + tileBotWidth * viewerJ, 
-					currYPos, tileTopWidth, tileBotWidth, nextYPos - currYPos);
+			var viewerJ = j - viewerXFrac;
+			rowCtx.drawImage(MapDrawer._helperGetImgForTileCoords(map, 
+					j + viewerXWhole, i - MapDrawer.TOTAL_ROWS / 2 + viewerYWhole), 
+					MapDrawer.ROW_CANVAS.width / 2 + viewerJ * MapDrawer.TILE_DIM, 0);
 		}
+		ImgUtils.drawTrapezium(ctx, MapDrawer.ROW_CANVAS, 
+				ScreenProps.EXP_WIDTH / 2 + tileTopWidth * (-halfTilesToDraw - 1), 
+				ScreenProps.EXP_WIDTH / 2 + tileBotWidth * (-halfTilesToDraw - 1), 
+				currYPos, tileTopWidth * (halfTilesToDraw + 1) * 2, 
+				tileBotWidth * (halfTilesToDraw + 1) * 2, nextYPos - currYPos);
 		currYPos = nextYPos;
 	}
 };
