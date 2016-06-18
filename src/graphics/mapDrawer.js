@@ -81,6 +81,53 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 				tileBotWidth * (halfTilesToDraw + 1) * 2, nextYPos - currYPos);
 		currYPos = nextYPos;
 	}
+	MapDrawer._helperDrawEntities(ctx, map, viewerX, viewerY);	
+};
+
+
+// Helper function for drawing all entities on the map.
+MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
+	// Optimize this later. We can't afford to draw every single entity each
+	// frame.
+	for (var i = 0; i < map.staticMapEntities.length; i++) {
+		var yBlockWidth =  MapDrawer.TOP_ROW_TILE_WIDTH * 
+				MapDrawer.NUM_TILES_TOP / 
+						(MapDrawer.NUM_TILES_TOP - (map.staticMapEntities[i].y - 
+								(viewerY - MapDrawer.TOTAL_ROWS / 2)) * 
+						MapDrawer.SHRINKAGE.WIDTH);
+		var spriteRatio = yBlockWidth / MapDrawer.TILE_DIM;
+		var anchorLoc = MapDrawer._helperLocatePixel(map.staticMapEntities[i].x,
+				map.staticMapEntities[i].y, viewerX, viewerY, yBlockWidth);
+		// check if the boundingBox is in bounds
+		var boundingRect = {
+			x: anchorLoc.x - map.staticMapEntities[i].anchor.x * spriteRatio,
+			y: anchorLoc.y - map.staticMapEntities[i].anchor.y * spriteRatio,
+			width: map.staticMapEntities[i].sprite.width * spriteRatio,
+			height: map.staticMapEntities[i].sprite.height * spriteRatio
+		};
+		if (MapDrawer._helperRectOnScreen(boundingRect)) {
+			ctx.drawImage(map.staticMapEntities[i].sprite, boundingRect.x, 
+					boundingRect.y, boundingRect.width, boundingRect.height);
+		}
+	}
+};
+
+
+// Helper function to see if rectangles overlap
+MapDrawer._helperRectOnScreen = function(r1) {
+	return !(0 > r1.x + r1.width || ScreenProps.EXP_WIDTH < r1.x || 
+			0 > r1.y + r1.height || ScreenProps.EXP_HEIGHT < r1.y);
+};
+
+
+// Helper function to calculate the on-screen position of a given grid
+// coordinate and an viewer x and y coordinate and yBlockWidth.
+MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
+	var result = {};
+	result.x = ScreenProps.EXP_WIDTH / 2 + (x - viewerX) * yBlockWidth;
+	result.y = MapDrawer._helperCalcScreenY(
+			y - (viewerY - MapDrawer.TOTAL_ROWS / 2));
+	return result;
 };
 
 

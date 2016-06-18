@@ -10,7 +10,43 @@
 			"name": "grass",
 			"passability": true
 		}, {
-			"name": "grass2",
+			"name": "grassSandN",
+			"passability": true
+		}, {
+			"name": "grassSandE",
+			"passability": true
+		}, {
+			"name": "grassSandS",
+			"passability": true
+		}, {
+			"name": "grassSandW",
+			"passability": true
+		}, {
+			"name": "grassSandNW",
+			"passability": true
+		}, {
+			"name": "grassSandNE",
+			"passability": true
+		}, {
+			"name": "grassSandSE",
+			"passability": true
+		}, {
+			"name": "grassSandSW",
+			"passability": true
+		}, {
+			"name": "sand",
+			"passability": true
+		}, {
+			"name": "sandGrassNW",
+			"passability": true
+		}, {
+			"name": "sandGrassNE",
+			"passability": true
+		}, {
+			"name": "sandGrassSE",
+			"passability": true
+		}, {
+			"name": "sandGrassSW",
 			"passability": true
 		}
 	]

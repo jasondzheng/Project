@@ -4,7 +4,7 @@
  * information like events, connectors, npcs, mob data, etc in the future.
  */
 
-var Map = function(name, data, width, tileset, dummyTile) {
+var Map = function(name, data, width, tileset, dummyTile, staticMapEntities) {
 	// The name of the map
 	this.name = name;
 
@@ -20,4 +20,7 @@ var Map = function(name, data, width, tileset, dummyTile) {
 
 	// The dummy tile for this map
 	this.dummyTile = dummyTile;
+
+	// The static map entities of the map
+	this.staticMapEntities = staticMapEntities;
 };

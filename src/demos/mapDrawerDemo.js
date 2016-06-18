@@ -1,6 +1,6 @@
 var viewerLoc = {
-	x: 0,
-	y: 0
+	x: 12,
+	y: 12
 };
 
 window.onload = function() {

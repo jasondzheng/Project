@@ -3,6 +3,9 @@
 
 var ImgUtils = {};
 
+// Stores loaded images until they are unloaded.
+ImgUtils.loadedImages = {};
+
 
 // Draws a trapezium out of a rectangular sprite. Draws to a canvas using
 // the given top edge, bottom edge, y, and height dimensions.
@@ -20,8 +23,13 @@ ImgUtils.drawTrapezium = function(ctx, img, x1, x2, y, startWidth, endWidth,
 // Loads an image into an offscreen Image element. Used for loading images
 // to be drawn onto canvases; callback called on completion.
 ImgUtils.loadImage = function(url, opt_callback) {
+	if (ImgUtils.loadedImages[url] && opt_callback) {
+		opt_callback(ImgUtils.loadedImages[url]);
+		return;
+	}
 	var img = new Image();
 	img.onload = function() {
+		ImgUtils.loadedImages[url] = img;
 		if (opt_callback) {
 			opt_callback(img);
 		}
@@ -50,5 +58,21 @@ ImgUtils.loadImages = function(urlMappings, opt_callback) {
 				}
 			};
 		})(imgName));
+	}
+};
+
+
+// Unloads an image.
+ImgUtils.unloadImage = function(url) {
+	if (ImgUtils.loadedImages[url]) {
+		ImgUtils.loadedImages[url] = null;
+	}
+};
+
+
+// Unloads multiple images.
+ImgUtils.unloadImages = function(urls) {
+	for (var i = 0; i < urls.length; i++) {
+		ImgUtils.unloadImage(urls[i]);
 	}
 };
