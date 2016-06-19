@@ -1,10 +1,10 @@
 var viewerLoc = {
-	x: 12,
-	y: 12
+	x: 0,
+	y: 0
 };
 
 window.onload = function() {
-	MapLoader.load('testMap', function(map) {
+	MapLoader.load('palletTown', function(map) {
 		var canvas = document.querySelector('#screen');
 		canvas.width = 1280; canvas.height = 720;
 		var drawLoop = function() {

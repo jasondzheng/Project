@@ -1,0 +1,47 @@
+{
+	"tiles": [
+		{
+			"name": "grassDark",
+			"passability": true
+		}, {
+			"name": "grass",
+			"passability": true
+		}, {
+			"name": "grassN",
+			"passability": true
+		}, {
+			"name": "grassS",
+			"passability": true
+		}, {
+			"name": "grassE",
+			"passability": true
+		}, {
+			"name": "grassW",
+			"passability": true
+		}, {
+			"name": "grassNE",
+			"passability": true
+		}, {
+			"name": "grassNW",
+			"passability": true
+		}, {
+			"name": "grassSE",
+			"passability": true
+		}, {
+			"name": "grassSW",
+			"passability": true
+		}, {
+			"name": "grassDarkNE",
+			"passability": true
+		}, {
+			"name": "grassDarkNW",
+			"passability": true
+		}, {
+			"name": "grassDarkSE",
+			"passability": true
+		}, {
+			"name": "grassDarkSW",
+			"passability": true
+		} 
+	]
+}

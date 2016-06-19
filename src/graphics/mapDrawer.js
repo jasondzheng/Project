@@ -87,26 +87,28 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 
 // Helper function for drawing all entities on the map.
 MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
-	// Optimize this later. We can't afford to draw every single entity each
-	// frame.
-	for (var i = 0; i < map.staticMapEntities.length; i++) {
+	var entitiesToDraw = map.staticMapEntities.slice(0);
+	entitiesToDraw.sort(function(a, b) {
+		return a.y - b.y;
+	});
+	for (var i = 0; i < entitiesToDraw.length; i++) {
 		var yBlockWidth =  MapDrawer.TOP_ROW_TILE_WIDTH * 
 				MapDrawer.NUM_TILES_TOP / 
-						(MapDrawer.NUM_TILES_TOP - (map.staticMapEntities[i].y - 
+						(MapDrawer.NUM_TILES_TOP - (entitiesToDraw[i].y - 
 								(viewerY - MapDrawer.TOTAL_ROWS / 2)) * 
 						MapDrawer.SHRINKAGE.WIDTH);
 		var spriteRatio = yBlockWidth / MapDrawer.TILE_DIM;
-		var anchorLoc = MapDrawer._helperLocatePixel(map.staticMapEntities[i].x,
-				map.staticMapEntities[i].y, viewerX, viewerY, yBlockWidth);
+		var anchorLoc = MapDrawer._helperLocatePixel(entitiesToDraw[i].x,
+				entitiesToDraw[i].y, viewerX, viewerY, yBlockWidth);
 		// check if the boundingBox is in bounds
 		var boundingRect = {
-			x: anchorLoc.x - map.staticMapEntities[i].anchor.x * spriteRatio,
-			y: anchorLoc.y - map.staticMapEntities[i].anchor.y * spriteRatio,
-			width: map.staticMapEntities[i].sprite.width * spriteRatio,
-			height: map.staticMapEntities[i].sprite.height * spriteRatio
+			x: anchorLoc.x - entitiesToDraw[i].anchor.x * spriteRatio,
+			y: anchorLoc.y - entitiesToDraw[i].anchor.y * spriteRatio,
+			width: entitiesToDraw[i].sprite.width * spriteRatio,
+			height: entitiesToDraw[i].sprite.height * spriteRatio
 		};
 		if (MapDrawer._helperRectOnScreen(boundingRect)) {
-			ctx.drawImage(map.staticMapEntities[i].sprite, boundingRect.x, 
+			ctx.drawImage(entitiesToDraw[i].sprite, boundingRect.x, 
 					boundingRect.y, boundingRect.width, boundingRect.height);
 		}
 	}
