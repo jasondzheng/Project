@@ -22,7 +22,7 @@ MapLoader.load = function(mapName, opt_callback) {
 			MapLoader._helperLoadStaticMapEntities(mapData, function() {
 				if (opt_callback) {
 					opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
-							tileset, mapData.dummyTile, mapData.staticMapEntities));
+							tileset, mapData.dummyTile, mapData.staticMapInstances));
 				};
 			});			
 		});
@@ -40,28 +40,23 @@ MapLoader.unload = function(map) {
 // Helper to load static map entities
 MapLoader._helperLoadStaticMapEntities = function(mapData, callback) {
 	var entityImageSpecs = {};
-	for (var i = 0; i < mapData.staticMapEntities.length; i++) {
-		entityImageSpecs[mapData.staticMapEntities[i].sprite] = 
-				MapLoader.STATIC_MAP_ENTITY_DIR + mapData.staticMapEntities[i].sprite + 
-				'.png';
+	for (var entityKey in mapData.staticMapEntities) {
+		if (mapData.staticMapEntities.hasOwnProperty(entityKey)) {
+			entityImageSpecs[mapData.staticMapEntities[entityKey].sprite] = 
+					MapLoader.STATIC_MAP_ENTITY_DIR + 
+					mapData.staticMapEntities[entityKey].sprite + '.png';
+		}
 	}
 	ImgUtils.loadImages(entityImageSpecs, function(images) {
-		for (var i = 0; i < mapData.staticMapEntities.length; i++) {
-			mapData.staticMapEntities[i].sprite = 
-					images[mapData.staticMapEntities[i].sprite];
-					// Calculate anchor point
-			mapData.staticMapEntities[i].anchor = {
-				x: mapData.staticMapEntities[i].sprite.width / 2,
-				y: mapData.staticMapEntities[i].sprite.height - 
-						(mapData.staticMapEntities[i].collisionDepth == undefined ? 
-								mapData.staticMapEntities[i].sprite.width / 2 : 0)
-			};
-			if (mapData.staticMapEntities[i].collisionDepth == undefined) {
-				mapData.staticMapEntities[i].collisionRadius = 
-						mapData.staticMapEntities[i].sprite.width / 2 / MapDrawer.TILE_DIM;
-			} else {
-				mapData.staticMapEntities[i].collisionDepth /= MapDrawer.TILE_DIM;
+		for (var entityKey in mapData.staticMapEntities) {
+			if (mapData.staticMapEntities.hasOwnProperty(entityKey)) {
+				mapData.staticMapEntities[entityKey].sprite = 
+						images[mapData.staticMapEntities[entityKey].sprite];
 			}
+		}
+		for (var i = 0; i < mapData.staticMapInstances.length; i++) {
+			mapData.staticMapInstances[i].entity = 
+					mapData.staticMapEntities[mapData.staticMapInstances[i].entity];
 		}
 		if (callback) {
 			callback();

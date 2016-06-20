@@ -26,13 +26,23 @@ var bindMouse = function() {
 		yAboveCenter = e.y < window.innerHeight / 2;
 	};
 
+	document.body.onkeyup = function(e) {
+		if (e.keyCode == 32) {
+			paused = !paused;
+		}
+	}
+
+	var paused = false;
+
 	var lastOperated = Date.now();
 
 	window.setInterval(function() {
 		var currTime = Date.now();
-		var scalingFactor = (currTime - lastOperated) / 33;
-		viewerLoc.x += (xLeftOfCenter ? -0.02 : 0.02) * scalingFactor;
-		viewerLoc.y += (yAboveCenter ? -0.02 : 0.02) * scalingFactor;
+		if (!paused) {
+			var scalingFactor = (currTime - lastOperated) / 33;
+			viewerLoc.x += (xLeftOfCenter ? -0.02 : 0.02) * scalingFactor;
+			viewerLoc.y += (yAboveCenter ? -0.02 : 0.02) * scalingFactor;
+		}
 		lastOperated = currTime;
 	}, 33);
 };

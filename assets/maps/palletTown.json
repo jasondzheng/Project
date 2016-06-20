@@ -35,83 +35,61 @@
 		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  
 		  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
 	"dummyTile": 0,
-	"staticMapEntities": [
-		{
+	"staticMapEntities": {
+		"trainer": {
 			"sprite": "trainer",
+			"center": {
+				"x": 51,
+				"y": 124
+			},
+			"collisionWidth": 1,
+			"collisionHeight": 1,
+			"isRounded": true
+		},
+		"house": {
+			"sprite": "house",
+			"center": {
+				"x": 283,
+				"y": 514
+			},
+			"collisionWidth": 6,
+			"collisionHeight": 3,
+			"isRounded": false
+		},
+		"mailBox": {
+			"sprite": "mailBox",
+			"center": {
+				"x": 42,
+				"y": 124
+			},
+			"collisionWidth": 1,
+			"collisionHeight": 1,
+			"isRounded": false,
+			"x": 5.5,
+			"y": 11
+		}
+	},
+	"staticMapInstances": [
+		{
+			"entity": "trainer",
 			"x": 0,
 			"y": 0
-		},
-		{
-			"sprite": "mailBox",
-			"x": 5.5,
-			"y": 10.5
-		},
-		{
-			"sprite": "mailBox",
-			"x": 16.5,
-			"y": 10.5
-		},
-		{
-			"sprite": "house",
+		}, {
+			"entity": "house",
 			"x": 8.5,
-			"y": 8
-		},
-		{
-			"sprite": "house",
+			"y": 10
+		}, {
+			"entity": "house",
 			"x": 19.5,
-			"y": 8
-		},
-		{
-			"sprite": "fence",
-			"x": 6.5,
-			"y": 16.5
-		},
-		{
-			"sprite": "fence",
-			"x": 7.5,
-			"y": 16.5
-		},
-		{
-			"sprite": "fence",
-			"x": 8.5,
-			"y": 16.5
-		},
-		{
-			"sprite": "fence",
-			"x": 9.5,
-			"y": 16.5
-		},
-		{
-			"sprite": "tree",
-			"x": 11,
-			"y": 2.5
-		},
-		{
-			"sprite": "tree",
-			"x": 9,
-			"y": 2.5
-		},
-		{
-			"sprite": "tree",
-			"x": 7,
-			"y": 2.5
-		},
-		{
-			"sprite": "tree",
-			"x": 5,
-			"y": 2.5
-		},
-		{
-			"sprite": "tree",
-			"x": 3,
-			"y": 2.5
-		},
-		{
-			"sprite": "tree",
-			"x": 1,
-			"y": 2.5
+			"y": 10
+		}, {
+			"entity": "mailBox",
+			"x": 5.5,
+			"y": 10.99
+		}, {
+			"entity": "mailBox",
+			"x": 16.5,
+			"y": 10.99
 		}
-	
-
 	]
 }

@@ -87,28 +87,44 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 
 // Helper function for drawing all entities on the map.
 MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
-	var entitiesToDraw = map.staticMapEntities.slice(0);
+	var entitiesToDraw = map.staticMapInstances.slice(0);
 	entitiesToDraw.sort(function(a, b) {
-		return a.y - b.y;
+		return a.y + a.entity.collisionHeight / 2 - 
+				b.y - b.entity.collisionHeight / 2;
 	});
 	for (var i = 0; i < entitiesToDraw.length; i++) {
-		var yBlockWidth =  MapDrawer.TOP_ROW_TILE_WIDTH * 
-				MapDrawer.NUM_TILES_TOP / 
-						(MapDrawer.NUM_TILES_TOP - (entitiesToDraw[i].y - 
-								(viewerY - MapDrawer.TOTAL_ROWS / 2)) * 
-						MapDrawer.SHRINKAGE.WIDTH);
-		var spriteRatio = yBlockWidth / MapDrawer.TILE_DIM;
-		var anchorLoc = MapDrawer._helperLocatePixel(entitiesToDraw[i].x,
-				entitiesToDraw[i].y, viewerX, viewerY, yBlockWidth);
+		var footYGridPos = 
+				(MapDrawer.TOTAL_ROWS + entitiesToDraw[i].entity.collisionHeight) / 2;
+		var centerYRealGridPos = entitiesToDraw[i].y - 
+				viewerY + MapDrawer.TOTAL_ROWS / 2;
+		var footYRealGridPos = entitiesToDraw[i].y + 
+				entitiesToDraw[i].entity.collisionHeight / 2 - viewerY + 
+				MapDrawer.TOTAL_ROWS / 2;
+		var realYDiff = MapDrawer._helperCalcScreenY(footYGridPos) - 
+				MapDrawer._helperCalcScreenY(MapDrawer.TOTAL_ROWS / 2);
+		var gridYDiff = MapDrawer._helperCalcScreenY(footYRealGridPos) - 
+				MapDrawer._helperCalcScreenY(centerYRealGridPos);
+		var yScale = 1;//gridYDiff / realYDiff;
+		var widthAtMidFoot = MapDrawer.TOP_ROW_TILE_WIDTH * 
+				MapDrawer.NUM_TILES_TOP / (MapDrawer.NUM_TILES_TOP - 
+				(footYGridPos) * MapDrawer.SHRINKAGE.WIDTH);
+		var widthAtRealFoot = MapDrawer._helperGetYBlockWidth(
+				entitiesToDraw[i].y + entitiesToDraw[i].entity.collisionHeight / 2, 
+				viewerY);
+		var xScale = widthAtRealFoot / widthAtMidFoot;
+		var centerLoc = MapDrawer._helperLocatePixel(entitiesToDraw[i].x, 
+				entitiesToDraw[i].y + entitiesToDraw[i].entity.collisionHeight / 2, 
+				viewerX, viewerY, MapDrawer._helperGetYBlockWidth(entitiesToDraw[i].y + 
+						entitiesToDraw[i].entity.collisionHeight / 2, viewerY));
 		// check if the boundingBox is in bounds
 		var boundingRect = {
-			x: anchorLoc.x - entitiesToDraw[i].anchor.x * spriteRatio,
-			y: anchorLoc.y - entitiesToDraw[i].anchor.y * spriteRatio,
-			width: entitiesToDraw[i].sprite.width * spriteRatio,
-			height: entitiesToDraw[i].sprite.height * spriteRatio
+			x: centerLoc.x - entitiesToDraw[i].entity.center.x * xScale,
+			y: centerLoc.y - entitiesToDraw[i].entity.sprite.height * yScale,
+			width: entitiesToDraw[i].entity.sprite.width * xScale,
+			height: entitiesToDraw[i].entity.sprite.height * yScale
 		};
 		if (MapDrawer._helperRectOnScreen(boundingRect)) {
-			ctx.drawImage(entitiesToDraw[i].sprite, boundingRect.x, 
+			ctx.drawImage(entitiesToDraw[i].entity.sprite, boundingRect.x, 
 					boundingRect.y, boundingRect.width, boundingRect.height);
 		}
 	}
@@ -130,6 +146,13 @@ MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
 	result.y = MapDrawer._helperCalcScreenY(
 			y - (viewerY - MapDrawer.TOTAL_ROWS / 2));
 	return result;
+};
+
+// Helper function to get block width.
+MapDrawer._helperGetYBlockWidth = function(y, viewerY) {
+	return MapDrawer.TOP_ROW_TILE_WIDTH * MapDrawer.NUM_TILES_TOP / 
+			(MapDrawer.NUM_TILES_TOP - (y - (viewerY - MapDrawer.TOTAL_ROWS / 2)) * 
+			MapDrawer.SHRINKAGE.WIDTH)
 };
 
 
