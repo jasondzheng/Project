@@ -6,13 +6,13 @@
 var MapLoader = {};
 
 // Expected map directory
-MapLoader.DIR = '/assets/maps/';
+MapLoader.DIR = '../assets/maps/';
 
 // Expected tileset directory
-MapLoader.TILESET_DIR = '/assets/img/tilesets/';
+MapLoader.TILESET_DIR = '../assets/img/tilesets/';
 
 // Expected static entity directory
-MapLoader.STATIC_MAP_ENTITY_DIR = '/assets/img/staticEntities/';
+MapLoader.STATIC_MAP_ENTITY_DIR = '../assets/img/staticEntities/';
 
 
 // Static function to load a map.

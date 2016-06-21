@@ -5,8 +5,10 @@ import os
 import re
 
 JS_PATH = 'src'
-URL_BASE_PATH = '/'
+
 CLIENT_PATH = 'src/testClient.html'
+# Subtractive path to replace components in path
+URL_BASE_PATH = '/' + CLIENT_PATH[:CLIENT_PATH.find('/')]
 
 IGNORE_PATHS = [
 	'src/demos/'
@@ -75,7 +77,8 @@ def main():
 		tabCount = delimiterIndex - newlineIndex
 	scriptTags = '\t' * tabCount + HTML_DELIMITER + '\n'
 	for entry in placed:
-		scriptTags += ('\t' * tabCount + '<script src="' + URL_BASE_PATH + entry + 
+		scriptTags += ('\t' * tabCount + '<script src="' + 
+				entry[len(URL_BASE_PATH):] + 
 				'"></script>\n')
 	scriptTags += '\t' * tabCount + HTML_DELIMITER + '\n'
 	if clientSource.find(HTML_DELIMITER) != -1:
