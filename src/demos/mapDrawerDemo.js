@@ -4,9 +4,9 @@ var viewerLoc = {
 };
 
 window.onload = function() {
+	ScreenResizeManager.init();
 	MapLoader.load('palletTown', function(map) {
-		var canvas = document.querySelector('#screen');
-		canvas.width = 1280; canvas.height = 720;
+		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
 		var drawLoop = function() {
 			MapDrawer.drawMap(canvas.getContext('2d'), map, viewerLoc.x, viewerLoc.y);
 			window.requestAnimationFrame(drawLoop);
