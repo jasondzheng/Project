@@ -89,16 +89,15 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
 	var entitiesToDraw = map.staticMapInstances.slice(0);
 	entitiesToDraw.sort(function(a, b) {
-		return a.y + a.entity.collisionHeight / 2 - 
-				b.y - b.entity.collisionHeight / 2;
+		return a.y + a.getCollisionHeight() / 2 - b.y - b.getCollisionHeight() / 2;
 	});
 	for (var i = 0; i < entitiesToDraw.length; i++) {
 		var footYGridPos = 
-				(MapDrawer.TOTAL_ROWS + entitiesToDraw[i].entity.collisionHeight) / 2;
+				(MapDrawer.TOTAL_ROWS + entitiesToDraw[i].getCollisionHeight()) / 2;
 		var centerYRealGridPos = entitiesToDraw[i].y - 
 				viewerY + MapDrawer.TOTAL_ROWS / 2;
 		var footYRealGridPos = entitiesToDraw[i].y + 
-				entitiesToDraw[i].entity.collisionHeight / 2 - viewerY + 
+				entitiesToDraw[i].getCollisionHeight() / 2 - viewerY + 
 				MapDrawer.TOTAL_ROWS / 2;
 		var realYDiff = MapDrawer._helperCalcScreenY(footYGridPos) - 
 				MapDrawer._helperCalcScreenY(MapDrawer.TOTAL_ROWS / 2);
@@ -109,22 +108,22 @@ MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
 				MapDrawer.NUM_TILES_TOP / (MapDrawer.NUM_TILES_TOP - 
 				(footYGridPos) * MapDrawer.SHRINKAGE.WIDTH);
 		var widthAtRealFoot = MapDrawer._helperGetYBlockWidth(
-				entitiesToDraw[i].y + entitiesToDraw[i].entity.collisionHeight / 2, 
+				entitiesToDraw[i].y + entitiesToDraw[i].getCollisionHeight() / 2, 
 				viewerY);
 		var xScale = widthAtRealFoot / widthAtMidFoot;
 		var centerLoc = MapDrawer._helperLocatePixel(entitiesToDraw[i].x, 
-				entitiesToDraw[i].y + entitiesToDraw[i].entity.collisionHeight / 2, 
+				entitiesToDraw[i].y + entitiesToDraw[i].getCollisionHeight() / 2, 
 				viewerX, viewerY, MapDrawer._helperGetYBlockWidth(entitiesToDraw[i].y + 
-						entitiesToDraw[i].entity.collisionHeight / 2, viewerY));
+						entitiesToDraw[i].getCollisionHeight() / 2, viewerY));
 		// check if the boundingBox is in bounds
 		var boundingRect = {
-			x: centerLoc.x - entitiesToDraw[i].entity.center.x * xScale,
-			y: centerLoc.y - entitiesToDraw[i].entity.sprite.height * yScale,
-			width: entitiesToDraw[i].entity.sprite.width * xScale,
-			height: entitiesToDraw[i].entity.sprite.height * yScale
+			x: centerLoc.x - entitiesToDraw[i].getCenter().x * xScale,
+			y: centerLoc.y - entitiesToDraw[i].getSprite().height * yScale,
+			width: entitiesToDraw[i].getSprite().width * xScale,
+			height: entitiesToDraw[i].getSprite().height * yScale
 		};
 		if (MapDrawer._helperRectOnScreen(boundingRect)) {
-			ctx.drawImage(entitiesToDraw[i].entity.sprite, boundingRect.x, 
+			ctx.drawImage(entitiesToDraw[i].getSprite(), boundingRect.x, 
 					boundingRect.y, boundingRect.width, boundingRect.height);
 		}
 	}

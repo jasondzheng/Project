@@ -22,7 +22,8 @@ MapLoader.load = function(mapName, opt_callback) {
 			MapLoader._helperLoadStaticMapEntities(mapName, mapData, function() {
 				if (opt_callback) {
 					opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
-							tileset, mapData.dummyTile, mapData.staticMapInstances));
+							tileset, mapData.dummyTile, mapData.staticMapEntities, 
+							mapData.staticMapInstances));
 				};
 			});			
 		});
@@ -37,7 +38,7 @@ MapLoader.unload = function(map) {
 };
 
 
-// Helper to load static map entities
+// Helper to load static map entities and convert static map instances
 MapLoader._helperLoadStaticMapEntities = function(mapName, mapData, callback) {
 	var entityImageSpecs = {};
 	for (var entityKey in mapData.staticMapEntities) {
@@ -50,13 +51,21 @@ MapLoader._helperLoadStaticMapEntities = function(mapName, mapData, callback) {
 	ImgUtils.loadImages(entityImageSpecs, function(images) {
 		for (var entityKey in mapData.staticMapEntities) {
 			if (mapData.staticMapEntities.hasOwnProperty(entityKey)) {
-				mapData.staticMapEntities[entityKey].sprite = 
-						images[mapData.staticMapEntities[entityKey].sprite];
+				// Upon loading the image, we can finally construct a StaticMapEntity
+				// for the JSON object
+				var entityJSON = mapData.staticMapEntities[entityKey];
+				mapData.staticMapEntities[entityKey] = new StaticMapEntity(
+						entityJSON.name, 
+						images[mapData.staticMapEntities[entityKey].sprite], 
+						entityJSON.center.x, entityJSON.center.y, entityJSON.collisionWidth, 
+						entityJSON.collisionHeight, entityJSON.isRounded);
 			}
 		}
 		for (var i = 0; i < mapData.staticMapInstances.length; i++) {
-			mapData.staticMapInstances[i].entity = 
-					mapData.staticMapEntities[mapData.staticMapInstances[i].entity];
+			// Convert to StaticMapInstance
+			mapData.staticMapInstances[i] = new StaticMapInstance(
+					mapData.staticMapEntities[mapData.staticMapInstances[i].entity], 
+					mapData.staticMapInstances[i].x, mapData.staticMapInstances[i].y);
 		}
 		if (callback) {
 			callback();
@@ -66,11 +75,8 @@ MapLoader._helperLoadStaticMapEntities = function(mapName, mapData, callback) {
 
 
 // Helper to unload static map entities
-MapLoader._helperUnloadStaticMapEntities = function(mapData) {
-	var urls = [];
-	for (var i = 0; i < mapData.staticMapEntities.length; i++) {
-		urls.push(mapData.staticMapEntities[i].sprite.src);
-		mapData.staticMapEntities[i].sprite = null;
+MapLoader._helperUnloadStaticMapEntities = function(map) {
+	for (var i = 0; i < map.staticMapEntities.length; i++) {
+		map.staticMapEntities[i].unload();
 	}
-	ImgUtils.unloadImages(urls);
 };

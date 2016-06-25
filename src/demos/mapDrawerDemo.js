@@ -9,6 +9,11 @@ window.onload = function() {
 		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
 		var drawLoop = function() {
 			MapDrawer.drawMap(canvas.getContext('2d'), map, viewerLoc.x, viewerLoc.y);
+			for (var i = 0; i < map.staticMapInstances.length; i++) {
+				if (map.staticMapInstances[i] instanceof DynamicMapInstance) {
+					map.staticMapInstances[i].advanceFrame();
+				}
+			}
 			window.requestAnimationFrame(drawLoop);
 		};
 		window.requestAnimationFrame(drawLoop);
