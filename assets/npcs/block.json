@@ -1,0 +1,501 @@
+{
+	"name": "Block",
+	"movement": "randomFar",
+	"stateMachine": {
+		"init": "
+			this._counter = 0;
+		",
+		"defaultState": "idle",
+		"states": {
+			"idle": {
+				"onEnter": "
+					console.log('Entered idle');
+				",
+				"onExit": "
+					console.log('Exited idle');
+				",
+				"tick": "
+					this._counter++;
+				",
+				"transitions": [
+					{
+						"state": "panic",
+						"condition": "
+							this._counter > 100
+						"
+					}
+				]
+			},
+			"panic": {
+				"onEnter": "
+					console.log('Entered panic');
+				",
+				"onExit": "
+					console.log('Exited panic');
+				",
+				"tick": "
+					this._counter--;
+				",
+				"transitions": [
+					{
+						"state": "idle",
+						"condition": "
+							this._counter == 0
+						"
+					}
+				]
+			}
+		} 
+	},
+	"entity": {
+		"frames": {
+			"up1": {
+				"sprite": "red1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"up2": {
+				"sprite": "red2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"up3": {
+				"sprite": "red3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"up4": {
+				"sprite": "red4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"down1": {
+				"sprite": "green1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"down2": {
+				"sprite": "green2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"down3": {
+				"sprite": "green3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"down4": {
+				"sprite": "green4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"left1": {
+				"sprite": "blue1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"left2": {
+				"sprite": "blue2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"left3": {
+				"sprite": "blue3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"left4": {
+				"sprite": "blue4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"right1": {
+				"sprite": "yellow1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"right2": {
+				"sprite": "yellow2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"right3": {
+				"sprite": "yellow3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"right4": {
+				"sprite": "yellow4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upLeft1": {
+				"sprite": "brown1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upLeft2": {
+				"sprite": "brown2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upLeft3": {
+				"sprite": "brown3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upLeft4": {
+				"sprite": "brown4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upRight1": {
+				"sprite": "orange1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upRight2": {
+				"sprite": "orange2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upRight3": {
+				"sprite": "orange3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"upRight4": {
+				"sprite": "orange4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downRight1": {
+				"sprite": "pink1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downRight2": {
+				"sprite": "pink2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downRight3": {
+				"sprite": "pink3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downRight4": {
+				"sprite": "pink4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downLeft1": {
+				"sprite": "purple1",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downLeft2": {
+				"sprite": "purple2",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downLeft3": {
+				"sprite": "purple3",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			},
+			"downLeft4": {
+				"sprite": "purple4",
+				"center": {
+					"x": 0,
+					"y": 0
+				}
+			}
+		},
+		"animations": {
+			"idleUp": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "up1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleDown": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "down1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "left1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "right1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleUpLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "upLeft1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleUpRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "upRight1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleDownRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "downRight1",
+						"duration": 999999
+					}
+				]
+			},
+			"idleDownLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "downLeft1",
+						"duration": 999999
+					}
+				]
+			},
+			"walkUp": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "up1",
+						"duration": 8
+					}, {
+						"frame": "up2",
+						"duration": 8
+					}, {
+						"frame": "up3",
+						"duration": 8
+					}, {
+						"frame": "up4",
+						"duration": 8
+					}
+				]
+			},
+			"walkDown": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "down1",
+						"duration": 8
+					}, {
+						"frame": "down2",
+						"duration": 8
+					}, {
+						"frame": "down3",
+						"duration": 8
+					}, {
+						"frame": "down4",
+						"duration": 8
+					}
+				]
+			},
+			"walkLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "left1",
+						"duration": 8
+					}, {
+						"frame": "left2",
+						"duration": 8
+					}, {
+						"frame": "left3",
+						"duration": 8
+					}, {
+						"frame": "left4",
+						"duration": 8
+					}
+				]
+			},
+			"walkRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "right1",
+						"duration": 8
+					}, {
+						"frame": "right2",
+						"duration": 8
+					}, {
+						"frame": "right3",
+						"duration": 8
+					}, {
+						"frame": "right4",
+						"duration": 8
+					}
+				]
+			},
+			"walkUpLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "upLeft1",
+						"duration": 8
+					}, {
+						"frame": "upLeft2",
+						"duration": 8
+					}, {
+						"frame": "upLeft3",
+						"duration": 8
+					}, {
+						"frame": "upLeft4",
+						"duration": 8
+					}
+				]
+			},
+			"walkUpRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "upRight1",
+						"duration": 8
+					}, {
+						"frame": "upRight2",
+						"duration": 8
+					}, {
+						"frame": "upRight3",
+						"duration": 8
+					}, {
+						"frame": "upRight4",
+						"duration": 8
+					}
+				]
+			},
+			"walkDownRight": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "downRight1",
+						"duration": 8
+					}, {
+						"frame": "downRight2",
+						"duration": 8
+					}, {
+						"frame": "downRight3",
+						"duration": 8
+					}, {
+						"frame": "downRight4",
+						"duration": 8
+					}
+				]
+			},
+			"walkDownLeft": {
+				"isLooped": true,
+				"frameRefs": [
+					{
+						"frame": "downLeft1",
+						"duration": 8
+					}, {
+						"frame": "downLeft2",
+						"duration": 8
+					}, {
+						"frame": "downLeft3",
+						"duration": 8
+					}, {
+						"frame": "downLeft4",
+						"duration": 8
+					}
+				]
+			}
+		},
+		"collisionWidth": 0,
+		"collisionHeight": 0,
+		"isRounded": false
+	},
+	"trades": {},
+	"shops": {}
+}

@@ -23,16 +23,6 @@ var DynamicMapEntity = function(name, frames, animations, collisionWidth,
 	}
 };
 
-DynamicMapEntity.prototype.unload = function() {
-	var urls = [];
-	for (var frameName in this.frames) {
-		if (!this.frames.hasOwnProperty(frameName)) {
-			continue;
-		}
-		urls.push(this.frames.sprite);
-	}
-	ImgUtils.unloadImages(urls);
-};
 
 /**
  * Wrapper instance class for DynamicMapEntities that allow for variable
@@ -50,6 +40,8 @@ var DynamicMapInstance = function(entity, x, y, opt_animation) {
 	this.setAnimation(opt_animation || entity.defaultAnimation);
 };
 
+
+// Sets the animation such that frame advances show that animation's frames
 DynamicMapInstance.prototype.setAnimation = function(animation) {
 	if (this._entity.animations[animation]) {
 		this._animation = animation;
@@ -60,6 +52,8 @@ DynamicMapInstance.prototype.setAnimation = function(animation) {
 	}
 };
 
+
+// Advances current animation's frames, once per tick
 DynamicMapInstance.prototype.advanceFrame = function() {
 	var currAnimation = this._helperGetCurrAnimation();
 	var currFrameRef = this._helperGetCurrFrameRef();
@@ -79,10 +73,13 @@ DynamicMapInstance.prototype.advanceFrame = function() {
 	}
 };
 
+
+// Returns true at the end of an animation (last frame if looped)
 DynamicMapInstance.prototype.isAtLastFrameOfAnimation = function() {
 	return this._frameIndex == this._helperGetCurrAnimation().length - 1 && 
 			this._frameCounter == this._helperGetCurrFrameRef().duration - 1;
 };
+
 
 DynamicMapInstance.prototype.getName = function() {
 	return this._entity.name;
@@ -108,12 +105,68 @@ DynamicMapInstance.prototype.isRounded = function() {
 	return this._entity.isRounded;
 };
 
+
 // Helper to get current frame reference
 DynamicMapInstance.prototype._helperGetCurrFrameRef = function() {
 	return this._entity.animations[this._animation].frameRefs[this._frameIndex];
 };
 
+
 // Helper to get current animation
 DynamicMapInstance.prototype._helperGetCurrAnimation = function() {
 	return this._entity.animations[this._animation];
+};
+
+
+/**
+ * Loader class for dynamic map entities. Takes in JSON data object for a single 
+ * entity and outputs the actual entity as a DynamicMapEntity.
+ */
+
+var DynamicMapEntityLoader = {};
+
+DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR = '../assets/img/';
+
+// A list of possible DynamicMapEntity types possible. The value is a string
+// representation of the type.
+DynamicMapEntityLoader.Types = {
+	NPC: 'npcs',
+	UNIT: 'units'
+};
+
+
+// Loads dynamic map entities from JSON
+DynamicMapEntityLoader.load = function(name, json, type, callback) {
+	var urls = {};
+	for (var frameName in json.frames) {
+		if (!json.frames.hasOwnProperty(frameName)) {
+			continue;
+		}
+		urls[json.frames[frameName].sprite] = 
+				DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR + type + '/' + name + 
+				'/' + json.frames[frameName].sprite + '.png';
+	}
+	ImgUtils.loadImages(urls, function(images) {
+		for (var frameName in json.frames) {
+			if (!json.frames.hasOwnProperty(frameName)) {
+				continue;
+			}
+			json.frames[frameName].sprite = images[json.frames[frameName].sprite];
+		}
+		var entity = new DynamicMapEntity(name, json.frames, json.animations, 
+				json.collisionWidth, json.collisionHeight, json.isRounded);
+		callback(entity);
+	});
+};
+
+
+// Unloads entity, freeing up all images required
+DynamicMapEntityLoader.unload = function(entity) {
+	for (var frameName in entity) {
+		if (!entity.hasOwnProperty(frameName)) {
+			continue;
+		}
+		ImgUtils.unload(entity.frames[frameName].sprite.src);
+		entity.frames[frameName].sprite = null;
+	}
 };

@@ -5,6 +5,8 @@
 
 var JSONLoader = {};
 
+
+// Static function to load JSON
 JSONLoader.load = function(url, opt_callback, opt_failCallback) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {

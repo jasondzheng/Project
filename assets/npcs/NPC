@@ -1,0 +1,20 @@
+{
+	name
+	movement pattern
+		randomNear
+		randomMid
+		randomFar
+		still
+		turn
+	state machine
+	trades
+	shops
+	entity
+}
+
+{
+	x
+	y
+	startingDirection
+	id
+}

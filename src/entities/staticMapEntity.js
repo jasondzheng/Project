@@ -16,10 +16,6 @@ var StaticMapEntity = function(name, sprite, centerX, centerY, collisionWidth,
 	this.isRounded = isRounded;
 };
 
-StaticMapEntity.prototype.unload = function() {
-	ImgUtils.unloadImage(this.sprite.src);
-};
-
 /**
  * Wrapper instance class for StaticMapEntities that allow for variable
  * positionings.
@@ -63,7 +59,7 @@ var StaticMapEntityLoader = {};
 // Expected static entity directory
 StaticMapEntityLoader.STATIC_MAP_ENTITY_DIR = '../assets/img/staticEntities/';
 
-StaticMapEntityLoader.load = function(json, mapName, callback) {
+StaticMapEntityLoader.loadAll = function(json, mapName, callback) {
 	// new StaticMapEntity(name, sprite, centerX, centerY, collisionWidth, collisionHeight, isRounded)
 	var imageUrls = {};
 	for (var entityName in json) {
@@ -75,6 +71,18 @@ StaticMapEntityLoader.load = function(json, mapName, callback) {
 				json[entityName].sprite + '.png';
 	}
 	ImgUtils.loadImages(imageUrls, function(images) {
-		// TODO: resume this and finish the loader
+		var staticEntities = {};
+		for (var entityName in json) {
+			staticEntities[entityName] = new StaticMapEntity(entityName, 
+					images[json[entityName].sprite], json[entityName].center.x, 
+					json[entityName].center.y, json[entityName].collisionWidth, 
+					json[entityName].collisionHeight, json[entityName].isRounded);
+		}
+		callback(staticEntities);
 	});
+};
+
+StaticMapEntityLoader.unload = function(entity) {
+	ImgUtils.unloadImage(entity.sprite.src);
+	entity.sprite = null;
 };

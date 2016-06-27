@@ -91,5 +91,13 @@
 			"x": 16.5,
 			"y": 10.99
 		}
+	],
+	"npcs": [
+		{
+			"id": "block",
+			"x": 1,
+			"y": 1,
+			"startingDirection": "down"
+		}
 	]
 }

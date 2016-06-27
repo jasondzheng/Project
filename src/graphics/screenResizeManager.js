@@ -6,6 +6,7 @@ var ScreenResizeManager = {};
 // An option to disable screen resize
 ScreenResizeManager.RESIZE_ENABLED = true;
 
+
 // Initializes the screen resize manager and binds handles so that the canvas
 // resizes appropriately when the screen size changes
 ScreenResizeManager.init = function() {

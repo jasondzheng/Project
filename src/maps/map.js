@@ -5,7 +5,7 @@
  */
 
 var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances) {
+		staticMapInstances, npcEntities, npcInstances) {
 	// The name of the map
 	this.name = name;
 
@@ -25,4 +25,22 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// The static map entities of the map
 	this.staticMapEntities = staticMapEntities;
 	this.staticMapInstances = staticMapInstances;
+
+	// NPC entities and instances
+	this.npcEntities = npcEntities;
+	this.npcInstances = npcInstances;
+};
+
+
+// Registers a newly created NPC instance to this map.
+Map.prototype.registerNPCInstance = function(npcInstance) {
+	this.npcInstances.push(npcInstance);
+};
+
+
+// Tick all tickables contained in the map
+Map.prototype.tickAll = function() {
+	for (var i = 0; i < this.npcInstances.length; i++) {
+		this.npcInstances[i].tick();
+	}
 };

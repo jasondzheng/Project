@@ -32,10 +32,8 @@ TileLoader.load = function(path, opt_callback) {
 
 // Unloads a tileset when it is no longer needed.
 TileLoader.unload = function(tileInfo) {
-	var urls = [];
-	for (var i = 0; i < tileInfo.length; i++) {
-		urls.push(tileInfo[i].img.src);
+	for (var i = 0; i < tileInfo.length; i++) {		
+		ImgUtils.unloadImage(tileInfo[i].img.src);
 		tileInfo[i].img = null;
 	}
-	ImgUtils.unloadImages(urls);
 };
