@@ -14,9 +14,6 @@ var NPCEntity = function(name, movement, stateMachine, trades, shops,
 	this.trades = trades;
 	this.shops = shops;
 	this.visualEntity = visualEntity;
-	// TODO: for any universalized structures that need transforming, please
-	// do here. Note that the state machine CANNOT be curried here because
-	// the instance has yet to be made.
 };
 
 
@@ -24,8 +21,9 @@ var NPCEntity = function(name, movement, stateMachine, trades, shops,
  * Instance representation of an NPC. Takes an NPC entity and instatiates
  * it along with its own visualInstance.
  */
-var NPCInstance = function(npcEntity, x, y, startingDirection) {
-	this._npcEntity = npcEntity;
+var NPCInstance = function(npcEntity, id, x, y, startingDirection) {
+	this.npcEntity = npcEntity;
+	this.id = id;
 	// TODO: initialize the animation families
 	this._animationFamilies = {	};
 	this._state = npcEntity.stateMachine.states[
@@ -42,7 +40,7 @@ var NPCInstance = function(npcEntity, x, y, startingDirection) {
 	// Handle all state machine inits here. This includes init'ing the object
 	// at the beginning of the state machine, as well as the onEnter for
 	// the current state.
-	this._helperEval(this._npcEntity.stateMachine.init);
+	this._helperEval(this.npcEntity.stateMachine.init);
 	this._helperEval(this._state.onEnter);
 };
 
@@ -54,7 +52,7 @@ NPCInstance.prototype.tick = function() {
 	for (var i = 0; i < this._state.transitions.length; i++) {
 		if (this._helperEval(this._state.transitions[i].condition)) {
 			this._helperEval(this._state.onExit);
-			this._state = this._npcEntity.stateMachine.states[
+			this._state = this.npcEntity.stateMachine.states[
 					this._state.transitions[i].state];
 			this._helperEval(this._state.onEnter);
 			break;

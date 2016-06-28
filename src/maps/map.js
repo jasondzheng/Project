@@ -5,7 +5,7 @@
  */
 
 var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances, npcEntities, npcInstances) {
+		staticMapInstances, npcInstances) {
 	// The name of the map
 	this.name = name;
 
@@ -26,8 +26,7 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	this.staticMapEntities = staticMapEntities;
 	this.staticMapInstances = staticMapInstances;
 
-	// NPC entities and instances
-	this.npcEntities = npcEntities;
+	// NPC instances
 	this.npcInstances = npcInstances;
 };
 

@@ -23,7 +23,7 @@ CallbackDeferrer.prototype.after = function(opt_callback) {
 	var that = this;
 	var genericCallback = function() {
 		// Mark that the past task was complete by removing it from the list
-		var callStackEntry = that._callQueue.shift(0);
+		var callStackEntry = that._callQueue.shift();
 		// Record all resulting params from the recently completed callback 
 		// into a cumulative list of all results
 		var callbackArgs = {};
