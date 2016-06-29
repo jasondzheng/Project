@@ -18,6 +18,7 @@ window.onload = function() {
 		};
 		window.requestAnimationFrame(drawLoop);
 		bindMouse();
+		setupTickCycle(map);
 	});
 };
 
@@ -50,4 +51,21 @@ var bindMouse = function() {
 		}
 		lastOperated = currTime;
 	}, 33);
+};
+
+var setupTickCycle = function(loadedMap) {
+	var tickWindow = 1000 / 60;
+	var lastOperated = Date.now();
+	window.setInterval(function() {
+		var currTime = Date.now();
+		var delta = currTime - lastOperated;
+		if (delta < tickWindow) {
+			return;
+		}
+		while (delta >= tickWindow) {
+			loadedMap.tickAll();
+			delta -= tickWindow;
+		}
+		lastOperated = currTime - delta;
+	}, 0);
 };

@@ -6,8 +6,9 @@
  * this file, intended to be a basic wrapper for NPCs.
  */
 
-var NPCEntity = function(name, movement, stateMachine, trades, shops, 
+var NPCEntity = function(id, name, movement, stateMachine, trades, shops, 
 		visualEntity) {
+	this.id = id;
 	this.name = name;
 	this.movement = movement;
 	this.stateMachine = stateMachine;
@@ -21,17 +22,17 @@ var NPCEntity = function(name, movement, stateMachine, trades, shops,
  * Instance representation of an NPC. Takes an NPC entity and instatiates
  * it along with its own visualInstance.
  */
-var NPCInstance = function(npcEntity, id, x, y, startingDirection) {
+var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
+	// The entity this instance is based off of
 	this.npcEntity = npcEntity;
-	this.id = id;
+
+	// The containing map the NPC is on
+	this.containingMap = containingMap;
+
 	// TODO: initialize the animation families
 	this._animationFamilies = {	};
 	this._state = npcEntity.stateMachine.states[
 			npcEntity.stateMachine.defaultState];
-	this.position = {
-		x: x,
-		y: y
-	};
 	this._direction = startingDirection;
 
 	this.visualInstance = new DynamicMapInstance(npcEntity.visualEntity, x, y, 
@@ -42,6 +43,17 @@ var NPCInstance = function(npcEntity, id, x, y, startingDirection) {
 	// the current state.
 	this._helperEval(this.npcEntity.stateMachine.init);
 	this._helperEval(this._state.onEnter);
+};
+
+
+NPCInstance.prototype.setPosition = function(x, y) {
+	this.visualInstance.x = x;
+	this.visualInstance.y = y;
+};
+
+
+NPCInstance.prototype.getPosition = function() {
+	return this.visualInstance;
 };
 
 

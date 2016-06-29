@@ -11,16 +11,17 @@ NPCLoader.NPC_PATH = '../assets/npcs';
 
 // Instantiates an NPC instance given an NPC id. Preloads the NPC entity
 // beforehand if needed.
-NPCLoader.loadInstance = function(id, x, y, startingDirection, callback) {
+NPCLoader.loadInstance = function(id, x, y, startingDirection, containingMap, 
+		callback) {
 	NPCLoader._helperLoadEntity(id, function(entity) {
-		callback(new NPCInstance(entity, id, x, y, startingDirection));
+		callback(new NPCInstance(entity, x, y, startingDirection, containingMap));
 	});	
 };
 
 
 // Unloads an NPC's dependencies.
 NPCLoader.unloadInstance = function(npcInstance) {
-	NPCLoader.loadedEntities[npcInstance.id] = null;
+	NPCLoader.loadedEntities[npcInstance.npcEntity.id] = null;
 	DynamicMapEntityLoader.unload(npcInstance.npcEntity.visualEntity);
 	npcInstance.npcEntity = null;
 };
@@ -36,7 +37,7 @@ NPCLoader._helperLoadEntity = function(id, callback) {
 	JSONLoader.loadWithoutWhitespace(path, function(obj) {
 		DynamicMapEntityLoader.load(id, obj.entity, 
 				DynamicMapEntityLoader.Types.NPC, function(entity) {
-			NPCLoader.loadedEntities[id] = new NPCEntity(obj.name, obj.movement, 
+			NPCLoader.loadedEntities[id] = new NPCEntity(id, obj.name, obj.movement, 
 					obj.stateMachine, obj.trades, obj.shops, entity);
 			callback(NPCLoader.loadedEntities[id]);
 		})

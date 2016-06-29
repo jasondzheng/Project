@@ -28,12 +28,18 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 	// NPC instances
 	this.npcInstances = npcInstances;
+
+	// When the map is finalized, link all instances to this map.
+	for (var i = 0; i < npcInstances.length; i++) {
+		npcInstances[i].map = this;
+	}
 };
 
 
 // Registers a newly created NPC instance to this map.
 Map.prototype.registerNPCInstance = function(npcInstance) {
 	this.npcInstances.push(npcInstance);
+	npcInstance.map = this;
 };
 
 
@@ -41,5 +47,27 @@ Map.prototype.registerNPCInstance = function(npcInstance) {
 Map.prototype.tickAll = function() {
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		this.npcInstances[i].tick();
+	}
+};
+
+
+// Utility function to find all collisions of all entity instances on the map
+// with the specified bounds.
+Map.prototype.findCollisions = function(width, height, centerX, centerY, 
+		isRounded) {
+	var collisions = [];
+	// First compare to static map entities
+	for (var i = 0; i < this.staticMapInstances; i++) {
+		var currentInstance = this.staticMapInstances[i];
+
+	}
+};
+
+
+// Helper to see if two bounding collision shapes are collided.
+Map._helperAreShapesColliding = function(width1, height1, centerX1, centerY1, 
+		isRounded1, width2, height2, centerX2, centerY2, isRounded2) {
+	if (!isRounded1 && !isRounded2) {
+		
 	}
 };

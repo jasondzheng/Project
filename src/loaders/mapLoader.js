@@ -70,7 +70,7 @@ MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
 			var nextInstanceData = instanceQueue.shift();
 			NPCLoader.loadInstance(nextInstanceData.id, nextInstanceData.x, 
 					nextInstanceData.y, nextInstanceData.startingDirection, 
-					aggregateCallback);
+					null /* containingMap */, aggregateCallback);
 		} else {
 			callback(resultingInstances);
 		}
@@ -78,5 +78,5 @@ MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
 	var nextInstanceData = instanceQueue.shift();
 	NPCLoader.loadInstance(nextInstanceData.id, nextInstanceData.x, 
 			nextInstanceData.y, nextInstanceData.startingDirection, 
-			aggregateCallback);
+			null /* containingMap */, aggregateCallback);
 };
