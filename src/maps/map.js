@@ -63,11 +63,3 @@ Map.prototype.findCollisions = function(width, height, centerX, centerY,
 	}
 };
 
-
-// Helper to see if two bounding collision shapes are collided.
-Map._helperAreShapesColliding = function(width1, height1, centerX1, centerY1, 
-		isRounded1, width2, height2, centerX2, centerY2, isRounded2) {
-	if (!isRounded1 && !isRounded2) {
-		
-	}
-};
