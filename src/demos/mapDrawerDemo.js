@@ -10,6 +10,7 @@ window.onload = function() {
 		var ctx = canvas.getContext('2d');
 		var drawLoop = function() {
 			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
+			ctx.clearRect(0,0,1280,720);
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);

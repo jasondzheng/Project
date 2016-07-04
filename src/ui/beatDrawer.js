@@ -26,7 +26,7 @@ BeatDrawer.INNER_RAD_1 = 46;
 BeatDrawer.INNER_RAD_2 = 36;
 
 BeatDrawer._queue;
-BeatDrawer._showInterval = 1.5;
+BeatDrawer._showInterval = 1.75;
 BeatDrawer._time;
 BeatDrawer._holdStart;
 BeatDrawer._holdDuration;
@@ -37,6 +37,7 @@ BeatDrawer._windowEnd;
 BeatDrawer.setWindowInterval = function(seconds) {
 	BeatDrawer._showInterval = seconds;
 };
+
 
 
 BeatDrawer.setQueue = function(queue) {
