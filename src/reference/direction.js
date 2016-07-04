@@ -13,3 +13,32 @@ var Direction = {
 	DOWN_LEFT: 'downLeft',
 	DOWN_RIGHT: 'downRight'
 };
+
+// Structure to map angle segments to direction enum values
+Direction._angleSegments = [
+	Direction.LEFT,
+	Direction.DOWN_LEFT,
+	Direction.DOWN,
+	Direction.DOWN_RIGHT,
+	Direction.RIGHT,
+	Direction.UP_RIGHT,
+	Direction.UP,
+	Direction.UP_LEFT
+];
+
+
+// Get a direction given a vector defined by a point.
+Direction.getDirectionFromCoords = function(x, y) {
+	var angle = Math.atan2(y, x);
+	if (angle >= 7 * Math.PI / 8) {
+		angle -= Math.PI * 2;
+	}
+	return Direction._angleSegments[
+			Math.floor((angle + 9 * Math.PI / 8) * 4 / Math.PI)];
+};
+
+// Get a random direction
+Direction.getRandom = function() {
+	return Direction._angleSegments[
+			Math.floor(Math.random() * Direction._angleSegments.length)];
+};

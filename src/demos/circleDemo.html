@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="../ui/beatDrawer.js"></script>
+	<script>
+window.onload = function() {
+	var canvas = document.querySelector('#canvas');
+	var ctx = canvas.getContext('2d');
+	BeatDrawer.setWindowInterval(1);
+	BeatDrawer.setQueue([
+		{
+			time: 5,
+			style: 'beat'
+		}, {
+			time: 5.5,
+			style: 'holdStart'
+		}, {
+			time: 6,
+			style: 'holdEnd'
+		}, {
+			time: 6.5,
+			style: 'beat'
+		}, {
+			time: 6.75,
+			style: 'holdStart'
+		}, {
+			time: 7,
+			style: 'holdEnd'
+		}, {
+			time: 10,
+			style: 'beat'
+		}, {
+			time: 11,
+			style: 'holdStart'
+		}, {
+			time: 12,
+			style: 'holdEnd'
+		}
+	]);
+	var startTime = Date.now() / 1000;
+	window.setInterval(function() {
+		BeatDrawer.advanceTime(Date.now() / 1000 - startTime);
+		ctx.clearRect(0, 0, 800, 600);
+		BeatDrawer.draw(ctx, 400, 300);
+	}, 1000 / 60);
+};
+	</script>
+</head>
+<body>
+	<canvas id="canvas" width="800px" height="600px" style="background-color: lightgrey;">
+	</canvas>
+</body>
+</html>

@@ -30,13 +30,32 @@ var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
 	this.containingMap = containingMap;
 
 	// TODO: initialize the animation families
-	this._animationFamilies = {	};
+	this._animationFamilies = {};
+	// Initialize animation families
+	for (var animationName in npcEntity.visualEntity.animations) {
+		if (!npcEntity.visualEntity.animations.hasOwnProperty(animationName)) {
+			continue;
+		}
+		if (NPCInstance.ANIM_NAME_REGEX.test(animationName)) {
+			var animFamilyName = animationName.match(NPCInstance.ANIM_NAME_REGEX)[1];
+			if (!this._animationFamilies[animFamilyName]) {
+				this._animationFamilies[animFamilyName] = [];
+			}
+			this._animationFamilies[animFamilyName].push(animationName);
+		}
+	}
 	this._state = npcEntity.stateMachine.states[
 			npcEntity.stateMachine.defaultState];
-	this._direction = startingDirection;
+	this.direction = startingDirection;
 
-	this.visualInstance = new DynamicMapInstance(npcEntity.visualEntity, x, y, 
-			undefined /* TODO: specify how to get starting direction animation */);
+	this.visualInstance = new DynamicMapInstance(npcEntity.visualEntity, x, y);
+	this.startingLocation = {
+		x: x,
+		y: y
+	};
+
+	// Create the movement manager
+	this.movementManager = new NPCMovementManager(this); 
 
 	// Handle all state machine inits here. This includes init'ing the object
 	// at the beginning of the state machine, as well as the onEnter for
@@ -46,6 +65,10 @@ var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
 };
 
 
+// Regex for testing animation family naming
+NPCInstance.ANIM_NAME_REGEX = /^(\w+?)\d+$/;
+
+
 NPCInstance.prototype.setPosition = function(x, y) {
 	this.visualInstance.x = x;
 	this.visualInstance.y = y;
@@ -53,7 +76,10 @@ NPCInstance.prototype.setPosition = function(x, y) {
 
 
 NPCInstance.prototype.getPosition = function() {
-	return this.visualInstance;
+	return {
+		x: this.visualInstance.x,
+		y: this.visualInstance.y
+	};
 };
 
 
@@ -71,6 +97,8 @@ NPCInstance.prototype.tick = function() {
 		}
 	}
 
+	// Movement manager as needed
+	this.movementManager.tick();
 
 	// Update the dynamic map instance
 	this.visualInstance.advanceFrame();
@@ -86,10 +114,11 @@ NPCInstance.prototype._helperEval = function(code) {
 
 
 // Helper to randomly pick an animation from a set of animations in a family.
-NPCInstance.prototype._helperGetAnimNameFromFamily = function(animName) {
+NPCInstance.prototype.getAnimNameFromFamily = function(animName) {
 	if (this._animationFamilies[animName]) {
-		return animName + (1 + Math.floor(Math.random() * 
-				this._animationFamilies[animName].length));
+		return this._animationFamilies[animName][Math.floor(Math.random() * 
+				this._animationFamilies[animName].length)];
+	} else {
+		return animName;
 	}
-	throw 'Unfound animation family named ' + animName;
 };

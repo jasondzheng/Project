@@ -1,6 +1,6 @@
 {
 	"name": "Block",
-	"movement": "randomFar",
+	"movement": "randomMidLarge",
 	"stateMachine": {
 		"init": "
 			this._counter = 0;
@@ -15,7 +15,6 @@
 					console.log('Exited idle');
 				",
 				"tick": "
-					this._counter++;
 				",
 				"transitions": [
 					{
@@ -34,7 +33,6 @@
 					console.log('Exited panic');
 				",
 				"tick": "
-					this._counter--;
 				",
 				"transitions": [
 					{
@@ -492,8 +490,8 @@
 				]
 			}
 		},
-		"collisionWidth": 0,
-		"collisionHeight": 0,
+		"collisionWidth": 1,
+		"collisionHeight": 1,
 		"isRounded": false
 	},
 	"trades": {},

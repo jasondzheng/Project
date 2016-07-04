@@ -11,6 +11,7 @@ var DynamicMapEntity = function(name, frames, animations, collisionWidth,
 	this.animations = animations;
 	this.collisionWidth = collisionWidth;
 	this.collisionHeight = collisionHeight;
+	this.isRounded = isRounded;
 
 	// Create a default animation
 	this.defaultAnimation;
@@ -46,7 +47,7 @@ DynamicMapInstance.prototype.setAnimation = function(animation) {
 	if (this._entity.animations[animation]) {
 		this._animation = animation;
 		this._frameIndex = 0;
-		this._frameCounter = 0;
+		this._frameCounter = -1;
 	} else {
 		throw 'Unsupported animation ' + animation;
 	}

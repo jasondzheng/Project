@@ -87,7 +87,12 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 
 // Helper function for drawing all entities on the map.
 MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
+	// Add static map entities
 	var entitiesToDraw = map.staticMapInstances.slice(0);
+	// Add npcs
+	for (var i = 0; i < map.npcInstances.length; i++) {
+		entitiesToDraw.push(map.npcInstances[i].visualInstance);
+	}
 	entitiesToDraw.sort(function(a, b) {
 		return a.y + a.getCollisionHeight() / 2 - b.y - b.getCollisionHeight() / 2;
 	});
