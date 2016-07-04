@@ -16,6 +16,7 @@ SoundPlayer.setTrack = function(track) {
 	BeatDrawer.setQueue(track.beatmap.notes);
 	audio.onended = function() {
 		audio.currentTime = 0;
+		audio.play();
 		BeatDrawer.setQueue(track.beatmap.notes);
 	};
 	SoundPlayer.currTrack = track;

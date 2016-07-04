@@ -11,7 +11,7 @@ BeatDrawer.HOLD_START_STYLE = 'holdStart';
 BeatDrawer.HOLD_END_STYLE = 'holdEnd';
 
 BeatDrawer.COLOR_OUTER = '#000000';
-BeatDrawer.STROKE_OUTER = 7;
+BeatDrawer.STROKE_OUTER = 6;
 BeatDrawer.COLOR_INNER = 'rgb(145, 155, 255)';
 BeatDrawer.STROKE_INNER = 5;
 
@@ -20,8 +20,13 @@ BeatDrawer.BOUND_COLOR_INNER = 'rgba(255, 255, 255, 0.5)';
 
 BeatDrawer.FILL_INDICATOR_COLOR = '#000000';
 
+BeatDrawer.OUTER_RAD_1 = 275;
+BeatDrawer.OUTER_RAD_2 = 220;
+BeatDrawer.INNER_RAD_1 = 46;
+BeatDrawer.INNER_RAD_2 = 36;
+
 BeatDrawer._queue;
-BeatDrawer._showInterval = 2;
+BeatDrawer._showInterval = 1.5;
 BeatDrawer._time;
 BeatDrawer._holdStart;
 BeatDrawer._holdDuration;
@@ -105,9 +110,14 @@ BeatDrawer.draw = function(ctx, centerX, centerY) {
 
 BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor, 
 		outerColor, fraction) {
-	var axisA = (275 - 46) * fraction + 46;
-	var axisB = (220 - 36) * fraction + 36;
+	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
+			BeatDrawer.INNER_RAD_1;
+	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
+			BeatDrawer.INNER_RAD_2;
 	var yVal = -14 * fraction;
+
+	ctx.globalAlpha = .5 - (0.45 * fraction);
+
 	ctx.lineWidth = BeatDrawer.STROKE_OUTER;
 	ctx.strokeStyle = outerColor;
 	ctx.beginPath();
@@ -119,12 +129,16 @@ BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor,
 	ctx.beginPath();
 	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
 	ctx.stroke();
+
+	ctx.globalAlpha = 1;
 };
 
 BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color, 
 		fraction) {
-	var axisA = (275 - 46) * fraction + 46;
-	var axisB = (220 - 36) * fraction + 36;
+	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
+			BeatDrawer.INNER_RAD_1;
+	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
+			BeatDrawer.INNER_RAD_2;
 	var yVal = -14 * fraction;
 	ctx.lineWidth = 2;
 	ctx.strokeStyle = color;
@@ -142,8 +156,10 @@ BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 
 BeatDrawer._helperDrawMarkerBeat = function(ctx, centerX, centerY, innerColor, 
 		outerColor, fraction) {
-	var axisA = (275 - 46) * fraction + 46;
-	var axisB = (220 - 36) * fraction + 36;
+	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
+			BeatDrawer.INNER_RAD_1;
+	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
+			BeatDrawer.INNER_RAD_2;
 	var yVal = -14 * fraction;
 	ctx.lineWidth = BeatDrawer.STROKE_OUTER;
 	ctx.strokeStyle = outerColor;
@@ -160,8 +176,8 @@ BeatDrawer._helperDrawMarkerBeat = function(ctx, centerX, centerY, innerColor,
 
 BeatDrawer._helperDrawFilledCenter = function(ctx, centerX, centerY, color, 
 		fraction) {
-	var axisA = fraction * 46;
-	var axisB = fraction * 36;
+	var axisA = fraction * BeatDrawer.INNER_RAD_1;
+	var axisB = fraction * BeatDrawer.INNER_RAD_2;
 	
 	ctx.fillStyle = color;
 	ctx.beginPath();
