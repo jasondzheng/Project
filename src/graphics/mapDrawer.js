@@ -74,11 +74,14 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 					j + viewerXWhole, i - MapDrawer.TOTAL_ROWS / 2 + viewerYWhole), 
 					MapDrawer.ROW_CANVAS.width / 2 + viewerJ * MapDrawer.TILE_DIM, 0);
 		}
+		/*
 		ImgUtils.drawTrapezium(ctx, MapDrawer.ROW_CANVAS, 
 				ScreenProps.EXP_WIDTH / 2 + tileTopWidth * (-halfTilesToDraw - 1), 
 				ScreenProps.EXP_WIDTH / 2 + tileBotWidth * (-halfTilesToDraw - 1), 
 				currYPos, tileTopWidth * (halfTilesToDraw + 1) * 2, 
 				tileBotWidth * (halfTilesToDraw + 1) * 2, nextYPos - currYPos);
+		*/
+		ctx.drawImage(MapDrawer.ROW_CANVAS,0,currYPos);
 		currYPos = nextYPos;
 	}
 };
