@@ -41,7 +41,14 @@ BeatDrawer.setQueue = function(queue) {
 };
 
 
-BeatDrawer.advanceTime = function(newTime) {
+BeatDrawer.tick = function() {
+	if (SoundPlayer.currTrack) {
+		BeatDrawer._advanceTime(SoundPlayer.currTrack.audio.currentTime);
+	}
+};
+
+
+BeatDrawer._advanceTime = function(newTime) {
 	BeatDrawer._time = newTime;
 	for (; BeatDrawer._windowStart < BeatDrawer._queue.length && 
 					BeatDrawer._queue[BeatDrawer._windowStart].time < newTime; 

@@ -27,11 +27,15 @@ MapLoader.load = function(mapName, opt_callback) {
 	deferrer.add(MapLoader._helperLoadAllNPCInstances, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['npcInstances']);
+	deferrer.add(MapLoader._helperLoadAllTracks, function(accumulatedArgs) {
+		return [accumulatedArgs[0].mapData];
+	}, ['tracks']);
 	deferrer.after(function(accumulatedArgs) {
 		var mapData = accumulatedArgs[0].mapData;
 		var tileset = accumulatedArgs[1].tileset;
 		var staticMapEntities = accumulatedArgs[2].staticMapEntities;
 		var npcInstances = accumulatedArgs[3].npcInstances;
+		var tracks = accumulatedArgs[4].tracks;
 		mapData.staticMapEntities = staticMapEntities;
 		for (var i = 0; i < mapData.staticMapInstances.length; i++) {
 			// Convert to StaticMapInstance
@@ -42,7 +46,7 @@ MapLoader.load = function(mapName, opt_callback) {
 		if (opt_callback) {
 			opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
 					tileset, mapData.dummyTile, mapData.staticMapEntities, 
-					mapData.staticMapInstances, npcInstances));
+					mapData.staticMapInstances, npcInstances, tracks));
 		};
 	});
 };
@@ -79,4 +83,14 @@ MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
 	NPCLoader.loadInstance(nextInstanceData.id, nextInstanceData.x, 
 			nextInstanceData.y, nextInstanceData.startingDirection, 
 			null /* containingMap */, aggregateCallback);
+};
+
+
+// Helper to load all tracks
+MapLoader._helperLoadAllTracks = function(mapData, callback) {
+	var tracksToLoad = {};
+	for (var i = 0; i < mapData.tracks.length; i++) {
+		tracksToLoad[mapData.tracks[i]] = mapData.tracks[i];
+	}
+	SoundLoader.loadBeatmaps(tracksToLoad, callback);
 };

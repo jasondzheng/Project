@@ -81,12 +81,13 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 				tileBotWidth * (halfTilesToDraw + 1) * 2, nextYPos - currYPos);
 		currYPos = nextYPos;
 	}
-	MapDrawer._helperDrawEntities(ctx, map, viewerX, viewerY);	
 };
 
 
-// Helper function for drawing all entities on the map.
-MapDrawer._helperDrawEntities = function(ctx, map, viewerX, viewerY) {
+// Function for drawing all entities on the map. Draws on top of map after
+// map has finished drawing. Separate from map draw to allow for things
+// like beat display to draw between the two layers.
+MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	// Add static map entities
 	var entitiesToDraw = map.staticMapInstances.slice(0);
 	// Add npcs

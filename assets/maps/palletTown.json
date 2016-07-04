@@ -99,5 +99,6 @@
 			"y": 1,
 			"startingDirection": "down"
 		}
-	]
+	],
+	"tracks": ["marioLuigiBattle"]
 }

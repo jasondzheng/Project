@@ -7,18 +7,18 @@ window.onload = function() {
 	ScreenResizeManager.init();
 	MapLoader.load('palletTown', function(map) {
 		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
+		var ctx = canvas.getContext('2d');
 		var drawLoop = function() {
-			MapDrawer.drawMap(canvas.getContext('2d'), map, viewerLoc.x, viewerLoc.y);
-			for (var i = 0; i < map.staticMapInstances.length; i++) {
-				if (map.staticMapInstances[i] instanceof DynamicMapInstance) {
-					map.staticMapInstances[i].advanceFrame();
-				}
-			}
+			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
+			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
+					ScreenProps.EXP_HEIGHT_HALF);
+			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
 			window.requestAnimationFrame(drawLoop);
 		};
 		window.requestAnimationFrame(drawLoop);
 		bindMouse();
 		setupTickCycle(map);
+		SoundPlayer.setTrack(map.tracks.marioLuigiBattle);
 	});
 };
 
@@ -64,6 +64,7 @@ var setupTickCycle = function(loadedMap) {
 		}
 		while (delta >= tickWindow) {
 			loadedMap.tickAll();
+			BeatDrawer.tick();
 			delta -= tickWindow;
 		}
 		lastOperated = currTime - delta;

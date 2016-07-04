@@ -5,7 +5,7 @@
  */
 
 var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances, npcInstances) {
+		staticMapInstances, npcInstances, tracks) {
 	// The name of the map
 	this.name = name;
 
@@ -28,6 +28,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 	// NPC instances
 	this.npcInstances = npcInstances;
+
+	// Tracks
+	this.tracks = tracks;
 
 	// When the map is finalized, link all instances to this map.
 	for (var i = 0; i < npcInstances.length; i++) {
