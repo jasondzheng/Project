@@ -9,8 +9,7 @@ window.onload = function() {
 		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
 		var ctx = canvas.getContext('2d');
 		var drawLoop = function() {
-			ctx.clearRect(0,0,1280,720);
-			//MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
+			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
