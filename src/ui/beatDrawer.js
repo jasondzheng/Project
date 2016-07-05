@@ -26,6 +26,7 @@ BeatDrawer.INNER_RAD_1 = 46;
 BeatDrawer.INNER_RAD_2 = 36;
 
 BeatDrawer._queue;
+BeatDrawer._songPlayTime;
 BeatDrawer._showInterval = 1.75;
 BeatDrawer._time;
 BeatDrawer._holdStart;
@@ -39,9 +40,9 @@ BeatDrawer.setWindowInterval = function(seconds) {
 };
 
 
-
-BeatDrawer.setQueue = function(queue) {
+BeatDrawer.setQueue = function(queue, songPlayTime) {
 	BeatDrawer._queue = queue;
+	BeatDrawer._songPlayTime = songPlayTime;
 	BeatDrawer._time = 0;
 	BeatDrawer._windowStart = BeatDrawer._windowEnd = 0;
 };
@@ -49,51 +50,63 @@ BeatDrawer.setQueue = function(queue) {
 
 BeatDrawer.tick = function() {
 	if (SoundPlayer.currTrack) {
-		BeatDrawer._advanceTime(SoundPlayer.currTrack.audio.currentTime);
+		BeatDrawer._advanceTime(
+				SoundPlayer.currTrack.audio[SoundPlayer.currParity].currentTime);
 	}
 };
 
 
 BeatDrawer._advanceTime = function(newTime) {
+	if (BeatDrawer._time > newTime) {
+		BeatDrawer._windowStart -= BeatDrawer._queue.length;
+		BeatDrawer._windowEnd -= BeatDrawer._queue.length;
+	}
 	BeatDrawer._time = newTime;
-	for (; BeatDrawer._windowStart < BeatDrawer._queue.length && 
-					BeatDrawer._queue[BeatDrawer._windowStart].time < newTime; 
+	for (; BeatDrawer._queue[
+			BeatDrawer._windowStart % BeatDrawer._queue.length].time + 
+			(BeatDrawer._windowStart < BeatDrawer._queue.length ? 0 : 
+					BeatDrawer._songPlayTime) < newTime; 
 			BeatDrawer._windowStart++) {
-		if (BeatDrawer._queue[BeatDrawer._windowStart].style == 
-				BeatDrawer.HOLD_START_STYLE) {
-			BeatDrawer._holdStart = BeatDrawer._queue[BeatDrawer._windowStart].time;
-			for (var i = BeatDrawer._windowStart; i < BeatDrawer._queue.length; i++) {
+		if (BeatDrawer._queue[BeatDrawer._windowStart % 
+				BeatDrawer._queue.length].style == BeatDrawer.HOLD_START_STYLE) {
+			BeatDrawer._holdStart = BeatDrawer._queue[
+					BeatDrawer._windowStart % BeatDrawer._queue.length].time;
+			for (var i = BeatDrawer._windowStart % BeatDrawer._queue.length; 
+					i < BeatDrawer._queue.length; i++) {
 				if (BeatDrawer._queue[i].style == BeatDrawer.HOLD_END_STYLE) {
 					BeatDrawer._holdDuration = BeatDrawer._queue[i].time - 
 							BeatDrawer._holdStart;
 					break;
 				}
 			}
-		} else if (BeatDrawer._queue[BeatDrawer._windowStart].style == 
+		} else if (BeatDrawer._queue[
+				BeatDrawer._windowStart % BeatDrawer._queue.length].style == 
 				BeatDrawer.HOLD_END_STYLE) {
 			BeatDrawer._holdStart = BeatDrawer._holdDuration = undefined;
 		}
 	}
 	for (BeatDrawer._windowEnd = 
 			Math.max(BeatDrawer._windowStart, BeatDrawer._windowEnd); 
-			BeatDrawer._windowEnd < BeatDrawer._queue.length && 
-					BeatDrawer._queue[BeatDrawer._windowEnd].time <	newTime + 
-							BeatDrawer._showInterval; 
+			BeatDrawer._queue[BeatDrawer._windowEnd % BeatDrawer._queue.length].time + 
+					(BeatDrawer._windowEnd < BeatDrawer._queue.length ? 0 : 
+							BeatDrawer._songPlayTime) <	newTime + BeatDrawer._showInterval; 
 			BeatDrawer._windowEnd++);
 };
 
 
 BeatDrawer.draw = function(ctx, centerX, centerY) {
 	for (var i = BeatDrawer._windowStart; i < BeatDrawer._windowEnd; i++) {
-		var fraction = (BeatDrawer._queue[i].time - BeatDrawer._time) / 
-				BeatDrawer._showInterval;
-		if (BeatDrawer._queue[i].style == BeatDrawer.BEAT_STYLE) {
+		var beat = BeatDrawer._queue[i % BeatDrawer._queue.length];
+		var time = (i < BeatDrawer._queue.length ? 0 : BeatDrawer._songPlayTime) + 
+				beat.time;
+		var fraction = (time - BeatDrawer._time) / BeatDrawer._showInterval;
+		if (beat.style == BeatDrawer.BEAT_STYLE) {
 			BeatDrawer._helperDrawBeat(ctx, centerX, centerY, BeatDrawer.COLOR_INNER, 
 					BeatDrawer.COLOR_OUTER, fraction);
-		} else if (BeatDrawer._queue[i].style == BeatDrawer.HOLD_START_STYLE) {
+		} else if (beat.style == BeatDrawer.HOLD_START_STYLE) {
 			BeatDrawer._helperDrawHoldBeatStart(ctx, centerX, centerY, 
 					BeatDrawer.COLOR_OUTER, fraction);
-		} else {
+		} else if (beat.style == BeatDrawer.HOLD_END_STYLE) {
 			BeatDrawer._helperDrawBeat(ctx, centerX, centerY, BeatDrawer.COLOR_OUTER, 
 					BeatDrawer.COLOR_OUTER, fraction);
 		}

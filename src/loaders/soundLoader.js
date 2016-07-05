@@ -42,13 +42,15 @@ SoundLoader.loadSounds = function(soundList, opt_callback) {
 // for playback
 SoundLoader.loadTrack = function(url, opt_callback) {
 	var track = new Audio();
-	track.preload = 'auto';
-	track.oncanplaythrough = function() {
-		if (opt_callback) {
-			opt_callback(track);
+	var track2 = new Audio();
+	track.preload = track2.preload = 'auto';
+	var counter = 2;
+	track.oncanplaythrough = track2.oncanplaythrough = function() {
+		if (--counter == 0 && opt_callback) {
+			opt_callback([track, track2]);
 		}
 	};
-	track.src = url;
+	track.src = track2.src = url;
 };
 
 

@@ -65,6 +65,7 @@ var setupTickCycle = function(loadedMap) {
 		while (delta >= tickWindow) {
 			loadedMap.tickAll();
 			BeatDrawer.tick();
+			SoundPlayer.tick();
 			delta -= tickWindow;
 		}
 		lastOperated = currTime - delta;
