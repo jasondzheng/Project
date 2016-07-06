@@ -25,6 +25,8 @@ BeatDrawer.OUTER_RAD_2 = 220;
 BeatDrawer.INNER_RAD_1 = 46;
 BeatDrawer.INNER_RAD_2 = 36;
 
+BeatDrawer.HOLD_ALPHA = 0.275;
+
 BeatDrawer._queue;
 BeatDrawer._songPlayTime;
 BeatDrawer._showInterval = 1.75;
@@ -105,16 +107,18 @@ BeatDrawer.draw = function(ctx, centerX, centerY) {
 					BeatDrawer.COLOR_OUTER, fraction);
 		} else if (beat.style == BeatDrawer.HOLD_START_STYLE) {
 			BeatDrawer._helperDrawHoldBeatStart(ctx, centerX, centerY, 
-					BeatDrawer.COLOR_OUTER, fraction);
+					BeatDrawer.COLOR_INNER, BeatDrawer.COLOR_OUTER, fraction, 
+					i == BeatDrawer._windowEnd - 1);
 		} else if (beat.style == BeatDrawer.HOLD_END_STYLE) {
-			BeatDrawer._helperDrawBeat(ctx, centerX, centerY, BeatDrawer.COLOR_OUTER, 
-					BeatDrawer.COLOR_OUTER, fraction);
+			BeatDrawer._helperDrawHoldBeatEnd(ctx, centerX, centerY, 
+					BeatDrawer.COLOR_INNER, BeatDrawer.COLOR_OUTER, fraction, 
+					i == BeatDrawer._windowStart);
 		}
 	}
-	if (BeatDrawer._holdStart != undefined) {
-		BeatDrawer._helperDrawFilledCenter(ctx, centerX, centerY, 
-				BeatDrawer.FILL_INDICATOR_COLOR, 
-				(BeatDrawer._time - BeatDrawer._holdStart) / BeatDrawer._holdDuration);
+	if (BeatDrawer._holdStart != undefined && 
+			BeatDrawer._windowStart == BeatDrawer._windowEnd) {
+		BeatDrawer._helperDrawUnboundFill(ctx, centerX, 
+				centerY, BeatDrawer.COLOR_INNER);
 	}
 	BeatDrawer._helperDrawMarkerBeat(ctx, centerX, centerY, 
 			BeatDrawer.BOUND_COLOR_INNER, BeatDrawer.BOUND_COLOR_OUTER, 
@@ -147,24 +151,79 @@ BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor,
 	ctx.globalAlpha = 1;
 };
 
-BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color, 
-		fraction) {
+
+BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
+		outerColor, fraction, isCutShort) {
 	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
 			BeatDrawer.INNER_RAD_1;
 	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
 			BeatDrawer.INNER_RAD_2;
 	var yVal = -14 * fraction;
-	ctx.lineWidth = 2;
-	ctx.strokeStyle = color;
-	ctx.beginPath();
-	ctx.ellipse(centerX, centerY - yVal, axisA + 6, axisB + 6, 0, 0, 2 * Math.PI);
-	ctx.stroke();
 
-	ctx.lineWidth = 2;
-	ctx.strokeStyle = color;
+	// Draw Mark
+	ctx.globalAlpha = .5 - (0.45 * fraction);
+	ctx.lineWidth = 3;
+	ctx.strokeStyle = outerColor;
 	ctx.beginPath();
 	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
 	ctx.stroke();
+	ctx.globalAlpha = 1;
+
+	ctx.lineWidth = 1;
+	ctx.fillStyle = ctx.strokeStyle = color;
+	ctx.beginPath();
+	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
+	if (isCutShort) {
+		ctx.ellipse(centerX, centerY + 14, BeatDrawer.OUTER_RAD_1, 
+				BeatDrawer.OUTER_RAD_2, 0, 0, 2 * Math.PI, true);
+		ctx.globalAlpha = BeatDrawer.HOLD_ALPHA;
+		ctx.fill();
+		ctx.globalAlpha = 1;
+	}
+};
+
+
+BeatDrawer._helperDrawHoldBeatEnd = function(ctx, centerX, centerY, color, 
+		outerColor, fraction, isCutShort) {
+	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
+			BeatDrawer.INNER_RAD_1;
+	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
+			BeatDrawer.INNER_RAD_2;
+	var yVal = -14 * fraction;
+
+	if (isCutShort) {
+		ctx.fillStyle = ctx.strokeStyle = color;
+		ctx.beginPath();
+		ctx.ellipse(centerX, centerY, BeatDrawer.INNER_RAD_1, 
+				BeatDrawer.INNER_RAD_2, 0, 0, 2 * Math.PI);	
+	}
+
+	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI, true);
+	ctx.globalAlpha = BeatDrawer.HOLD_ALPHA;
+	ctx.fill();
+
+	// Draw Mark
+	ctx.globalAlpha = .5 - (0.45 * fraction);
+	ctx.lineWidth = 3;
+	ctx.strokeStyle = outerColor;
+	ctx.beginPath();
+	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
+	ctx.stroke();
+	ctx.globalAlpha = 1;
+};
+
+
+BeatDrawer._helperDrawUnboundFill = function(ctx, centerX, centerY, color) {
+	ctx.lineWidth = 1;
+	ctx.fillStyle = color;
+	ctx.beginPath();
+	ctx.ellipse(centerX, centerY, BeatDrawer.INNER_RAD_1, 
+				BeatDrawer.INNER_RAD_2, 0, 0, 2 * Math.PI);	
+	ctx.ellipse(centerX, centerY + 14, BeatDrawer.OUTER_RAD_1, 
+				BeatDrawer.OUTER_RAD_2, 0, 0, 2 * Math.PI, true);
+	ctx.globalAlpha = BeatDrawer.HOLD_ALPHA;
+	ctx.fill();
+	ctx.globalAlpha = 1;
 };
 
 
@@ -185,16 +244,5 @@ BeatDrawer._helperDrawMarkerBeat = function(ctx, centerX, centerY, innerColor,
 	ctx.fillStyle = innerColor;
 	ctx.beginPath();
 	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
-	ctx.fill();
-};
-
-BeatDrawer._helperDrawFilledCenter = function(ctx, centerX, centerY, color, 
-		fraction) {
-	var axisA = fraction * BeatDrawer.INNER_RAD_1;
-	var axisB = fraction * BeatDrawer.INNER_RAD_2;
-	
-	ctx.fillStyle = color;
-	ctx.beginPath();
-	ctx.ellipse(centerX, centerY, axisA, axisB, 0, 0, 2 * Math.PI);
 	ctx.fill();
 };

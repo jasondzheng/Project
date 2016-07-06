@@ -7,6 +7,9 @@ var SoundPlayer = {};
 SoundPlayer.currTrack;
 SoundPlayer.currParity = 0;
 
+
+// Sets the track that needs to be played. Plays using a double track to ensure 
+// perfect loop
 SoundPlayer.setTrack = function(track) {
 	if (SoundPlayer.currTrack != undefined) {
 		SoundPlayer.currTrack[currParity].audio.onended = null;
@@ -21,6 +24,9 @@ SoundPlayer.setTrack = function(track) {
 	track.audio[1 - SoundPlayer.currParity].pause();
 };
 
+
+// An update function to check if the current track is finished; if so, plays 
+// the other track
 SoundPlayer.tick = function() {
 	if (SoundPlayer.currTrack && 
 			SoundPlayer.currTrack.audio[SoundPlayer.currParity].currentTime == 
