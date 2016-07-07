@@ -85,7 +85,8 @@ ECCollisionChecker.OUTER_POLYS = [];
 // Initialize constant values of a unit circle and special polygons that either
 // inscribe or circumscribe the shape.
 (function() {
-	ECCollisionChecker.NUM_SIDES = 4 * (1 << ECCollisionChecker.NUM_SIDES_LOG);
+	ECCollisionChecker.NUM_SIDES = 4 * 
+			NumericalPowers[2][ECCollisionChecker.NUM_SIDES_LOG];
 	// Initialize points for the inscribed polygon
 	for (var i = 0; i < ECCollisionChecker.NUM_SIDES; i++) {
 		var rad = i * 2 * Math.PI / ECCollisionChecker.NUM_SIDES;
@@ -118,8 +119,8 @@ ECCollisionChecker.OUTER_POLYS = [];
 // until needed.
 ECCollisionChecker._areEllipsesColliding = function(centerX1, centerY1, width1, 
 		height1, centerX2, centerY2, width2, height2) {
-	var a1 = width1 >> 1, b1 = height1 >> 1;
-	var a2 = width2 >> 1, b2 = height2 >> 1;
+	var a1 = width1 / 1, b1 = height1 / 1;
+	var a2 = width2 / 1, b2 = height2 / 1;
 	if (ECCollisionChecker._helperEllipseBound(centerX1, centerY1, centerX2, 
 					centerY2, a1, b1) || 
 			ECCollisionChecker._helperEllipseBound(centerX2, centerY2, centerX1, 
@@ -149,8 +150,9 @@ ECCollisionChecker._areEllipsesColliding = function(centerX1, centerY1, width1,
 ECCollisionChecker._helperCheckEllipsePoly = function(semiX, semiY, centerX2, 
 		centerY2, iterationNo, startIndex, endIndex) {
 	// First check the inner polygon properties for short circuit true
-	var iterationDiff = 1 << (ECCollisionChecker.NUM_SIDES_LOG - iterationNo);
-	var iterSides = 4 * (1 << iterationNo);
+	var iterationDiff = 
+			NumericalPowers[2][ECCollisionChecker.NUM_SIDES_LOG - iterationNo];
+	var iterSides = 4 * NumericalPowers[2][iterationNo];
 	if (startIndex >= iterSides) {
 		startIndex %= iterSides;
 		endIndex %= iterSides;

@@ -52,5 +52,5 @@ KeyTracker.tick = function() {
 // more than 2 ticks for each state
 KeyTracker.getValue = function(keyCode) {
 	return KeyTracker._states[keyCode] == undefined ? KeyTracker.KeyStatus.OPEN : 
-			(KeyTracker._states[keyCode] >> 1) << 1;
+			KeyTracker._states[keyCode] - KeyTracker._states[keyCode] % 2;
 };
