@@ -86,7 +86,7 @@ ECCollisionChecker.OUTER_POLYS = [];
 // inscribe or circumscribe the shape.
 (function() {
 	ECCollisionChecker.NUM_SIDES = 4 * 
-			NumericalPowers[2][ECCollisionChecker.NUM_SIDES_LOG];
+			Math.pow(2, ECCollisionChecker.NUM_SIDES_LOG);
 	// Initialize points for the inscribed polygon
 	for (var i = 0; i < ECCollisionChecker.NUM_SIDES; i++) {
 		var rad = i * 2 * Math.PI / ECCollisionChecker.NUM_SIDES;

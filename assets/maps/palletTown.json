@@ -72,8 +72,8 @@
 	"staticMapInstances": [
 		{
 			"entity": "trainer",
-			"x": 0,
-			"y": 0
+			"x": 1,
+			"y": 1
 		}, {
 			"entity": "house",
 			"x": 8.5,
@@ -95,8 +95,8 @@
 	"npcs": [
 		{
 			"id": "block",
-			"x": 1,
-			"y": 1,
+			"x": 2,
+			"y": 2,
 			"startingDirection": "down"
 		}
 	],

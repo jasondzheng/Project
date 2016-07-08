@@ -8,12 +8,28 @@ window.onload = function() {
 	MapLoader.load('palletTown', function(map) {
 		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
 		var ctx = canvas.getContext('2d');
+		// Your code below
+		// TODO: init any variables you need here. Try not to do it with an array.
+		// You can do this with 2 variables.
+		var startTime = Date.now();
+		var framesElapsed = 0;
+
+		// Your code above
 		var drawLoop = function() {
 			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
+			var timestamp = Date.now();
+			var framesPerSecond = (++framesElapsed) * 1000 / (timestamp - startTime);
+			ctx.font = '50px Arial';
+			ctx.fillStyle = 'black';
+			ctx.fillText(Math.round(framesPerSecond) + ' FPS', 30, 50);
 			window.requestAnimationFrame(drawLoop);
+			// Your code below
+			// TODO: draw the FPS on the canvas in the topright corner
+
+			// Your code above
 		};
 		window.requestAnimationFrame(drawLoop);
 		bindMouse();

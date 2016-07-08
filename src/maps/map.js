@@ -29,6 +29,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// NPC instances
 	this.npcInstances = npcInstances;
 
+	// The player on this map, if any
+	this.player;
+
 	// Tracks
 	this.tracks = tracks;
 
@@ -43,6 +46,13 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 Map.prototype.registerNPCInstance = function(npcInstance) {
 	this.npcInstances.push(npcInstance);
 	npcInstance.containingMap = this;
+};
+
+
+// Registers player objects when they enter the map
+Map.prototype.registerNPCInstance = function(player) {
+	this.player = player;
+	player.containingMap = this;
 };
 
 
@@ -81,6 +91,15 @@ Map.prototype.findCollisions = function(centerX, centerY, width, height,
 			collisions.push(currentInstance);
 		}
 	}
+	// Finally compare to the player, if any
+	if (this.player && CollisionDetector.areShapesColliding(centerX, centerY, 
+			width, height, isRounded, this.player.visualInstance.x, 
+			this.player.visualInstance.y, 
+			this.player.visualInstance.getCollisionWidth(), 
+			this.player.visualInstance.getCollisionHeight(), 
+			this.player.visualInstance.isRounded())) {
+		collisions.push(this.player);
+	}
 	return collisions;
 };
 
@@ -115,5 +134,23 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 			}
 		}
 	}
+	// Finally compare to the player, if any
+	if (this.player && CollisionDetector.areShapesColliding(centerX, centerY, 
+			width, height, isRounded, this.player.visualInstance.x, 
+			this.player.visualInstance.y, 
+			this.player.visualInstance.getCollisionWidth(), 
+			this.player.visualInstance.getCollisionHeight(), 
+			this.player.visualInstance.isRounded())) {
+		return true;
+	}
 	return false;
+};
+
+
+// Checks if an element, including width and height, are out of map bounds.
+Map.prototype.isOutOfBounds = function(centerX, centerY, width, height) {
+	width /= 2;
+	height /= 2;
+	return centerX - width < 0 || centerX + width > this.width || 
+			centerY - height < 0 || centerY + height > this.height;
 };

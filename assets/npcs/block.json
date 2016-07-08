@@ -48,224 +48,224 @@
 	"entity": {
 		"frames": {
 			"up1": {
-				"sprite": "red1",
+				"sprite": "walk/red1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"up2": {
-				"sprite": "red2",
+				"sprite": "walk/red2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"up3": {
-				"sprite": "red3",
+				"sprite": "walk/red3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"up4": {
-				"sprite": "red4",
+				"sprite": "walk/red4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"down1": {
-				"sprite": "green1",
+				"sprite": "walk/green1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"down2": {
-				"sprite": "green2",
+				"sprite": "walk/green2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"down3": {
-				"sprite": "green3",
+				"sprite": "walk/green3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"down4": {
-				"sprite": "green4",
+				"sprite": "walk/green4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"left1": {
-				"sprite": "blue1",
+				"sprite": "walk/blue1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"left2": {
-				"sprite": "blue2",
+				"sprite": "walk/blue2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"left3": {
-				"sprite": "blue3",
+				"sprite": "walk/blue3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"left4": {
-				"sprite": "blue4",
+				"sprite": "walk/blue4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"right1": {
-				"sprite": "yellow1",
+				"sprite": "walk/yellow1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"right2": {
-				"sprite": "yellow2",
+				"sprite": "walk/yellow2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"right3": {
-				"sprite": "yellow3",
+				"sprite": "walk/yellow3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"right4": {
-				"sprite": "yellow4",
+				"sprite": "walk/yellow4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upLeft1": {
-				"sprite": "brown1",
+				"sprite": "walk/brown1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upLeft2": {
-				"sprite": "brown2",
+				"sprite": "walk/brown2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upLeft3": {
-				"sprite": "brown3",
+				"sprite": "walk/brown3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upLeft4": {
-				"sprite": "brown4",
+				"sprite": "walk/brown4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upRight1": {
-				"sprite": "orange1",
+				"sprite": "walk/orange1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upRight2": {
-				"sprite": "orange2",
+				"sprite": "walk/orange2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upRight3": {
-				"sprite": "orange3",
+				"sprite": "walk/orange3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"upRight4": {
-				"sprite": "orange4",
+				"sprite": "walk/orange4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downRight1": {
-				"sprite": "pink1",
+				"sprite": "walk/pink1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downRight2": {
-				"sprite": "pink2",
+				"sprite": "walk/pink2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downRight3": {
-				"sprite": "pink3",
+				"sprite": "walk/pink3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downRight4": {
-				"sprite": "pink4",
+				"sprite": "walk/pink4",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downLeft1": {
-				"sprite": "purple1",
+				"sprite": "walk/purple1",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downLeft2": {
-				"sprite": "purple2",
+				"sprite": "walk/purple2",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downLeft3": {
-				"sprite": "purple3",
+				"sprite": "walk/purple3",
 				"center": {
 					"x": 0,
 					"y": 0
 				}
 			},
 			"downLeft4": {
-				"sprite": "purple4",
+				"sprite": "walk/purple4",
 				"center": {
 					"x": 0,
 					"y": 0

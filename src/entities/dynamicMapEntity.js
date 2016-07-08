@@ -22,6 +22,44 @@ var DynamicMapEntity = function(name, frames, animations, collisionWidth,
 		this.defaultAnimation = animationName;
 		break;
 	}
+
+	// Initialize animation families
+	this._animationFamilies = {};
+	for (var animationName in animations) {
+		if (!animations.hasOwnProperty(animationName)) {
+			continue;
+		}
+		if (DynamicMapEntity.ANIM_NAME_REGEX.test(animationName)) {
+			var animFamilyName = animationName.match(
+					DynamicMapEntity.ANIM_NAME_REGEX)[1];
+			if (!this._animationFamilies[animFamilyName]) {
+				this._animationFamilies[animFamilyName] = [];
+			}
+			this._animationFamilies[animFamilyName].push(animationName);
+		}
+	}
+};
+
+
+// Regex for testing animation family naming
+DynamicMapEntity.ANIM_NAME_REGEX = /^(\w+?)\d+$/;
+
+
+// Helper to randomly pick an animation from a set of animations in a family.
+DynamicMapEntity.prototype.getAnimNameFromFamily = function(animName) {
+	if (this._animationFamilies[animName]) {
+		return this._animationFamilies[animName][Math.floor(Math.random() * 
+				this._animationFamilies[animName].length)];
+	} else {
+		return animName;
+	}
+};
+
+
+// Utility function to create names that are derived from an animation action
+// concatenated to a direction.
+DynamicMapEntity.getActionDirectionFamilyName = function(base, direction) {
+	return base + direction.substr(0, 1).toUpperCase() + direction.substr(1);
 };
 
 
@@ -39,6 +77,12 @@ var DynamicMapInstance = function(entity, x, y, opt_animation) {
 	this._frameCounter = 0;
 
 	this.setAnimation(opt_animation || entity.defaultAnimation);
+};
+
+
+// Gives access to getting animation names by family in the entity
+DynamicMapInstance.prototype.getAnimNameFromFamily = function(animName) {
+	return this._entity.getAnimNameFromFamily(animName);
 };
 
 

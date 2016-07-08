@@ -29,21 +29,6 @@ var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
 	// The containing map the NPC is on
 	this.containingMap = containingMap;
 
-	// TODO: initialize the animation families
-	this._animationFamilies = {};
-	// Initialize animation families
-	for (var animationName in npcEntity.visualEntity.animations) {
-		if (!npcEntity.visualEntity.animations.hasOwnProperty(animationName)) {
-			continue;
-		}
-		if (NPCInstance.ANIM_NAME_REGEX.test(animationName)) {
-			var animFamilyName = animationName.match(NPCInstance.ANIM_NAME_REGEX)[1];
-			if (!this._animationFamilies[animFamilyName]) {
-				this._animationFamilies[animFamilyName] = [];
-			}
-			this._animationFamilies[animFamilyName].push(animationName);
-		}
-	}
 	this._state = npcEntity.stateMachine.states[
 			npcEntity.stateMachine.defaultState];
 	this.direction = startingDirection;
@@ -65,21 +50,23 @@ var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
 };
 
 
-// Regex for testing animation family naming
-NPCInstance.ANIM_NAME_REGEX = /^(\w+?)\d+$/;
-
-
-NPCInstance.prototype.setPosition = function(x, y) {
+NPCInstance.prototype.setPositionX = function(x) {
 	this.visualInstance.x = x;
+};
+
+
+NPCInstance.prototype.setPositionY = function(y) {
 	this.visualInstance.y = y;
 };
 
 
-NPCInstance.prototype.getPosition = function() {
-	return {
-		x: this.visualInstance.x,
-		y: this.visualInstance.y
-	};
+NPCInstance.prototype.getPositionX = function() {
+	return this.visualInstance.x;
+};
+
+
+NPCInstance.prototype.getPositionY = function() {
+	return this.visualInstance.y;
 };
 
 
@@ -110,15 +97,4 @@ NPCInstance.prototype._helperEval = function(code) {
 	return function(code) {
 		return eval(code);
 	}.call(this, code);
-};
-
-
-// Helper to randomly pick an animation from a set of animations in a family.
-NPCInstance.prototype.getAnimNameFromFamily = function(animName) {
-	if (this._animationFamilies[animName]) {
-		return this._animationFamilies[animName][Math.floor(Math.random() * 
-				this._animationFamilies[animName].length)];
-	} else {
-		return animName;
-	}
 };
