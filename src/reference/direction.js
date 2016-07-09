@@ -29,7 +29,7 @@ Direction._angleSegments = [
 
 // Get a direction given a vector defined by a point.
 Direction.getDirectionFromCoords = function(x, y) {
-	var angle = Math.atan2(y, x);
+	var angle = Math.atan2(-y, x);
 	if (angle >= 7 * Math.PI / 8) {
 		angle -= Math.PI * 2;
 	}

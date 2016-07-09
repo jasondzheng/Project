@@ -50,7 +50,7 @@ Map.prototype.registerNPCInstance = function(npcInstance) {
 
 
 // Registers player objects when they enter the map
-Map.prototype.registerNPCInstance = function(player) {
+Map.prototype.registerPlayer = function(player) {
 	this.player = player;
 	player.containingMap = this;
 };
@@ -60,6 +60,9 @@ Map.prototype.registerNPCInstance = function(player) {
 Map.prototype.tickAll = function() {
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		this.npcInstances[i].tick();
+	}
+	if (this.player) {
+		this.player.tick();
 	}
 };
 
@@ -112,35 +115,35 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 	for (var i = 0; i < this.staticMapInstances.length; i++) {
 		var currentInstance = this.staticMapInstances[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
-				height, isRounded, currentInstance.x, currentInstance.y, 
-				currentInstance.getCollisionWidth(), 
-				currentInstance.getCollisionHeight(), currentInstance.isRounded())) {
-			if (!ignoreList || ignoreList.indexOf(currentInstance) == -1) {
-				return true;
-			}
+						height, isRounded, currentInstance.x, currentInstance.y, 
+						currentInstance.getCollisionWidth(), 
+						currentInstance.getCollisionHeight(), 
+						currentInstance.isRounded()) && 
+				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+			return true;
 		}
 	}
 	// Then compare NPCS
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		var currentInstance = this.npcInstances[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
-				height, isRounded, currentInstance.visualInstance.x, 
-				currentInstance.visualInstance.y, 
-				currentInstance.visualInstance.getCollisionWidth(), 
-				currentInstance.visualInstance.getCollisionHeight(), 
-				currentInstance.visualInstance.isRounded())) {
-			if (!ignoreList || ignoreList.indexOf(currentInstance) == -1) {
-				return true;
-			}
+						height, isRounded, currentInstance.visualInstance.x, 
+						currentInstance.visualInstance.y, 
+						currentInstance.visualInstance.getCollisionWidth(), 
+						currentInstance.visualInstance.getCollisionHeight(), 
+						currentInstance.visualInstance.isRounded()) && 
+				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+			return true;
 		}
 	}
 	// Finally compare to the player, if any
-	if (this.player && CollisionDetector.areShapesColliding(centerX, centerY, 
-			width, height, isRounded, this.player.visualInstance.x, 
-			this.player.visualInstance.y, 
-			this.player.visualInstance.getCollisionWidth(), 
-			this.player.visualInstance.getCollisionHeight(), 
-			this.player.visualInstance.isRounded())) {
+	if (this.player && (!ignoreList || ignoreList.indexOf(this.player) == -1) && 
+			CollisionDetector.areShapesColliding(centerX, centerY, 
+					width, height, isRounded, this.player.visualInstance.x, 
+					this.player.visualInstance.y, 
+					this.player.visualInstance.getCollisionWidth(), 
+					this.player.visualInstance.getCollisionHeight(), 
+					this.player.visualInstance.isRounded())) {
 		return true;
 	}
 	return false;

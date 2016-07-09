@@ -230,191 +230,191 @@
 			"idleDown": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "down1",
+					"frame": "walkDown1",
 					"duration": 999999
 				}]
 			},
 			"walkDown": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "down1",
+					"frame": "walkDown1",
 					"duration": 8
 				}, {
-					"frame": "down2",
+					"frame": "walkDown2",
 					"duration": 8
 				}, {
-					"frame": "down3",
+					"frame": "walkDown3",
 					"duration": 8
 				}, {
-					"frame": "down4",
+					"frame": "walkDown4",
 					"duration": 8
 				}]
 			},
 			"idleDownLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "downLeft1",
+					"frame": "walkDownLeft1",
 					"duration": 999999
 				}]
 			},
 			"walkDownLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "downLeft1",
+					"frame": "walkDownLeft1",
 					"duration": 8
 				}, {
-					"frame": "downLeft2",
+					"frame": "walkDownLeft2",
 					"duration": 8
 				}, {
-					"frame": "downLeft3",
+					"frame": "walkDownLeft3",
 					"duration": 8
 				}, {
-					"frame": "downLeft4",
+					"frame": "walkDownLeft4",
 					"duration": 8
 				}]
 			},
 			"idleDownRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "downRight1",
+					"frame": "walkDownRight1",
 					"duration": 999999
 				}]
 			},
 			"walkDownRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "downRight1",
+					"frame": "walkDownRight1",
 					"duration": 8
 				}, {
-					"frame": "downRight2",
+					"frame": "walkDownRight2",
 					"duration": 8
 				}, {
-					"frame": "downRight3",
+					"frame": "walkDownRight3",
 					"duration": 8
 				}, {
-					"frame": "downRight4",
+					"frame": "walkDownRight4",
 					"duration": 8
 				}]
 			},
 			"idleUp": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "up1",
+					"frame": "walkUp1",
 					"duration": 999999
 				}]
 			},
 			"walkUp": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "up1",
+					"frame": "walkUp1",
 					"duration": 8
 				}, {
-					"frame": "up2",
+					"frame": "walkUp2",
 					"duration": 8
 				}, {
-					"frame": "up3",
+					"frame": "walkUp3",
 					"duration": 8
 				}, {
-					"frame": "up4",
+					"frame": "walkUp4",
 					"duration": 8
 				}]
 			},
 			"idleUpLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "upLeft1",
+					"frame": "walkUpLeft1",
 					"duration": 999999
 				}]
 			},
 			"walkUpLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "upLeft1",
+					"frame": "walkUpLeft1",
 					"duration": 8
 				}, {
-					"frame": "upLeft2",
+					"frame": "walkUpLeft2",
 					"duration": 8
 				}, {
-					"frame": "upLeft3",
+					"frame": "walkUpLeft3",
 					"duration": 8
 				}, {
-					"frame": "upLeft4",
+					"frame": "walkUpLeft4",
 					"duration": 8
 				}]
 			},
 			"idleUpRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "upRight1",
+					"frame": "walkUpRight1",
 					"duration": 999999
 				}]
 			},
 			"walkUpRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "upRight1",
+					"frame": "walkUpRight1",
 					"duration": 8
 				}, {
-					"frame": "upRight2",
+					"frame": "walkUpRight2",
 					"duration": 8
 				}, {
-					"frame": "upRight3",
+					"frame": "walkUpRight3",
 					"duration": 8
 				}, {
-					"frame": "upRight4",
+					"frame": "walkUpRight4",
 					"duration": 8
 				}]
 			},
 			"idleLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "left1",
+					"frame": "walkLeft1",
 					"duration": 999999
 				}]
 			},
 			"walkLeft": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "left1",
+					"frame": "walkLeft1",
 					"duration": 8
 				}, {
-					"frame": "left2",
+					"frame": "walkLeft2",
 					"duration": 8
 				}, {
-					"frame": "left3",
+					"frame": "walkLeft3",
 					"duration": 8
 				}, {
-					"frame": "left4",
+					"frame": "walkLeft4",
 					"duration": 8
 				}]
 			},
 			"idleRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "right1",
+					"frame": "walkRight1",
 					"duration": 999999
 				}]
 			},
 			"walkRight": {
 				"isLooped": true,
 				"frameRefs": [{
-					"frame": "right1",
+					"frame": "walkRight1",
 					"duration": 8
 				}, {
-					"frame": "right2",
+					"frame": "walkRight2",
 					"duration": 8
 				}, {
-					"frame": "right3",
+					"frame": "walkRight3",
 					"duration": 8
 				}, {
-					"frame": "right4",
+					"frame": "walkRight4",
 					"duration": 8
 				}]
 			}
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,
-		"isRounded": true,
+		"isRounded": true
 	}
 }
 

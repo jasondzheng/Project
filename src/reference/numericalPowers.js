@@ -11,7 +11,7 @@ NumericalPowers.MAX_BASE = 4;
 	for (var i = 2; i <= NumericalPowers.MAX_BASE; i++) {
 		NumericalPowers[i] = [];
 		for (var j = 0; j <= NumericalPowers.MAX_CACHE; j++) {
-			NumericalPowers[i][j] = (j == 0 ? 1 : NumericalPowers[i][j] * i);
+			NumericalPowers[i][j] = (j == 0 ? 1 : NumericalPowers[i][j - 1] * i);
 		}
 	}
 })();

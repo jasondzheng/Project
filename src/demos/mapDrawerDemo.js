@@ -5,34 +5,52 @@ var viewerLoc = {
 
 window.onload = function() {
 	ScreenResizeManager.init();
-	MapLoader.load('palletTown', function(map) {
+	var deferrer = new CallbackDeferrer();
+	deferrer.add(MapLoader.load, function(accumulatedArgs) {
+		return ['palletTown'];
+	}, ['map']);
+	deferrer.add(PlayerLoader.load, function(accumulatedArgs) {
+		return ['domino'];
+	}, ['player']);
+	deferrer.after(function(accumulatedArgs) {
+		var map = accumulatedArgs[0].map;
+		var player = accumulatedArgs[1].player;
+
+		// Register map and player in the GameState
+		GameState.map = map;
+		GameState.player = player;
+
 		var canvas = document.querySelector(ScreenProps.SCREEN_QS);
 		var ctx = canvas.getContext('2d');
-		// Your code below
-		// TODO: init any variables you need here. Try not to do it with an array.
-		// You can do this with 2 variables.
-		var startTime = Date.now();
+
+		KeyTracker.attachToScreen(document.body);
+
+		var startTime;
 		var framesElapsed = 0;
 
-		// Your code above
+		player.setPositionX(4);
+		player.setPositionY(4);
+		map.registerPlayer(player);
+
 		var drawLoop = function() {
 			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
-			var timestamp = Date.now();
-			var framesPerSecond = (++framesElapsed) * 1000 / (timestamp - startTime);
-			ctx.font = '50px Arial';
-			ctx.fillStyle = 'black';
-			ctx.fillText(Math.round(framesPerSecond) + ' FPS', 30, 50);
+			if (!startTime) {
+				startTime = Date.now();	
+			} else {
+				var timestamp = Date.now();
+				var framesPerSecond = 
+						(++framesElapsed) * 1000 / (timestamp - startTime);
+				ctx.font = '50px Arial';
+				ctx.fillStyle = 'black';
+				ctx.fillText(Math.round(framesPerSecond) + ' FPS', 30, 50);
+			}
 			window.requestAnimationFrame(drawLoop);
-			// Your code below
-			// TODO: draw the FPS on the canvas in the topright corner
-
-			// Your code above
 		};
 		window.requestAnimationFrame(drawLoop);
-		bindMouse();
+		// bindMouse();
 		setupTickCycle(map);
 		SoundPlayer.setTrack(map.tracks.marioLuigiBattle);
 	});
@@ -79,11 +97,21 @@ var setupTickCycle = function(loadedMap) {
 			return;
 		}
 		while (delta >= tickWindow) {
+			KeyTracker.tick();
+			InputRouter.tick();
 			loadedMap.tickAll();
 			BeatDrawer.tick();
 			SoundPlayer.tick();
+			trackCameraOnPlayerDebugDebug();
 			delta -= tickWindow;
 		}
 		lastOperated = currTime - delta;
 	}, 0);
+};
+
+var trackCameraOnPlayerDebugDebug = function() {
+	if (GameState.player) {
+		viewerLoc.x = GameState.player.getPositionX();
+		viewerLoc.y = GameState.player.getPositionY();
+	}
 };

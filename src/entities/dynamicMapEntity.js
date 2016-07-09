@@ -176,7 +176,8 @@ DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR = '../assets/img/';
 // representation of the type.
 DynamicMapEntityLoader.Types = {
 	NPC: 'npcs',
-	UNIT: 'units'
+	UNIT: 'units',
+	PLAYER: 'players'
 };
 
 
@@ -214,4 +215,13 @@ DynamicMapEntityLoader.unload = function(entity) {
 		ImgUtils.unload(entity.frames[frameName].sprite.src);
 		entity.frames[frameName].sprite = null;
 	}
+};
+
+
+// Unloads entity of a given instance, freeing up all images required. Note
+// that this should only be done if this is the last instance referencing
+// that entity.
+DynamicMapEntityLoader.unloadFromInstance = function(instance) {
+	DynamicMapEntityLoader.unload(instance._entity);
+	instance._entity = null;
 };

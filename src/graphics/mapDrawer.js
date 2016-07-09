@@ -68,6 +68,10 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	for (var i = 0; i < map.npcInstances.length; i++) {
 		entitiesToDraw.push(map.npcInstances[i].visualInstance);
 	}
+	// Add player
+	if (map.player) {
+		entitiesToDraw.push(map.player.visualInstance);
+	}
 	entitiesToDraw.sort(function(a, b) {
 		return a.y + a.getCollisionHeight() / 2 - b.y - b.getCollisionHeight() / 2;
 	});
@@ -123,7 +127,7 @@ MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
 // coordinate.
 MapDrawer._helperCalcScreenY = function(y) {
 	return Math.floor(y * MapDrawer.BASE_HEIGHT * 
-			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT));
+			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT)) + 36;
 };
 
 

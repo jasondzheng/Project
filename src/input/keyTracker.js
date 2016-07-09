@@ -24,12 +24,12 @@ KeyTracker._states = {};
 // Attaches key listeners to capture key down and up events on the specified
 // screen element. Tracks events using the states object, indexed by key
 // code.
-KeyTracker.attachToScreen = function(canvas) {
-	canvas.onkeydown = function(e) {
+KeyTracker.attachToScreen = function(screen) {
+	screen.onkeydown = function(e) {
 		KeyTracker._states[e.keyCode] = KeyTracker.KeyStatus.DOWN;
 	};
 
-	canvas.onkeyup = function(e) {
+	screen.onkeyup = function(e) {
 		KeyTracker._states[e.keyCode] = KeyTracker.KeyStatus.UP;
 	};
 };
