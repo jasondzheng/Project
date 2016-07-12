@@ -11,6 +11,7 @@ var NPCMovementManager = function(npc) {
 	this.setIdle(npc.direction);
 };
 
+// TODO: comment this class
 
 NPCMovementManager.WalkStates = {
 	IDLE: 'idle',

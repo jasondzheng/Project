@@ -50,225 +50,225 @@
 			"up1": {
 				"sprite": "walk/red1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"up2": {
 				"sprite": "walk/red2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"up3": {
 				"sprite": "walk/red3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"up4": {
 				"sprite": "walk/red4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"down1": {
 				"sprite": "walk/green1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"down2": {
 				"sprite": "walk/green2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"down3": {
 				"sprite": "walk/green3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"down4": {
 				"sprite": "walk/green4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"left1": {
 				"sprite": "walk/blue1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"left2": {
 				"sprite": "walk/blue2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"left3": {
 				"sprite": "walk/blue3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"left4": {
 				"sprite": "walk/blue4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"right1": {
 				"sprite": "walk/yellow1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"right2": {
 				"sprite": "walk/yellow2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"right3": {
 				"sprite": "walk/yellow3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"right4": {
 				"sprite": "walk/yellow4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upLeft1": {
 				"sprite": "walk/brown1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upLeft2": {
 				"sprite": "walk/brown2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upLeft3": {
 				"sprite": "walk/brown3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upLeft4": {
 				"sprite": "walk/brown4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upRight1": {
 				"sprite": "walk/orange1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upRight2": {
 				"sprite": "walk/orange2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upRight3": {
 				"sprite": "walk/orange3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"upRight4": {
 				"sprite": "walk/orange4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downRight1": {
 				"sprite": "walk/pink1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downRight2": {
 				"sprite": "walk/pink2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downRight3": {
 				"sprite": "walk/pink3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downRight4": {
 				"sprite": "walk/pink4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downLeft1": {
 				"sprite": "walk/purple1",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downLeft2": {
 				"sprite": "walk/purple2",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downLeft3": {
 				"sprite": "walk/purple3",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			},
 			"downLeft4": {
 				"sprite": "walk/purple4",
 				"center": {
-					"x": 0,
-					"y": 0
+					"x": 48,
+					"y": 48
 				}
 			}
 		},

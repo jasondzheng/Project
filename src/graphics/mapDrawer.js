@@ -68,6 +68,10 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	for (var i = 0; i < map.npcInstances.length; i++) {
 		entitiesToDraw.push(map.npcInstances[i].visualInstance);
 	}
+	// Add units
+	for (var i = 0; i < map.unitInstances.length; i++) {
+		entitiesToDraw.push(map.unitInstances[i].visualInstance);
+	}
 	// Add player
 	if (map.player) {
 		entitiesToDraw.push(map.player.visualInstance);

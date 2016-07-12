@@ -52,7 +52,7 @@ Player.prototype.getPositionY = function() {
 Player.prototype.tryMove = function(deltaX, deltaY) {
 	var targetX = this.visualInstance.x + deltaX;
 	var targetY = this.visualInstance.y + deltaY;
-	var targetDirection = (deltaX == deltaY && deltaX == 0) ? this._direction : 
+	var targetDirection = (deltaX == 0 && deltaY == 0) ? this._direction : 
 			Direction.getDirectionFromCoords(deltaX, deltaY);
 	var targetAnimationState;
 	// Check if a move is possible

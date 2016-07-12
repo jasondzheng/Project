@@ -29,6 +29,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// NPC instances
 	this.npcInstances = npcInstances;
 
+	// Unit instances
+	this.unitInstances = [];
+
 	// The player on this map, if any
 	this.player;
 
@@ -49,6 +52,13 @@ Map.prototype.registerNPCInstance = function(npcInstance) {
 };
 
 
+// Registers a newly created unit instance to the map
+Map.prototype.registerUnitInstance = function(unitInstance) {
+	this.unitInstances.push(unitInstance);
+	unitInstance.containingMap = this;
+}
+
+
 // Registers player objects when they enter the map
 Map.prototype.registerPlayer = function(player) {
 	this.player = player;
@@ -60,6 +70,9 @@ Map.prototype.registerPlayer = function(player) {
 Map.prototype.tickAll = function() {
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		this.npcInstances[i].tick();
+	}
+	for (var i = 0; i < this.unitInstances.length; i++) {
+		this.unitInstances[i].tick();
 	}
 	if (this.player) {
 		this.player.tick();
@@ -85,6 +98,18 @@ Map.prototype.findCollisions = function(centerX, centerY, width, height,
 	// Then compare NPCS
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		var currentInstance = this.npcInstances[i];
+		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
+				height, isRounded, currentInstance.visualInstance.x, 
+				currentInstance.visualInstance.y, 
+				currentInstance.visualInstance.getCollisionWidth(), 
+				currentInstance.visualInstance.getCollisionHeight(), 
+				currentInstance.visualInstance.isRounded())) {
+			collisions.push(currentInstance);
+		}
+	}
+	// Then compare units
+	for (var i = 0; i < this.unitInstances.length; i++) {
+		var currentInstance = this.unitInstances[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
 				height, isRounded, currentInstance.visualInstance.x, 
 				currentInstance.visualInstance.y, 
@@ -126,6 +151,19 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 	// Then compare NPCS
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		var currentInstance = this.npcInstances[i];
+		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
+						height, isRounded, currentInstance.visualInstance.x, 
+						currentInstance.visualInstance.y, 
+						currentInstance.visualInstance.getCollisionWidth(), 
+						currentInstance.visualInstance.getCollisionHeight(), 
+						currentInstance.visualInstance.isRounded()) && 
+				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+			return true;
+		}
+	}
+	// Then compare units
+	for (var i = 0; i < this.unitInstances.length; i++) {
+		var currentInstance = this.unitInstances[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
 						height, isRounded, currentInstance.visualInstance.x, 
 						currentInstance.visualInstance.y, 
