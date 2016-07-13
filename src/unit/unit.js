@@ -26,6 +26,9 @@ var UnitEntity = function(id, name, maxHp, atk, behaviorPattern, attackPattern,
 
 var UnitInstance = function(unitEntity, x, y, startingDirection, 
 		containingMap) {
+	// Globally increasing ID to reference this unit.
+	this.uid = UnitInstance._uidCounter++;
+
 	this.hp = unitEntity.maxHp;
 
 	this.unitEntity = unitEntity;
@@ -42,6 +45,9 @@ var UnitInstance = function(unitEntity, x, y, startingDirection,
 	this._helperEval(this.unitEntity.stateMachine.init);
 	this._helperEval(this._state.onEnter);
 };
+
+
+UnitInstance._uidCounter = 0;
 
 
 UnitInstance.prototype.setPositionX = function(x) {

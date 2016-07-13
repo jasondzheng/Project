@@ -2,6 +2,7 @@
 	"name": "Ball",
 	"maxHp": 10,
 	"atk": 1,
+	"monsterHeight": 1,
 	"behaviorPattern": " ",
 	"attackPattern": " ",
 	"stateMachine": {
@@ -50,6 +51,34 @@
 	},
 	"entity": {
 		"frames": {
+			"spawn1": {
+				"sprite": "spawn/1",
+				"center": {
+					"x": 50,
+					"y": 92
+				}
+			},
+			"spawn2": {
+				"sprite": "spawn/2",
+				"center": {
+					"x": 50,
+					"y": 92
+				}
+			},
+			"spawn3": {
+				"sprite": "spawn/3",
+				"center": {
+					"x": 50,
+					"y": 92
+				}
+			},
+			"spawn4": {
+				"sprite": "spawn/4",
+				"center": {
+					"x": 50,
+					"y": 92
+				}
+			},
 			"walkDown1": {
 				"sprite": "walk/1",
 				"center": {
@@ -299,6 +328,22 @@
 					"duration": 8
 				}]
 			},
+			"spawnDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
 			"idleDownLeft": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -320,6 +365,22 @@
 				}, {
 					"frame": "walkDownLeft4",
 					"duration": 8
+				}]
+			},
+			"spawnDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
 				}]
 			},
 			"idleDownRight": {
@@ -345,6 +406,22 @@
 					"duration": 8
 				}]
 			},
+			"spawnDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
 			"idleUp": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -366,6 +443,22 @@
 				}, {
 					"frame": "walkUp4",
 					"duration": 8
+				}]
+			},
+			"spawnUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
 				}]
 			},
 			"idleUpLeft": {
@@ -391,6 +484,22 @@
 					"duration": 8
 				}]
 			},
+			"spawnUpLeft":{
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
 			"idleUpRight": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -412,6 +521,22 @@
 				}, {
 					"frame": "walkUpRight4",
 					"duration": 8
+				}]
+			},
+			"spawnUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
 				}]
 			},
 			"idleLeft": {
@@ -437,6 +562,22 @@
 					"duration": 8
 				}]
 			},
+			"spawnLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
 			"idleRight": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -458,6 +599,22 @@
 				}, {
 					"frame": "walkRight4",
 					"duration": 8
+				}]
+			},
+			"spawnUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
 				}]
 			}
 		},

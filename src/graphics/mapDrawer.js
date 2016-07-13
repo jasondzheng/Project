@@ -14,7 +14,7 @@ MapDrawer.HALF_ROWS = MapDrawer.TOTAL_ROWS / 2;
 
 // The shrinkage coefficients.
 MapDrawer.SHRINKAGE = {
-	HEIGHT: 0.05
+	HEIGHT: 0.01
 };
 
 // The fixed width of all square tiles.
@@ -131,7 +131,7 @@ MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
 // coordinate.
 MapDrawer._helperCalcScreenY = function(y) {
 	return Math.floor(y * MapDrawer.BASE_HEIGHT * 
-			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT)) + 36;
+			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT)) + 60;
 };
 
 

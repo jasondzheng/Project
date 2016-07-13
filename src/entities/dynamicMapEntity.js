@@ -113,6 +113,8 @@ DynamicMapInstance.prototype.advanceFrame = function() {
 			if (this._frameIndex == currAnimation.frameRefs.length) {
 				this._frameIndex--;
 				this._frameCounter--;
+			} else {
+				this._frameCounter = 0;
 			}
 		}
 	}

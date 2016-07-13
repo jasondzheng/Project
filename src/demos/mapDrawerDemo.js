@@ -25,8 +25,7 @@ window.onload = function() {
 
 		KeyTracker.attachToScreen(document.body);
 
-		var startTime;
-		var framesElapsed = 0;
+		var startTimes = [];
 
 		player.setPositionX(4);
 		player.setPositionY(4);
@@ -37,15 +36,16 @@ window.onload = function() {
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
-			if (!startTime) {
-				startTime = Date.now();	
-			} else {
+			if (startTimes.length == 30) {
 				var timestamp = Date.now();
-				var framesPerSecond = 
-						(++framesElapsed) * 1000 / (timestamp - startTime);
+				var framesPerSecond = 30000 / (timestamp - startTimes[0]);
 				ctx.font = '50px Arial';
 				ctx.fillStyle = 'black';
 				ctx.fillText(Math.round(framesPerSecond) + ' FPS', 30, 50);
+				startTimes.push(timestamp);
+				startTimes.shift();
+			} else {
+				startTimes.push(Date.now());	
 			}
 			window.requestAnimationFrame(drawLoop);
 		};
