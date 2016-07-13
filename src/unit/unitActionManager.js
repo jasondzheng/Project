@@ -17,7 +17,6 @@ var UnitActionManager = function(unit) {
 	this._actionQueue = [];
 	this._behavior = unit.unitEntity.behaviorPattern; // TODO: get actual behavior
 	this._animationState;
-	this._direction = unit.direction;
 	this._collisionIgnoreList = [unit];
 };
 
@@ -127,7 +126,8 @@ UnitActionManager.StayIdleAction.prototype.tick = function() {
 		this._uam.unit.visualInstance.setAnimation(
 				this._uam.unit.visualInstance.getAnimNameFromFamily(
 						DynamicMapEntity.getActionDirectionFamilyName(
-								UnitActionManager.AnimationStates.IDLE, this._uam._direction)));
+								UnitActionManager.AnimationStates.IDLE, 
+								this._uam.unit.direction)));
 		this._animationState = UnitActionManager.AnimationStates.IDLE;
 	}
 	this._duration--;
