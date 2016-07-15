@@ -163,7 +163,6 @@ UnitActionManager.SpawnAction.prototype.tick = function() {
 								this._uam.unit.direction)));
 		this._uam._animationState = UnitActionManager.AnimationStates.SPAWNING;
 	}
-
 };
 
 
