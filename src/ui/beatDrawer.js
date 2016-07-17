@@ -40,7 +40,6 @@ BeatDrawer._windowEnd;
 
 BeatDrawer._hitWindowStart;
 BeatDrawer._hitWindowEnd;
-BeatDrawer._hitHoldStart;
 BeatDrawer._hitHoldEnd;
 
 BeatDrawer.setWindowInterval = function(seconds) {
@@ -69,6 +68,7 @@ BeatDrawer._advanceTime = function(newTime) {
 	if (BeatDrawer._time > newTime) {
 		BeatDrawer._windowStart -= BeatDrawer._queue.length;
 		BeatDrawer._windowEnd -= BeatDrawer._queue.length;
+		BeatDrawer._hitHoldEnd -= BeatDrawer._songPlayTime;
 	}
 	if (BeatDrawer._hitWindowStart >= BeatDrawer._queue.length &&
 			BeatDrawer._hitWindowEnd >= BeatDrawer._queue.length) {
@@ -118,12 +118,29 @@ BeatDrawer._advanceTime = function(newTime) {
 					(BeatDrawer._hitWindowEnd < BeatDrawer._queue.length ? 0 : 
 							BeatDrawer._songPlayTime) <	newTime + BeatDrawer.NOTE_HIT_GRACE; 
 			BeatDrawer._hitWindowEnd++);
+	if (BeatDrawer._hitHoldEnd != undefined && 
+			BeatDrawer._time >= BeatDrawer._hitHoldEnd) {
+		BeatDrawer._hitHoldEnd = undefined;
+	}
 };
+
+
+BeatDrawer.isInHold = function() {
+	return BeatDrawer._hitHoldEnd != undefined && 
+			BeatDrawer._time < BeatDrawer._hitHoldEnd;
+}
 
 
 BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
 	if (BeatDrawer._hitWindowStart != BeatDrawer._hitWindowEnd) {
 		console.log('Consumed 1 of ' + (BeatDrawer._hitWindowEnd - BeatDrawer._hitWindowStart) + ' notes');
+		var startIndex = BeatDrawer._hitWindowStart % BeatDrawer._queue.length;
+		if (BeatDrawer._queue[startIndex].style == BeatDrawer.HOLD_START_STYLE) {
+			BeatDrawer._hitHoldEnd = BeatDrawer._queue[
+					(BeatDrawer._hitWindowStart + 1) % BeatDrawer._queue.length].time + 
+					((BeatDrawer._hitWindowStart + 1) < BeatDrawer._queue.length ? 0 : 
+							BeatDrawer._songPlayTime);
+		}
 		BeatDrawer._hitWindowStart++;
 		return true;
 	}

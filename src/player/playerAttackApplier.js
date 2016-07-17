@@ -9,7 +9,7 @@ var PlayerAttackApplier = {};
  */
 PlayerAttackApplier.BasicCloseRangedAttack = {
 	ATTACK_RADIUS: 2,
-	apply: function(player, keyPressWasDown) {
+	apply: function(player) {
 		var collidingUnits = player.containingMap.findUnitCollisions(
 				player.visualInstance.x, player.visualInstance.y, 
 				PlayerAttackApplier.BasicCloseRangedAttack.ATTACK_RADIUS, 
@@ -22,14 +22,19 @@ PlayerAttackApplier.BasicCloseRangedAttack = {
 							unit.visualInstance.x - player.visualInstance.x, 
 							unit.visualInstance.y - player.visualInstance.y) == 
 					player._direction) {
-				if (keyPressWasDown && !bonusApplied) {
+				if (!bonusApplied) {
 					bonusApplied = true;
-					if (BeatDrawer.consumeHitNote()) {
-						player.attackCombo++;
+					if (BeatDrawer.isInHold()) {
+						player.attackCombo += 1;
+						console.log(player.attackCombo);
 					} else {
-						player.attackCombo = 0;
-					}
-					console.log(player.attackCombo);
+						if (BeatDrawer.consumeHitNote()) {
+							player.attackCombo += 10;
+						} else {
+							player.attackCombo = 0;
+						}
+						console.log(player.attackCombo);	
+					} 
 				}
 				unit.hp -= 1;
 				unit.actionManager.forceEnqueue(unit.hp == 0 ? 
