@@ -3,13 +3,13 @@
  * drawing that sprite.
  */
 
-var StaticMapEntity = function(name, sprite, centerX, centerY, collisionWidth, 
+var StaticMapEntity = function(name, sprite, edgeX, edgeY, collisionWidth, 
 		collisionHeight, isRounded) {
 	this.name = name;
 	this.sprite = sprite;
-	this.center = {
-		x: centerX,
-		y: centerY
+	this.edge = {
+		x: edgeX,
+		y: edgeY
 	};
 	this.collisionWidth = collisionWidth;
 	this.collisionHeight = collisionHeight;
@@ -34,8 +34,8 @@ StaticMapInstance.prototype.getSprite = function() {
 	return this._entity.sprite;
 };
 
-StaticMapInstance.prototype.getCenter = function() {
-	return this._entity.center;
+StaticMapInstance.prototype.getEdge = function() {
+	return this._entity.edge;
 };
 
 StaticMapInstance.prototype.getCollisionWidth = function() {
@@ -60,7 +60,10 @@ var StaticMapEntityLoader = {};
 StaticMapEntityLoader.STATIC_MAP_ENTITY_DIR = '../assets/img/staticEntities/';
 
 StaticMapEntityLoader.loadAll = function(json, mapName, callback) {
-	// new StaticMapEntity(name, sprite, centerX, centerY, collisionWidth, collisionHeight, isRounded)
+	if (Object.keys(json).length == 0) {
+		callback({});
+		return;
+	}
 	var imageUrls = {};
 	for (var entityName in json) {
 		if (!json.hasOwnProperty(entityName)) {
@@ -74,8 +77,8 @@ StaticMapEntityLoader.loadAll = function(json, mapName, callback) {
 		var staticEntities = {};
 		for (var entityName in json) {
 			staticEntities[entityName] = new StaticMapEntity(entityName, 
-					images[json[entityName].sprite], json[entityName].center.x, 
-					json[entityName].center.y, json[entityName].collisionWidth, 
+					images[json[entityName].sprite], json[entityName].edge.x, 
+					json[entityName].edge.y, json[entityName].collisionWidth, 
 					json[entityName].collisionHeight, json[entityName].isRounded);
 		}
 		callback(staticEntities);

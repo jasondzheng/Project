@@ -96,8 +96,8 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 				viewerX, viewerY, MapDrawer.TILE_DIM);
 		// check if the boundingBox is in bounds
 		var boundingRect = {
-			x: centerLoc.x - entitiesToDraw[i].getCenter().x,
-			y: centerLoc.y - entitiesToDraw[i].getSprite().height,
+			x: centerLoc.x - entitiesToDraw[i].getEdge().x,
+			y: centerLoc.y - entitiesToDraw[i].getEdge().y,
 			width: entitiesToDraw[i].getSprite().width,
 			height: entitiesToDraw[i].getSprite().height
 		};

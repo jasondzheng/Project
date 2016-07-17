@@ -31,6 +31,8 @@ window.onload = function() {
 		player.setPositionY(4);
 		map.registerPlayer(player);
 
+		map.unitSpawner.fillUnitQuotas();
+
 		var drawLoop = function() {
 			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 

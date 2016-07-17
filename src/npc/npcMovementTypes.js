@@ -11,6 +11,7 @@ var MoveInstruction = function(x, y, speed, direction) {
 	this.direction = direction;
 };
 
+
 MovePattern._genRandomClassPattern = function(speed, walkRate, turnRate, 
 		boxWidth, boxHeight) {
 	var result = {};
@@ -81,7 +82,7 @@ MovePattern._genRandomClassPattern = function(speed, walkRate, turnRate,
 })();
 
 
-// TODO: replace with meaningful function later
+// Gets a move pattern by its string representation.
 MovePattern.getType = function(patternName) {
 	return MovePattern[patternName.substr(0, 1).toUpperCase() + 
 			patternName.substr(1)];

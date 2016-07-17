@@ -38,9 +38,9 @@
 	"staticMapEntities": {
 		"trainer": {
 			"sprite": "trainer",
-			"center": {
+			"edge": {
 				"x": 51,
-				"y": 124
+				"y": 168
 			},
 			"collisionWidth": 1,
 			"collisionHeight": 1,
@@ -48,9 +48,9 @@
 		},
 		"house": {
 			"sprite": "house",
-			"center": {
+			"edge": {
 				"x": 283,
-				"y": 514
+				"y": 668
 			},
 			"collisionWidth": 6,
 			"collisionHeight": 3,
@@ -58,9 +58,9 @@
 		},
 		"mailBox": {
 			"sprite": "mailBox",
-			"center": {
+			"edge": {
 				"x": 42,
-				"y": 124
+				"y": 156
 			},
 			"collisionWidth": 1,
 			"collisionHeight": 1,
@@ -100,5 +100,23 @@
 			"startingDirection": "down"
 		}
 	],
-	"tracks": ["marioLuigiBattle"]
+	"tracks": ["marioLuigiBattle"],
+	"spawnBehavior": {
+		"monsterData": {
+			"ball": {
+				"capacity": 5,
+				"spawnInterval": 1800,
+				"spawnRate": 1,
+				"spawnPoints": [0]
+			}
+		},
+		"spawnPoints": [
+			{
+				"x": 20,
+				"y": 0,
+				"width": 10,
+				"height": 10
+			}
+		]
+	}
 }

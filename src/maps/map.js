@@ -5,7 +5,7 @@
  */
 
 var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances, npcInstances, tracks) {
+		staticMapInstances, npcInstances, tracks, spawnBehavior) {
 	// The name of the map
 	this.name = name;
 
@@ -38,6 +38,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// Tracks
 	this.tracks = tracks;
 
+	// Unit Spawner
+	this.unitSpawner = new UnitSpawner(this, spawnBehavior);
+
 	// When the map is finalized, link all instances to this map.
 	for (var i = 0; i < npcInstances.length; i++) {
 		npcInstances[i].containingMap = this;
@@ -56,7 +59,13 @@ Map.prototype.registerNPCInstance = function(npcInstance) {
 Map.prototype.registerUnitInstance = function(unitInstance) {
 	this.unitInstances.push(unitInstance);
 	unitInstance.containingMap = this;
-}
+};
+
+
+Map.prototype.deregisterUnitInstance = function(unitInstance) {
+	this.unitInstances.splice(this.unitInstances.indexOf(unitInstance), 1);
+	unitInstance.containingMap = null;
+};
 
 
 // Registers player objects when they enter the map
@@ -68,6 +77,7 @@ Map.prototype.registerPlayer = function(player) {
 
 // Tick all tickables contained in the map
 Map.prototype.tickAll = function() {
+	this.unitSpawner.tick();
 	for (var i = 0; i < this.npcInstances.length; i++) {
 		this.npcInstances[i].tick();
 	}
@@ -132,10 +142,30 @@ Map.prototype.findCollisions = function(centerX, centerY, width, height,
 };
 
 
+// Finds all colliding units with the specified shape.
+Map.prototype.findUnitCollisions = function(centerX, centerY, width, height, 
+		isRounded, opt_ignoreList) {
+	var collisions = [];
+	for (var i = 0; i < this.unitInstances.length; i++) {
+		var currentInstance = this.unitInstances[i];
+		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
+						height, isRounded, currentInstance.visualInstance.x, 
+						currentInstance.visualInstance.y, 
+						currentInstance.visualInstance.getCollisionWidth(), 
+						currentInstance.visualInstance.getCollisionHeight(), 
+						currentInstance.visualInstance.isRounded()) &&
+				(!opt_ignoreList || opt_ignoreList.indexOf(currentInstance) == -1)) {
+			collisions.push(currentInstance);
+		}
+	}
+	return collisions;
+};
+
+
 // Helper function to detect whether a collision has happened or not. Keep in
 // sync with findCollisions.
 Map.prototype.isColliding = function(centerX, centerY, width, height, 
-		isRounded, ignoreList) {
+		isRounded, opt_ignoreList) {
 	// First compare to static map entities
 	for (var i = 0; i < this.staticMapInstances.length; i++) {
 		var currentInstance = this.staticMapInstances[i];
@@ -144,7 +174,7 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 						currentInstance.getCollisionWidth(), 
 						currentInstance.getCollisionHeight(), 
 						currentInstance.isRounded()) && 
-				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+				(!opt_ignoreList || opt_ignoreList.indexOf(currentInstance) == -1)) {
 			return true;
 		}
 	}
@@ -157,7 +187,7 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 						currentInstance.visualInstance.getCollisionWidth(), 
 						currentInstance.visualInstance.getCollisionHeight(), 
 						currentInstance.visualInstance.isRounded()) && 
-				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+				(!opt_ignoreList || opt_ignoreList.indexOf(currentInstance) == -1)) {
 			return true;
 		}
 	}
@@ -170,12 +200,13 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 						currentInstance.visualInstance.getCollisionWidth(), 
 						currentInstance.visualInstance.getCollisionHeight(), 
 						currentInstance.visualInstance.isRounded()) && 
-				(!ignoreList || ignoreList.indexOf(currentInstance) == -1)) {
+				(!opt_ignoreList || opt_ignoreList.indexOf(currentInstance) == -1)) {
 			return true;
 		}
 	}
 	// Finally compare to the player, if any
-	if (this.player && (!ignoreList || ignoreList.indexOf(this.player) == -1) && 
+	if (this.player && (!opt_ignoreList || 
+					opt_ignoreList.indexOf(this.player) == -1) && 
 			CollisionDetector.areShapesColliding(centerX, centerY, 
 					width, height, isRounded, this.player.visualInstance.x, 
 					this.player.visualInstance.y, 

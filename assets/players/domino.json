@@ -3,226 +3,233 @@
 		"frames": {
 			"walkDown1": {
 				"sprite": "walk/down1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDown2": {
 				"sprite": "walk/down2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDown3": {
 				"sprite": "walk/down3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDown4": {
 				"sprite": "walk/down4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownLeft1": {
 				"sprite": "walk/downLeft1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownLeft2": {
 				"sprite": "walk/downLeft2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownLeft3": {
 				"sprite": "walk/downLeft3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownLeft4": {
 				"sprite": "walk/downLeft4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkLeft1": {
 				"sprite": "walk/left1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkLeft2": {
 				"sprite": "walk/left2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkLeft3": {
 				"sprite": "walk/left3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkLeft4": {
 				"sprite": "walk/left4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpLeft1": {
 				"sprite": "walk/upLeft1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpLeft2": {
 				"sprite": "walk/upLeft2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpLeft3": {
 				"sprite": "walk/upLeft3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpLeft4": {
 				"sprite": "walk/upLeft4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUp1": {
 				"sprite": "walk/up1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUp2": {
 				"sprite": "walk/up2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUp3": {
 				"sprite": "walk/up3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUp4": {
 				"sprite": "walk/up4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpRight1": {
 				"sprite": "walk/upRight1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpRight2": {
 				"sprite": "walk/upRight2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpRight3": {
 				"sprite": "walk/upRight3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkUpRight4": {
 				"sprite": "walk/upRight4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkRight1": {
 				"sprite": "walk/right1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkRight2": {
 				"sprite": "walk/right2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkRight3": {
 				"sprite": "walk/right3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkRight4": {
 				"sprite": "walk/right4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownRight1": {
 				"sprite": "walk/downRight1",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownRight2": {
 				"sprite": "walk/downRight2",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownRight3": {
 				"sprite": "walk/downRight3",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
 				}
 			},
 			"walkDownRight4": {
 				"sprite": "walk/downRight4",
-				"center": {
+				"edge": {
 					"x": 49,
-					"y": 261
+					"y": 300
+				}
+			},
+			"basickAttackDown1": {
+				"sprite": "walk/downRight4",
+				"edge": {
+					"x": 49,
+					"y": 300
 				}
 			}
 		},
@@ -410,7 +417,24 @@
 					"frame": "walkRight4",
 					"duration": 8
 				}]
+			},
+			"basickAttackDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "walkRight1",
+					"duration": 8
+				}, {
+					"frame": "walkRight2",
+					"duration": 8
+				}, {
+					"frame": "walkRight3",
+					"duration": 8
+				}, {
+					"frame": "walkRight4",
+					"duration": 8
+				}]
 			}
+
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,

@@ -119,8 +119,8 @@ ECCollisionChecker.OUTER_POLYS = [];
 // until needed.
 ECCollisionChecker._areEllipsesColliding = function(centerX1, centerY1, width1, 
 		height1, centerX2, centerY2, width2, height2) {
-	var a1 = width1 / 1, b1 = height1 / 1;
-	var a2 = width2 / 1, b2 = height2 / 1;
+	var a1 = width1 / 2, b1 = height1 / 2;
+	var a2 = width2 / 2, b2 = height2 / 2;
 	if (ECCollisionChecker._helperEllipseBound(centerX1, centerY1, centerX2, 
 					centerY2, a1, b1) || 
 			ECCollisionChecker._helperEllipseBound(centerX2, centerY2, centerX1, 

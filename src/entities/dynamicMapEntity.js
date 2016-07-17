@@ -1,5 +1,5 @@
 /**
- * Represents a map entity with variable sprite and center configurations. Used
+ * Represents a map entity with variable sprite and edge configurations. Used
  * to support flexible animation sequences which can change the current
  * appearance of the entity based on which frame is being played.
  */
@@ -123,7 +123,8 @@ DynamicMapInstance.prototype.advanceFrame = function() {
 
 // Returns true at the end of an animation (last frame if looped)
 DynamicMapInstance.prototype.isAtLastFrameOfAnimation = function() {
-	return this._frameIndex == this._helperGetCurrAnimation().length - 1 && 
+	return this._frameIndex == 
+					this._helperGetCurrAnimation().frameRefs.length - 1 && 
 			this._frameCounter == this._helperGetCurrFrameRef().duration - 1;
 };
 
@@ -136,8 +137,8 @@ DynamicMapInstance.prototype.getSprite = function() {
 	return this._entity.frames[this._helperGetCurrFrameRef().frame].sprite;
 };
 
-DynamicMapInstance.prototype.getCenter = function() {
-	return this._entity.frames[this._helperGetCurrFrameRef().frame].center;
+DynamicMapInstance.prototype.getEdge = function() {
+	return this._entity.frames[this._helperGetCurrFrameRef().frame].edge;
 };
 
 DynamicMapInstance.prototype.getCollisionWidth = function() {

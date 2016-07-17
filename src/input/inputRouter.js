@@ -28,36 +28,46 @@ InputRouter._helperHandlePlayerMovement = function() {
 	if (!GameState.player) {
 		return;
 	}
-	var xVelocity = 0, yVelocity = 0;
-	if (KeyTracker.getValue(InputRouter.KeyMapping.LEFT) <= 
-			KeyTracker.KeyStatus.HELD) {
-		xVelocity--;
-	}
-	if (KeyTracker.getValue(InputRouter.KeyMapping.RIGHT) <= 
-			KeyTracker.KeyStatus.HELD) {
-		xVelocity++;
-	}
-	if (KeyTracker.getValue(InputRouter.KeyMapping.UP) <= 
-			KeyTracker.KeyStatus.HELD) {
-		yVelocity--;
-	}
-	if (KeyTracker.getValue(InputRouter.KeyMapping.DOWN) <= 
-			KeyTracker.KeyStatus.HELD) {
-		yVelocity++;
-	}
-	if (xVelocity == 0 && yVelocity == 0) {
-		GameState.player.tryMove(xVelocity, yVelocity);
-		return;	
-	}
-	if (xVelocity != 0 && yVelocity != 0) {
-		xVelocity *= 0.70710678118;
-		yVelocity *= 0.70710678118;
-	}
-	xVelocity *= Player.MIN_MOVE_SPEED;
-	yVelocity *= Player.MIN_MOVE_SPEED;
-	for (var i = 0; i < Player.WALK_SPEED; i++) {
-		if (!GameState.player.tryMove(xVelocity, yVelocity)) {
-			break;
+	if (KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) <= 
+					KeyTracker.KeyStatus.HELD || 
+			KeyTracker.getValue(InputRouter.KeyMapping.ATTACK_ALT) <= 
+					KeyTracker.KeyStatus.HELD) {
+		if (GameState.player.canBasicAttack()) {
+			GameState.player.basicAttack();
+			PlayerAttackApplier.BasicCloseRangedAttack.apply(GameState.player);
+		}
+	} else {
+		var xVelocity = 0, yVelocity = 0;
+		if (KeyTracker.getValue(InputRouter.KeyMapping.LEFT) <= 
+				KeyTracker.KeyStatus.HELD) {
+			xVelocity--;
+		}
+		if (KeyTracker.getValue(InputRouter.KeyMapping.RIGHT) <= 
+				KeyTracker.KeyStatus.HELD) {
+			xVelocity++;
+		}
+		if (KeyTracker.getValue(InputRouter.KeyMapping.UP) <= 
+				KeyTracker.KeyStatus.HELD) {
+			yVelocity--;
+		}
+		if (KeyTracker.getValue(InputRouter.KeyMapping.DOWN) <= 
+				KeyTracker.KeyStatus.HELD) {
+			yVelocity++;
+		}
+		if (xVelocity == 0 && yVelocity == 0) {
+			GameState.player.tryMove(xVelocity, yVelocity);
+			return;	
+		}
+		if (xVelocity != 0 && yVelocity != 0) {
+			xVelocity *= 0.70710678118;
+			yVelocity *= 0.70710678118;
+		}
+		xVelocity *= Player.MIN_MOVE_SPEED;
+		yVelocity *= Player.MIN_MOVE_SPEED;
+		for (var i = 0; i < Player.WALK_SPEED; i++) {
+			if (!GameState.player.tryMove(xVelocity, yVelocity)) {
+				break;
+			}
 		}
 	}
 };

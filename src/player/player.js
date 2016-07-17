@@ -16,7 +16,8 @@ var Player = function(id, visualInstance, x, y) {
 // animated actions the player can take, like being idle, attacking, etc
 Player.AnimationStates = {
 	IDLE: 'idle',
-	WALKING: 'walk'
+	WALKING: 'walk',
+	BASIC_ATTACKING: 'basicAttack'
 };
 
 // The player's walk speed, in MIN_MOVE_SPEED units.
@@ -80,6 +81,20 @@ Player.prototype.tryMove = function(deltaX, deltaY) {
 		this._animationState = targetAnimationState;
 	}
 	return targetX == this.visualInstance.x && targetY == this.visualInstance.y;
+};
+
+
+Player.prototype.basicAttack = function() {
+	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
+			DynamicMapEntity.getActionDirectionFamilyName(
+					Player.AnimationStates.BASIC_ATTACKING, this._direction)));
+	this._animationState = Player.AnimationStates.BASIC_ATTACKING;
+};
+
+
+Player.prototype.canBasicAttack = function() {
+	return this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
+			this.visualInstance.isAtLastFrameOfAnimation();
 };
 
 

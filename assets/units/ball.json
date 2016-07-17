@@ -13,39 +13,12 @@
 		"states": {
 			"idle": {
 				"onEnter": "
-					console.log('Entered idle');
 				",
 				"onExit": "
-					console.log('Exited idle');
 				",
 				"tick": "
 				",
-				"transitions": [
-					{
-						"state": "panic",
-						"condition": "
-							this._counter > 100
-						"
-					}
-				]
-			},
-			"panic": {
-				"onEnter": "
-					console.log('Entered panic');
-				",
-				"onExit": "
-					console.log('Exited panic');
-				",
-				"tick": "
-				",
-				"transitions": [
-					{
-						"state": "idle",
-						"condition": "
-							this._counter == 0
-						"
-					}
-				]
+				"transitions": []
 			}
 		} 
 	},
@@ -53,254 +26,254 @@
 		"frames": {
 			"spawn1": {
 				"sprite": "spawn/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 92
+					"y": 134
 				}
 			},
 			"spawn2": {
 				"sprite": "spawn/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 92
+					"y": 134
 				}
 			},
 			"spawn3": {
 				"sprite": "spawn/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 92
+					"y": 134
 				}
 			},
 			"spawn4": {
 				"sprite": "spawn/4",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 92
+					"y": 134
 				}
 			},
 			"walkDown1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDown2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDown3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDown4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownLeft1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownLeft2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownLeft3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownLeft4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkLeft1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkLeft2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkLeft3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkLeft4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpLeft1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpLeft2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpLeft3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpLeft4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUp1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUp2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUp3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUp4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpRight1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpRight2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpRight3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkUpRight4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkRight1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkRight2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkRight3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkRight4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownRight1": {
 				"sprite": "walk/1",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownRight2": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownRight3": {
 				"sprite": "walk/3",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			},
 			"walkDownRight4": {
 				"sprite": "walk/2",
-				"center": {
+				"edge": {
 					"x": 50,
-					"y": 158
+					"y": 200
 				}
 			}
 		},
@@ -309,6 +282,55 @@
 				"isLooped": true,
 				"frameRefs": [{
 					"frame": "walkDown1",
+					"duration": 999999
+				}]
+			},
+			"idleDownLeft": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkDownLeft1",
+					"duration": 999999
+				}]
+			},
+			"idleDownRight": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkDownRight1",
+					"duration": 999999
+				}]
+			},
+			"idleUp": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkUp1",
+					"duration": 999999
+				}]
+			},
+			"idleUpLeft": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkUpLeft1",
+					"duration": 999999
+				}]
+			},
+			"idleUpRight": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkUpRight1",
+					"duration": 999999
+				}]
+			},
+			"idleLeft": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkLeft1",
+					"duration": 999999
+				}]
+			},
+			"idleRight": {
+				"isLooped": true,
+				"frameRefs": [{
+					"frame": "walkRight1",
 					"duration": 999999
 				}]
 			},
@@ -328,29 +350,6 @@
 					"duration": 8
 				}]
 			},
-			"spawnDown": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleDownLeft": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkDownLeft1",
-					"duration": 999999
-				}]
-			},
 			"walkDownLeft": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -365,29 +364,6 @@
 				}, {
 					"frame": "walkDownLeft4",
 					"duration": 8
-				}]
-			},
-			"spawnDownLeft": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleDownRight": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkDownRight1",
-					"duration": 999999
 				}]
 			},
 			"walkDownRight": {
@@ -406,29 +382,6 @@
 					"duration": 8
 				}]
 			},
-			"spawnDownRight": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleUp": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkUp1",
-					"duration": 999999
-				}]
-			},
 			"walkUp": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -443,29 +396,6 @@
 				}, {
 					"frame": "walkUp4",
 					"duration": 8
-				}]
-			},
-			"spawnUp": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleUpLeft": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkUpLeft1",
-					"duration": 999999
 				}]
 			},
 			"walkUpLeft": {
@@ -484,29 +414,6 @@
 					"duration": 8
 				}]
 			},
-			"spawnUpLeft":{
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleUpRight": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkUpRight1",
-					"duration": 999999
-				}]
-			},
 			"walkUpRight": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -521,29 +428,6 @@
 				}, {
 					"frame": "walkUpRight4",
 					"duration": 8
-				}]
-			},
-			"spawnUpRight": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleLeft": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkLeft1",
-					"duration": 999999
 				}]
 			},
 			"walkLeft": {
@@ -562,29 +446,6 @@
 					"duration": 8
 				}]
 			},
-			"spawnLeft": {
-				"isLooped": false,
-				"frameRefs": [{
-					"frame": "spawn1",
-					"duration": 4
-				}, {
-					"frame": "spawn2",
-					"duration": 4
-				}, {
-					"frame": "spawn3",
-					"duration": 4
-				}, {
-					"frame": "spawn4",
-					"duration": 4
-				}]
-			},
-			"idleRight": {
-				"isLooped": true,
-				"frameRefs": [{
-					"frame": "walkRight1",
-					"duration": 999999
-				}]
-			},
 			"walkRight": {
 				"isLooped": true,
 				"frameRefs": [{
@@ -601,6 +462,54 @@
 					"duration": 8
 				}]
 			},
+			"spawnDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
 			"spawnUp": {
 				"isLooped": false,
 				"frameRefs": [{
@@ -614,6 +523,302 @@
 					"duration": 4
 				}, {
 					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnUpLeft":{
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"spawnRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn1",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn4",
+					"duration": 4
+				}]
+			},
+			"despawnDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnUpLeft":{
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"despawnRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn4",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn1",
+					"duration": 4
+				}]
+			},
+			"damageTakenDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenUpLeft":{
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
+					"duration": 4
+				}]
+			},
+			"damageTakenRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "spawn3",
+					"duration": 4
+				}, {
+					"frame": "spawn2",
+					"duration": 4
+				}, {
+					"frame": "spawn3",
 					"duration": 4
 				}]
 			}

@@ -3,6 +3,12 @@ var SoundLoader = {};
 // Used for loading sound clips. Calls callback with a mapping of names to
 // loaded buffers on completion.
 SoundLoader.loadSounds = function(soundList, opt_callback) {
+	if (Object.keys(soundList).length == 0) {
+		if (opt_callback) {
+			opt_callback({});
+		}
+		return;
+	}
 	window.AudioContext = window.AudioContext || window.webkitAudioContext;
 	var context = SoundLoader.context || 
 			(SoundLoader.context = new AudioContext());
@@ -59,6 +65,12 @@ SoundLoader.loadTrack = function(url, opt_callback) {
 SoundLoader.loadTracks = function(urls, opt_callback) {
 	var tracks = {};
 	var tracksToLoad = Object.keys(urls).length;
+	if (tracksToLoad == 0) {
+		if (opt_callback) {
+			opt_callback(tracks);
+		}
+		return;
+	}
 	for (var urlKey in urls) {
 		SoundLoader.loadTrack(urls[urlKey], (function(urlKey) {
 			return function(track) {
@@ -94,6 +106,12 @@ SoundLoader.loadBeatmap = function(name, opt_callback) {
 SoundLoader.loadBeatmaps = function(names, opt_callback) {
 	var tracks = {};
 	var tracksToLoad = Object.keys(names).length;
+	if (tracksToLoad == 0) {
+		if (opt_callback) {
+			opt_callback(tracks);
+		}
+		return;
+	}
 	for (var trackName in names) {
 		SoundLoader.loadBeatmap(names[trackName], (function(trackName) {
 			return function(beatmap) {

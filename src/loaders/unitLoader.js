@@ -14,11 +14,33 @@ UnitLoader.loadInstance = function(id, x, y, startingDirection,
 };
 
 
-// Unloads provided unit instance
-UnitLoader.unloadInstance = function(unitInstance) {
-	UnitLoader.loadedEntities[unitInstance.unitEntity.id] = null;
-	DynamicMapEntityLoader.unload(unitInstance.unitEntity.visualEntity);
-	unitInstance.unitEntity = null;
+// Retrieve a pre-loaded unit entity
+UnitLoader.getPreloadedEntity = function (id) {
+	return UnitLoader.loadedEntities[id];
+};
+
+
+// Preload a batch of entities. Note that the entities will not be used at the
+// time, so the callback is not provided with the loaded entities.
+UnitLoader.preloadEntities = function (ids, callback) {
+	var counter = ids.length;
+	for (var i = 0; i < ids.length; i++) {
+		UnitLoader._helperLoadEntity(ids[i], function() {
+			if (--counter == 0) {
+				callback();
+			}
+		});
+	}
+};
+
+
+// Unloads a batch of unit entities
+UnitLoader.unloadEntities = function(ids) {
+	for (var i = 0; i < ids.length; i++) {
+		DynamicMapEntityLoader.unload(
+				UnitLoader.loadedEntities[unitInstance.unitEntity.id].visualEntity);
+		UnitLoader.loadedEntities[unitInstance.unitEntity.id] = null;
+	}
 };
 
 
@@ -37,4 +59,4 @@ UnitLoader._helperLoadEntity = function(id, callback) {
 					unitData.attackPattern, unitData.stateMachine, unitEntity));
 		});
 	});
-};            
+};     

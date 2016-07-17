@@ -27,6 +27,9 @@ MapLoader.load = function(mapName, opt_callback) {
 	deferrer.add(MapLoader._helperLoadAllNPCInstances, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['npcInstances']);
+	deferrer.add(UnitLoader.preloadEntities, function(accumulatedArgs) {
+		return [Object.keys(accumulatedArgs[0].mapData.spawnBehavior.monsterData)];
+	}, []);
 	deferrer.add(MapLoader._helperLoadAllTracks, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['tracks']);
@@ -35,7 +38,7 @@ MapLoader.load = function(mapName, opt_callback) {
 		var tileset = accumulatedArgs[1].tileset;
 		var staticMapEntities = accumulatedArgs[2].staticMapEntities;
 		var npcInstances = accumulatedArgs[3].npcInstances;
-		var tracks = accumulatedArgs[4].tracks;
+		var tracks = accumulatedArgs[5].tracks;
 		mapData.staticMapEntities = staticMapEntities;
 		for (var i = 0; i < mapData.staticMapInstances.length; i++) {
 			// Convert to StaticMapInstance
@@ -46,7 +49,8 @@ MapLoader.load = function(mapName, opt_callback) {
 		if (opt_callback) {
 			opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
 					tileset, mapData.dummyTile, mapData.staticMapEntities, 
-					mapData.staticMapInstances, npcInstances, tracks));
+					mapData.staticMapInstances, npcInstances, tracks, 
+					mapData.spawnBehavior));
 		};
 	});
 };
@@ -58,11 +62,17 @@ MapLoader.unload = function(map) {
 	for (var i = 0; i < map.staticMapEntities.length; i++) {
 		StaticMapEntityLoader.unload(map.staticMapEntities[i]);
 	}
+	// TODO: fill in all that debt and properly unload everything, including
+	// npcs, unit entities, etc
 };
 
 
 // Helper to load NPC instances
 MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
+	if (mapData.npcs.length == 0) {
+		callback([]);
+		return;
+	}
 	var instanceQueue = [];
 	for (var i = 0; i < mapData.npcs.length; i++) {
 		instanceQueue.push(mapData.npcs[i]);

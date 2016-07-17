@@ -15,7 +15,8 @@ spawn
 var UnitActionManager = function(unit) {
 	this.unit = unit;
 	this._actionQueue = [];
-	this._behavior = unit.unitEntity.behaviorPattern; // TODO: get actual behavior
+	// this._behavior = unit.unitEntity.behaviorPattern; // TODO: get actual behavior
+	this._behavior = UnitBehaviors.IdleBehavior;
 	this._animationState;
 	this._collisionIgnoreList = [unit];
 };
@@ -27,7 +28,9 @@ UnitActionManager.MIN_MOVE_DISTANCE = 0.01;
 UnitActionManager.AnimationStates = {
 	IDLE: 'idle',
 	WALKING: 'walk',
-	SPAWNING: 'spawn'
+	SPAWNING: 'spawn',
+	DAMAGE_TAKEN: 'damageTaken',
+	DESPAWNING: 'despawn'
 }
 
 
@@ -39,9 +42,55 @@ UnitActionManager.prototype.tick = function() {
 	if (this._actionQueue.length > 0) {
 		this._actionQueue[0].tick();
 	} else {
-		// TODO: grab the next queueable since theres nothing to do
+		(this._actionQueue[0] = this._behavior.getNextBehavior(this)).tick();
 	}
-}
+};
+
+
+// Force enqueues an action, killing all other actions previously in the queue.
+UnitActionManager.prototype.forceEnqueue = function(action) {
+	this._actionQueue.length = 1;
+	this._actionQueue[0] = action;
+};
+
+
+// Helper for incremental movement of units. Minimum movement amount is used,
+// using speed to attempt to move towards targetX and targetY. Sets position
+// of a given unit, but does NOT do any animation changing for the
+// unit. Requires two callbacks: onCanMove, which has params for the
+// intermediate x and y coordinates of the move (already updated in the unit)
+// and onFailMove, which ought to return true if breaking from the attempted
+// moves is needed.
+UnitActionManager._helperIncrementalMove = function(unit, targetX, targetY, 
+		angle, speed, collisionIgnoreList, onCanMove, onFailMove) {
+	var minimalXDelta = UnitActionManager.MIN_MOVE_DISTANCE * Math.cos(angle);
+	var minimalYDelta = UnitActionManager.MIN_MOVE_DISTANCE * -Math.sin(angle);
+	for (var i = 0; i < speed; i++) {
+		var midTargetX = unit.visualInstance.x + minimalXDelta;
+		var midTargetY = unit.visualInstance.y + minimalYDelta;
+		if ((midTargetX < targetX != unit.visualInstance.x < targetX) || 
+				(midTargetY < targetY != unit.visualInstance.y < targetY)) {
+			midTargetX = targetX;
+			midTargetY = targetY;
+		}
+		if (!unit.containingMap.isColliding(midTargetX, midTargetY, 
+						unit.visualInstance.getCollisionWidth(), 
+						unit.visualInstance.getCollisionHeight(), 
+						unit.visualInstance.isRounded(), 
+						collisionIgnoreList) && 
+				!unit.containingMap.isOutOfBounds(midTargetX, midTargetY, 
+						unit.visualInstance.getCollisionWidth(), 
+						unit.visualInstance.getCollisionHeight())) {
+			unit.visualInstance.x = midTargetX;
+			unit.visualInstance.y = midTargetY;
+			onCanMove(midTargetX, midTargetY);
+		} else {
+			if (onFailMove()) {
+				break;
+			}
+		}
+	}
+};
 
 
 /** 
@@ -69,35 +118,16 @@ UnitActionManager.MoveWaypointAction.prototype.tick = function() {
 	} else {
 		targetDirection = Direction.getDirectionFromCoords(deltaX, deltaY);
 		var angle = Math.atan2(-deltaY, deltaX);
-		var minimalXDelta = UnitActionManager.MIN_MOVE_DISTANCE * Math.cos(angle);
-		var minimalYDelta = UnitActionManager.MIN_MOVE_DISTANCE * -Math.sin(angle);
-		for (var i = 0; i < this._speed; i++) {
-			var midTargetX = this._uam.unit.visualInstance.x + minimalXDelta;
-			var midTargetY = this._uam.unit.visualInstance.y + minimalYDelta;
-			if ((midTargetX < this._targetX != 
-							this._uam.unit.visualInstance.x < this._targetX) || 
-					(midTargetY < this._targetY != 
-							this._uam.unit.visualInstance.y < this._targetY)) {
-				midTargetX = this._targetX;
-				midTargetY = this._targetY;
-			}
-			if (!this._uam.unit.containingMap.isColliding(midTargetX, midTargetY, 
-							this._uam.unit.visualInstance.getCollisionWidth(), 
-							this._uam.unit.visualInstance.getCollisionHeight(), 
-							this._uam.unit.visualInstance.isRounded(), 
-							this._uam._collisionIgnoreList) && 
-					!this._uam.unit.containingMap.isOutOfBounds(midTargetX, midTargetY, 
-							this._uam.unit.visualInstance.getCollisionWidth(), 
-							this._uam.unit.visualInstance.getCollisionHeight())) {
-				targetAnimationState = UnitActionManager.AnimationStates.WALKING;
-				this._uam.unit.visualInstance.x = midTargetX;
-				this._uam.unit.visualInstance.y = midTargetY;
-			} else {
-				targetAnimationState = UnitActionManager.AnimationStates.IDLE;
-				this._complete = true;
-				break;
-			}
-		}
+		var that = this;
+		UnitActionManager._helperIncrementalMove(this._uam.unit, this._targetX, 
+				this._targetY, angle, this._speed, this._uam._collisionIgnoreList, 
+				function() {
+			targetAnimationState = UnitActionManager.AnimationStates.WALKING;
+		}, function() {
+			targetAnimationState = UnitActionManager.AnimationStates.IDLE;
+			that._complete = true;
+			return true;
+		});
 	}
 	if (targetAnimationState != this._uam._animationState || 
 			targetDirection != this._uam.unit.direction) {
@@ -116,6 +146,9 @@ UnitActionManager.MoveWaypointAction.prototype.isDone = function() {
 };
 
 
+/** 
+ * Represents staying idle for a given number of ticks.
+ */
 UnitActionManager.StayIdleAction = function(duration, uam) {
 	this._uam = uam;
 	this._duration = duration;
@@ -140,6 +173,9 @@ UnitActionManager.StayIdleAction.prototype.isDone = function() {
 };
 
 
+/** 
+ * Represents playing a spawn animation.
+ */
 UnitActionManager.SpawnAction = function(uam) {
 	this._uam = uam;
 	this._isCompleted = false;
@@ -167,5 +203,189 @@ UnitActionManager.SpawnAction.prototype.tick = function() {
 
 
 UnitActionManager.SpawnAction.prototype.isDone = function() {
+	return this._isCompleted;
+};
+
+
+// TODO: test this code below
+/** 
+ * Represents chasing a player, randomly moving if unable to continue chase.
+ * Terminates when either close enough or too far from the player.
+ */
+UnitActionManager.ChaseAction = function(uam, minRadius, maxRadius, speed) {
+	this._uam = uam;
+	this._minRadius = minRadius;
+	this._maxRadius = maxRadius;
+	this._speed = speed;
+	this._lockedMoveTime = 0;
+	this._lockedDirection;
+};
+
+
+UnitActionManager.ChaseAction.LOCKED_MOVEMENT_MAX = 180;
+UnitActionManager.ChaseAction.MAX_UNOCCUPIED_ANGLE_TRIES = 10;
+
+
+UnitActionManager.ChaseAction.prototype.tick = function() {
+	if (this._lockedMoveTime != 0) {
+		this._helperMoveLocked();
+	} else {
+		var playerVI = this._uam.unit.containingMap.player.visualInstance;
+		var unitVI = this._uam.unit.visualInstance;
+		var bestDir = Direction.getDirectionFromCoords(playerVI.x - unitVI.x, 
+				playerVI.y - unitVI.y);
+		var angle = Direction.getAngle(bestDir);
+		var targetX = this._uam.unit.visualInstance.x + Math.cos(angle) * 
+				this._speed * UnitActionManager.MIN_MOVE_DISTANCE;
+		var targetY = this._uam.unit.visualInstance.y - Math.sin(angle) * 
+				this._speed * UnitActionManager.MIN_MOVE_DISTANCE;
+		var that = this;
+		UnitActionManager._helperIncrementalMove(this._uam.unit, targetX, 
+				targetY, angle, this._speed, this._uam._collisionIgnoreList, 
+				function() {
+			targetAnimationState = UnitActionManager.AnimationStates.WALKING;
+		}, function() {
+			targetAnimationState = UnitActionManager.AnimationStates.IDLE;
+			that._lockedMoveTime = UnitActionManager.ChaseAction.LOCKED_MOVEMENT_MAX;
+			that._lockedDirection = this._helperFindUnoccupiedDir(currentAngle);
+			return true;
+		});
+		if (targetAnimationState != this._uam._animationState || 
+				bestDir != this._uam.unit.direction) {
+			this._uam.unit.visualInstance.setAnimation(
+					this._uam.unit.visualInstance.getAnimNameFromFamily(
+							DynamicMapEntity.getActionDirectionFamilyName(
+									targetAnimationState, bestDir)));
+			this._uam.unit.direction = bestDir;
+			this._uam._animationState = targetAnimationState;
+		}
+	}
+};
+
+
+UnitActionManager.ChaseAction.prototype._helperFindUnoccupiedDir = 
+		function(currentAngle) {
+	for (var i = 0; i < UnitActionManager.ChaseAction.MAX_UNOCCUPIED_ANGLE_TRIES; 
+			i++) {
+		var angle;
+		var direction;
+		if (i == 0) {
+			angle = (currentAngle - Math.PI / 2) % Math.PI * 2;
+			direction = Direction.lockAngleToDirection(angle);
+		} else if (i == 1) {
+			angle = (currentAngle + Math.PI / 2) % Math.PI * 2;
+			direction = Direction.lockAngleToDirection(angle);
+		} else {
+			direction = Direction.getRandom();
+			angle = Direction.getAngle(direction);
+		}
+		var targetX = this._uam.unit.visualInstance.x + Math.cos(angle) * 
+				UnitActionManager.MIN_MOVE_DISTANCE;
+		var targetY = this._uam.unit.visualInstance.y - Math.sin(angle) * 
+				UnitActionManager.MIN_MOVE_DISTANCE;
+		if (!unit.containingMap.isColliding(midTargetX, midTargetY, 
+						unit.visualInstance.getCollisionWidth(), 
+						unit.visualInstance.getCollisionHeight(), 
+						unit.visualInstance.isRounded(), 
+						collisionIgnoreList) && 
+				!unit.containingMap.isOutOfBounds(midTargetX, midTargetY, 
+						unit.visualInstance.getCollisionWidth(), 
+						unit.visualInstance.getCollisionHeight())) {
+			return direction;
+		}
+	}
+};
+
+
+UnitActionManager.ChaseAction.prototype._helperMoveLocked = function() {
+	var targetAnimationState;
+	var angle = Direction.getAngle(this._lockedDirection);
+	var targetX = this._uam.unit.visualInstance.x + Math.cos(angle) * 
+			this._speed * UnitActionManager.MIN_MOVE_DISTANCE;
+	var targetY = this._uam.unit.visualInstance.y - Math.sin(angle) * 
+			this._speed * UnitActionManager.MIN_MOVE_DISTANCE;
+	UnitActionManager._helperIncrementalMove(this._uam.unit, targetX, 
+			targetY, angle, this._speed, this._uam._collisionIgnoreList, 
+			function() {
+		targetAnimationState = UnitActionManager.AnimationStates.WALKING;
+	}, function() {
+		targetAnimationState = UnitActionManager.AnimationStates.IDLE;
+		return true;
+	});
+	if (targetAnimationState != this._uam._animationState || 
+			this._lockedDirection != this._uam.unit.direction) {
+		this._uam.unit.visualInstance.setAnimation(
+				this._uam.unit.visualInstance.getAnimNameFromFamily(
+						DynamicMapEntity.getActionDirectionFamilyName(
+								targetAnimationState, this._lockedDirection)));
+		this._uam.unit.direction = this._lockedDirection;
+		this._uam._animationState = targetAnimationState;
+	}
+	this._lockedMoveTime--;
+};
+
+
+UnitActionManager.ChaseAction.prototype.isDone = function() {
+	var unitVisualinstance = this._uam.unit.visualInstance;
+	var playerVisualInstance = this._uam.unit.containingMap.player.visualInstance;
+	var distance = GridCalcs.getDistance(
+			unitVisualinstance.x - playerVisualInstance.x, 
+			unitVisualinstance.y - playerVisualInstance.y);
+	return distance < this._minRadius || distance > this._maxRadius;
+};
+// TODO: test this code above
+
+
+UnitActionManager.DamageTakenAction = function(uam) {
+	this._uam = uam;
+};
+
+UnitActionManager.DamageTakenAction.prototype.tick = function() {
+	if (this._uam._animationState != 
+			UnitActionManager.AnimationStates.DAMAGE_TAKEN) {
+		this._uam.unit.visualInstance.setAnimation(
+				this._uam.unit.visualInstance.getAnimNameFromFamily(
+						DynamicMapEntity.getActionDirectionFamilyName(
+								UnitActionManager.AnimationStates.DAMAGE_TAKEN, 
+								this._uam.unit.direction)));
+		this._uam._animationState = UnitActionManager.AnimationStates.DAMAGE_TAKEN;
+	}
+};
+
+UnitActionManager.DamageTakenAction.prototype.isDone = function() {
+	return this._uam._animationState == 
+					UnitActionManager.AnimationStates.DAMAGE_TAKEN && 
+			this._uam.unit.visualInstance.isAtLastFrameOfAnimation();
+};
+
+
+UnitActionManager.DespawnAction = function(uam) {
+	this._uam = uam;
+	this._isCompleted = false;
+};
+
+
+UnitActionManager.DespawnAction.prototype.tick = function() {
+	if (this._uam._animationState == 
+			UnitActionManager.AnimationStates.DESPAWNING && 
+			this._uam.unit.visualInstance.isAtLastFrameOfAnimation()) {
+		// Remove monster from map and update monster counts
+		this._uam.unit.containingMap.unitSpawner.notifyOnUnitDeath(this._uam.unit);
+		this._uam.unit.containingMap.deregisterUnitInstance(this._uam.unit);
+		this._isCompleted = true;
+	}
+	if (this._uam._animationState != 
+			UnitActionManager.AnimationStates.DESPAWNING) {
+		this._uam.unit.visualInstance.setAnimation(
+				this._uam.unit.visualInstance.getAnimNameFromFamily(
+						DynamicMapEntity.getActionDirectionFamilyName(
+								UnitActionManager.AnimationStates.DESPAWNING, 
+								this._uam.unit.direction)));
+		this._uam._animationState = UnitActionManager.AnimationStates.DESPAWNING;
+	}
+};
+
+
+UnitActionManager.DespawnAction.prototype.isDone = function() {
 	return this._isCompleted;
 };

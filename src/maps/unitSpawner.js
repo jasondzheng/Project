@@ -1,31 +1,9 @@
 /**
  */
 
-var UnitSpawner = function(containingMap) {
+var UnitSpawner = function(containingMap, spawnBehavior) {
 	this.containingMap = containingMap;
-	/*
-	
-	{
-		monsterData: {
-			<id:String>: {
-				capacity: <Number>,
-				spawnInterval: <ticks:Number>,
-				spawnRate: <rate:Number>,
-				spawnPoints: [<spawnPointIndex:Number>, ...]
-			}, ...
-		},
-		spawnPoints: [
-			{
-				x: <Number>,
-				y: <Number>,
-				width: <Number>,
-				height: <Number>,
-			}, ...
-		]
-	}
-
-	*/
-	this._spawnBehavior = containingMap.spawnBehavior;
+	this._spawnBehavior = spawnBehavior;
 	this._instanceCounts = {};
 
 	for (var id in this._spawnBehavior.monsterData) {
@@ -41,15 +19,57 @@ var UnitSpawner = function(containingMap) {
 };
 
 
+// The maximal number of tries a spawn unit is placed before giving up due to
+// repeated spawn collisions.
+UnitSpawner.MAX_SPAWN_TRIES = 10;
+
+
 // Forcefully spawns an instance of a monster given its id, regardless of spawn 
 // capacity. May not successfully spawn if collisions checks fail.
-UnitSpawner.prototype.forceSpawn = function(id, opt_x, opt_y, opt_direction) {
+UnitSpawner.prototype.forceSpawn = function(id, opt_x, opt_y, 
+		opt_direction) {
 	// Obtain the collision window from entity
-	// Attempt to place the collision window N times
-	// On success, spawn unit fitting in the window
-	// Of course, follow up with preparations and spawning animation stuff
-	// On fail, don't even make the instance
-	// return unit;
+	var entity = UnitLoader.getPreloadedEntity(id);
+	var spawnProfile = this._spawnBehavior.monsterData[id];
+	if (opt_x == undefined || opt_y == undefined) {
+		// Attempt to place the collision window N times
+		for (var i = 0; i < UnitSpawner.MAX_SPAWN_TRIES; i++) {
+			var spawnPoint = this._spawnBehavior.spawnPoints[
+					spawnProfile.spawnPoints[
+							Math.floor(Math.random() * spawnProfile.spawnPoints.length)]];
+			opt_x = spawnPoint.x + spawnPoint.width * Math.random();
+			opt_y = spawnPoint.y + spawnPoint.height * Math.random();
+			if (!this.containingMap.isColliding(opt_x, opt_y, 
+							entity.visualEntity.collisionWidth, 
+							entity.visualEntity.collisionHeight,
+							entity.visualEntity.isRounded) && 
+					!this.containingMap.isOutOfBounds(opt_x, opt_y, 
+							entity.visualEntity.collisionWidth, 
+							entity.visualEntity.collisionHeight)) {
+				break;
+			}
+		}
+	} else if (this.containingMap.isColliding(opt_x, opt_y, 
+					entity.visualEntity.collisionWidth, 
+					entity.visualEntity.collisionHeight,
+					entity.visualEntity.isRounded) || 
+			this.containingMap.isOutOfBounds(opt_x, opt_y, 
+					entity.visualEntity.collisionWidth, 
+					entity.visualEntity.collisionHeight)) {
+		return null;
+	}
+	if (opt_x == null || opt_y == null) {
+		return null;
+	} else {
+		// On success, spawn unit fitting in the window
+		var newUnit = new UnitInstance(entity, opt_x, opt_y, 
+				opt_direction || Direction.getRandom(), this.containingMap);
+		this.containingMap.registerUnitInstance(newUnit);
+		newUnit.actionManager.forceEnqueue(
+				new UnitActionManager.SpawnAction(newUnit.actionManager));
+		this._instanceCounts[id]++;
+		return newUnit;
+	}
 };
 
 

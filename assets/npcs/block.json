@@ -49,226 +49,226 @@
 		"frames": {
 			"up1": {
 				"sprite": "walk/red1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"up2": {
 				"sprite": "walk/red2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"up3": {
 				"sprite": "walk/red3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"up4": {
 				"sprite": "walk/red4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"down1": {
 				"sprite": "walk/green1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"down2": {
 				"sprite": "walk/green2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"down3": {
 				"sprite": "walk/green3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"down4": {
 				"sprite": "walk/green4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"left1": {
 				"sprite": "walk/blue1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"left2": {
 				"sprite": "walk/blue2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"left3": {
 				"sprite": "walk/blue3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"left4": {
 				"sprite": "walk/blue4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"right1": {
 				"sprite": "walk/yellow1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"right2": {
 				"sprite": "walk/yellow2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"right3": {
 				"sprite": "walk/yellow3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"right4": {
 				"sprite": "walk/yellow4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upLeft1": {
 				"sprite": "walk/brown1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upLeft2": {
 				"sprite": "walk/brown2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upLeft3": {
 				"sprite": "walk/brown3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upLeft4": {
 				"sprite": "walk/brown4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upRight1": {
 				"sprite": "walk/orange1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upRight2": {
 				"sprite": "walk/orange2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upRight3": {
 				"sprite": "walk/orange3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"upRight4": {
 				"sprite": "walk/orange4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downRight1": {
 				"sprite": "walk/pink1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downRight2": {
 				"sprite": "walk/pink2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downRight3": {
 				"sprite": "walk/pink3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downRight4": {
 				"sprite": "walk/pink4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downLeft1": {
 				"sprite": "walk/purple1",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downLeft2": {
 				"sprite": "walk/purple2",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downLeft3": {
 				"sprite": "walk/purple3",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			},
 			"downLeft4": {
 				"sprite": "walk/purple4",
-				"center": {
+				"edge": {
 					"x": 48,
-					"y": 48
+					"y": 96
 				}
 			}
 		},
