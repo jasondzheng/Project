@@ -28,15 +28,19 @@ InputRouter._helperHandlePlayerMovement = function() {
 	if (!GameState.player) {
 		return;
 	}
-	if (KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) <= 
+	if ((KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) <= 
 					KeyTracker.KeyStatus.HELD || 
 			KeyTracker.getValue(InputRouter.KeyMapping.ATTACK_ALT) <= 
-					KeyTracker.KeyStatus.HELD) {
-		if (GameState.player.canBasicAttack()) {
-			GameState.player.basicAttack();
-			PlayerAttackApplier.BasicCloseRangedAttack.apply(GameState.player);
-		}
-	} else {
+					KeyTracker.KeyStatus.HELD) && 
+			GameState.player.canBasicAttack()) {
+		var keyPressWasDown = KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) == 
+						KeyTracker.KeyStatus.DOWN || 
+				KeyTracker.getValue(InputRouter.KeyMapping.ATTACK_ALT) == 
+						KeyTracker.KeyStatus.DOWN;
+		GameState.player.basicAttack();
+		PlayerAttackApplier.BasicCloseRangedAttack.apply(GameState.player, 
+				keyPressWasDown);
+	} else if (GameState.player.canMove()) {
 		var xVelocity = 0, yVelocity = 0;
 		if (KeyTracker.getValue(InputRouter.KeyMapping.LEFT) <= 
 				KeyTracker.KeyStatus.HELD) {

@@ -99,9 +99,9 @@ UnitSpawner.prototype.tick = function() {
 			continue;
 		}
 		var spawnInfo = this._spawnBehavior.monsterData[id];
-		if (--spawnInfo.timeTillSpawn == 0 && 
-				this._instanceCounts[id] < spawnInfo.capacity) {
-			if (Math.random() < spawnInfo.spawnRate) {
+		if (--spawnInfo.timeTillSpawn == 0) {
+			if (this._instanceCounts[id] < spawnInfo.capacity && 
+					Math.random() < spawnInfo.spawnRate) {
 				this.forceSpawn(id);
 			}
 			spawnInfo.timeTillSpawn = spawnInfo.spawnInterval;

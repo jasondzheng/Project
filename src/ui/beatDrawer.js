@@ -27,6 +27,8 @@ BeatDrawer.INNER_RAD_2 = 36;
 
 BeatDrawer.HOLD_ALPHA = 0.275;
 
+BeatDrawer.NOTE_HIT_GRACE = 0.2;
+
 BeatDrawer._queue;
 BeatDrawer._songPlayTime;
 BeatDrawer._showInterval = 1.75;
@@ -36,6 +38,10 @@ BeatDrawer._holdDuration;
 BeatDrawer._windowStart;
 BeatDrawer._windowEnd;
 
+BeatDrawer._hitWindowStart;
+BeatDrawer._hitWindowEnd;
+BeatDrawer._hitHoldStart;
+BeatDrawer._hitHoldEnd;
 
 BeatDrawer.setWindowInterval = function(seconds) {
 	BeatDrawer._showInterval = seconds;
@@ -47,6 +53,7 @@ BeatDrawer.setQueue = function(queue, songPlayTime) {
 	BeatDrawer._songPlayTime = songPlayTime;
 	BeatDrawer._time = 0;
 	BeatDrawer._windowStart = BeatDrawer._windowEnd = 0;
+	BeatDrawer._hitWindowStart = BeatDrawer._hitWindowEnd = 0;
 };
 
 
@@ -62,6 +69,11 @@ BeatDrawer._advanceTime = function(newTime) {
 	if (BeatDrawer._time > newTime) {
 		BeatDrawer._windowStart -= BeatDrawer._queue.length;
 		BeatDrawer._windowEnd -= BeatDrawer._queue.length;
+	}
+	if (BeatDrawer._hitWindowStart >= BeatDrawer._queue.length &&
+			BeatDrawer._hitWindowEnd >= BeatDrawer._queue.length) {
+		BeatDrawer._hitWindowStart -= BeatDrawer._queue.length;
+		BeatDrawer._hitWindowEnd -= BeatDrawer._queue.length;
 	}
 	BeatDrawer._time = newTime;
 	for (; BeatDrawer._queue[
@@ -93,6 +105,30 @@ BeatDrawer._advanceTime = function(newTime) {
 					(BeatDrawer._windowEnd < BeatDrawer._queue.length ? 0 : 
 							BeatDrawer._songPlayTime) <	newTime + BeatDrawer._showInterval; 
 			BeatDrawer._windowEnd++);
+	// Hit window advance time
+	for (; BeatDrawer._queue[
+			BeatDrawer._hitWindowStart % BeatDrawer._queue.length].time + 
+			(BeatDrawer._hitWindowStart < BeatDrawer._queue.length ? 0 : 
+					BeatDrawer._songPlayTime) < newTime - BeatDrawer.NOTE_HIT_GRACE; 
+			BeatDrawer._hitWindowStart++);
+	for (BeatDrawer._hitWindowEnd = 
+			Math.max(BeatDrawer._hitWindowStart, BeatDrawer._hitWindowEnd); 
+			BeatDrawer._queue[BeatDrawer._hitWindowEnd % 
+					BeatDrawer._queue.length].time + 
+					(BeatDrawer._hitWindowEnd < BeatDrawer._queue.length ? 0 : 
+							BeatDrawer._songPlayTime) <	newTime + BeatDrawer.NOTE_HIT_GRACE; 
+			BeatDrawer._hitWindowEnd++);
+};
+
+
+BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
+	if (BeatDrawer._hitWindowStart != BeatDrawer._hitWindowEnd) {
+		console.log('Consumed 1 of ' + (BeatDrawer._hitWindowEnd - BeatDrawer._hitWindowStart) + ' notes');
+		BeatDrawer._hitWindowStart++;
+		return true;
+	}
+	console.log('Missed notes');
+	return false;
 };
 
 

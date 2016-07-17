@@ -7,9 +7,10 @@ var Player = function(id, visualInstance, x, y) {
 	this.id = id;
 	this.visualInstance = visualInstance;
 	this.containingMap;
-	this._animationState;
+	this._animationState = Player.AnimationStates.IDLE;
 	this._direction = Direction.DOWN;
 	this._collisionIgnoreList = [this];
+	this.attackCombo = 0;
 };
 
 // The animation states the player can be in. This should be supported for all
@@ -44,6 +45,14 @@ Player.prototype.getPositionX = function() {
 
 Player.prototype.getPositionY = function() {
 	return this.visualInstance.y;
+};
+
+
+Player.prototype.canMove = function() {
+	return this._animationState == Player.AnimationStates.IDLE || 
+			this._animationState == Player.AnimationStates.WALKING || (
+					this._animationState == Player.AnimationStates.BASIC_ATTACKING &&
+					this.visualInstance.isAtLastFrameOfAnimation());
 };
 
 

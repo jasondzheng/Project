@@ -225,10 +225,108 @@
 					"y": 300
 				}
 			},
-			"basickAttackDown1": {
-				"sprite": "walk/downRight4",
+			"basicAttackDown1": {
+				"sprite": "basicAttack/down1",
 				"edge": {
-					"x": 49,
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackDown2": {
+				"sprite": "basicAttack/down2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackDownLeft1": {
+				"sprite": "basicAttack/downLeft1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackDownLeft2": {
+				"sprite": "basicAttack/downLeft2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackDownRight1": {
+				"sprite": "basicAttack/downRight1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackDownRight2": {
+				"sprite": "basicAttack/downRight2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackUp1": {
+				"sprite": "basicAttack/up1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackUpLeft1": {
+				"sprite": "basicAttack/upLeft1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackUpLeft2": {
+				"sprite": "basicAttack/upLeft2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackUpRight1": {
+				"sprite": "basicAttack/upRight1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackUpRight2": {
+				"sprite": "basicAttack/upRight2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackLeft1": {
+				"sprite": "basicAttack/left1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackLeft2": {
+				"sprite": "basicAttack/left2",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackRight1": {
+				"sprite": "basicAttack/right1",
+				"edge": {
+					"x": 100,
+					"y": 300
+				}
+			},
+			"basicAttackRight2": {
+				"sprite": "basicAttack/right2",
+				"edge": {
+					"x": 100,
 					"y": 300
 				}
 			}
@@ -418,23 +516,104 @@
 					"duration": 8
 				}]
 			},
-			"basickAttackDown": {
+			"basicAttackDown": {
 				"isLooped": false,
 				"frameRefs": [{
-					"frame": "walkRight1",
-					"duration": 8
+					"frame": "basicAttackDown1",
+					"duration": 2
 				}, {
-					"frame": "walkRight2",
-					"duration": 8
+					"frame": "basicAttackDown2",
+					"duration": 2
 				}, {
-					"frame": "walkRight3",
-					"duration": 8
+					"frame": "basicAttackDown1",
+					"duration": 2
+				}]
+			},
+			"basicAttackDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackDownLeft1",
+					"duration": 2
 				}, {
-					"frame": "walkRight4",
-					"duration": 8
+					"frame": "basicAttackDownLeft2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackDownLeft1",
+					"duration": 2
+				}]
+			},
+			"basicAttackDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackDownRight1",
+					"duration": 2
+				}, {
+					"frame": "basicAttackDownRight2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackDownRight1",
+					"duration": 2
+				}]
+			},
+			"basicAttackUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackUp1",
+					"duration": 6
+				}]
+			},
+			"basicAttackUpLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackUpLeft1",
+					"duration": 2
+				}, {
+					"frame": "basicAttackUpLeft2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackUpLeft1",
+					"duration": 2
+				}]
+			},
+			"basicAttackUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackUpRight1",
+					"duration": 2
+				}, {
+					"frame": "basicAttackUpRight2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackUpRight1",
+					"duration": 2
+				}]
+			},
+			"basicAttackLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackLeft1",
+					"duration": 2
+				}, {
+					"frame": "basicAttackLeft2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackLeft1",
+					"duration": 2
+				}]
+			},
+			"basicAttackRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "basicAttackRight1",
+					"duration": 2
+				}, {
+					"frame": "basicAttackRight2",
+					"duration": 2
+				}, {
+					"frame": "basicAttackRight1",
+					"duration": 2
 				}]
 			}
-
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,
