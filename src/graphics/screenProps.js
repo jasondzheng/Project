@@ -14,3 +14,10 @@ ScreenProps.EXP_HEIGHT_HALF = ScreenProps.EXP_HEIGHT / 2;
 
 // The expectd query selector of canvas screen element.
 ScreenProps.SCREEN_QS = '#screen';
+
+
+// Function to see if rectangles overlap with the screen rectangle. 
+ScreenProps.isRectOnScreen = function(x, y, width, height) {
+	return !(0 > x + width || ScreenProps.EXP_WIDTH < x || 
+			0 > y + height || ScreenProps.EXP_HEIGHT < y);
+};

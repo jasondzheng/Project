@@ -93,7 +93,10 @@ UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp,
 		width) {
 	width *= UnitHpDrawer.MIN_BAR_WIDTH;
 	// Check in bounds and short circuit if not on screen
-	// TODO
+	if (!ScreenProps.isRectOnScreen(centerX - width / 2, bottomY - 
+					UnitHpDrawer.HP_BAR_HEIGHT, width, UnitHpDrawer.HP_BAR_HEIGHT)) {
+		return;
+	}
 	// White background
 	ctx.fillStyle = 'grey';
 	var midHeight = bottomY - UnitHpDrawer.HP_BAR_HEIGHT_HALF;

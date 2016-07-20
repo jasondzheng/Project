@@ -109,18 +109,12 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 					boundingRect.y + instance.getUiTop());
 		}
 		// check if the boundingBox is in bounds
-		if (MapDrawer._helperRectOnScreen(boundingRect)) {
+		if (ScreenProps.isRectOnScreen(boundingRect.x, boundingRect.y, 
+				boundingRect.width, boundingRect.height)) {
 			ctx.drawImage(instance.getSprite(), boundingRect.x, 
 					boundingRect.y, boundingRect.width, boundingRect.height);
 		}
 	}
-};
-
-
-// Helper function to see if rectangles overlap
-MapDrawer._helperRectOnScreen = function(r1) {
-	return !(0 > r1.x + r1.width || ScreenProps.EXP_WIDTH < r1.x || 
-			0 > r1.y + r1.height || ScreenProps.EXP_HEIGHT < r1.y);
 };
 
 
