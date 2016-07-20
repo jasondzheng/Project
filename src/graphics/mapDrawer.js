@@ -60,49 +60,57 @@ MapDrawer.drawMap = function(ctx, map, viewerX, viewerY) {
 
 // Function for drawing all entities on the map. Draws on top of map after
 // map has finished drawing. Separate from map draw to allow for things
-// like beat display to draw between the two layers.
+// like beat display to draw between the two layers. Any drawable entity
+// MUST have a field named visualInstance, which is a DynamicMapInstance.
 MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	// Add static map entities
 	var entitiesToDraw = map.staticMapInstances.slice(0);
 	// Add npcs
 	for (var i = 0; i < map.npcInstances.length; i++) {
-		entitiesToDraw.push(map.npcInstances[i].visualInstance);
+		entitiesToDraw.push(map.npcInstances[i]);
 	}
 	// Add units
 	for (var i = 0; i < map.unitInstances.length; i++) {
-		entitiesToDraw.push(map.unitInstances[i].visualInstance);
+		entitiesToDraw.push(map.unitInstances[i]);
 	}
 	// Add player
 	if (map.player) {
-		entitiesToDraw.push(map.player.visualInstance);
+		entitiesToDraw.push(map.player);
 	}
 	entitiesToDraw.sort(function(a, b) {
+		a = a instanceof StaticMapInstance ? a : a.visualInstance;
+		b = b instanceof StaticMapInstance ? b : b.visualInstance;
 		return a.y + a.getCollisionHeight() / 2 - b.y - b.getCollisionHeight() / 2;
 	});
 	for (var i = 0; i < entitiesToDraw.length; i++) {
+		var instance = entitiesToDraw[i] instanceof StaticMapInstance ? 
+				entitiesToDraw[i] : entitiesToDraw[i].visualInstance;
 		var footYGridPos = 
-				(MapDrawer.TOTAL_ROWS + entitiesToDraw[i].getCollisionHeight()) / 2;
-		var centerYRealGridPos = entitiesToDraw[i].y - 
+				(MapDrawer.TOTAL_ROWS + instance.getCollisionHeight()) / 2;
+		var centerYRealGridPos = instance.y - viewerY + MapDrawer.HALF_ROWS;
+		var footYRealGridPos = instance.y + instance.getCollisionHeight() / 2 - 
 				viewerY + MapDrawer.HALF_ROWS;
-		var footYRealGridPos = entitiesToDraw[i].y + 
-				entitiesToDraw[i].getCollisionHeight() / 2 - viewerY + 
-				MapDrawer.HALF_ROWS;
 		var realYDiff = MapDrawer._helperCalcScreenY(footYGridPos) - 
 				MapDrawer._helperCalcScreenY(MapDrawer.HALF_ROWS);
 		var gridYDiff = MapDrawer._helperCalcScreenY(footYRealGridPos) - 
 				MapDrawer._helperCalcScreenY(centerYRealGridPos);
-		var centerLoc = MapDrawer._helperLocatePixel(entitiesToDraw[i].x, 
-				entitiesToDraw[i].y + entitiesToDraw[i].getCollisionHeight() / 2, 
+		var centerLoc = MapDrawer._helperLocatePixel(instance.x, 
+				instance.y + instance.getCollisionHeight() / 2, 
 				viewerX, viewerY, MapDrawer.TILE_DIM);
-		// check if the boundingBox is in bounds
 		var boundingRect = {
-			x: centerLoc.x - entitiesToDraw[i].getEdge().x,
-			y: centerLoc.y - entitiesToDraw[i].getEdge().y,
-			width: entitiesToDraw[i].getSprite().width,
-			height: entitiesToDraw[i].getSprite().height
+			x: centerLoc.x - instance.getEdge().x,
+			y: centerLoc.y - instance.getEdge().y,
+			width: instance.getSprite().width,
+			height: instance.getSprite().height
 		};
+		// Update unit positions for HP drawer
+		if (entitiesToDraw[i] instanceof UnitInstance) {
+			UnitHpDrawer.updateUnitDrawPosition(entitiesToDraw[i], centerLoc.x, 
+					boundingRect.y + instance.getUiTop());
+		}
+		// check if the boundingBox is in bounds
 		if (MapDrawer._helperRectOnScreen(boundingRect)) {
-			ctx.drawImage(entitiesToDraw[i].getSprite(), boundingRect.x, 
+			ctx.drawImage(instance.getSprite(), boundingRect.x, 
 					boundingRect.y, boundingRect.width, boundingRect.height);
 		}
 	}

@@ -5,13 +5,14 @@
  */
 
 var DynamicMapEntity = function(name, frames, animations, collisionWidth, 
-		collisionHeight, isRounded) {
+		collisionHeight, isRounded, defaultUiTop) {
 	this.name = name;
 	this.frames = frames;
 	this.animations = animations;
 	this.collisionWidth = collisionWidth;
 	this.collisionHeight = collisionHeight;
 	this.isRounded = isRounded;
+	this.defaultUiTop = defaultUiTop;
 
 	// Create a default animation
 	this.defaultAnimation;
@@ -137,6 +138,12 @@ DynamicMapInstance.prototype.getSprite = function() {
 	return this._entity.frames[this._helperGetCurrFrameRef().frame].sprite;
 };
 
+DynamicMapInstance.prototype.getUiTop = function() {
+	var uiTop = 
+			this._entity.frames[this._helperGetCurrFrameRef().frame].uiTop;
+	return uiTop != undefined ? uiTop : this._entity.defaultUiTop;
+};
+
 DynamicMapInstance.prototype.getEdge = function() {
 	return this._entity.frames[this._helperGetCurrFrameRef().frame].edge;
 };
@@ -203,7 +210,8 @@ DynamicMapEntityLoader.load = function(name, json, type, callback) {
 			json.frames[frameName].sprite = images[json.frames[frameName].sprite];
 		}
 		var entity = new DynamicMapEntity(name, json.frames, json.animations, 
-				json.collisionWidth, json.collisionHeight, json.isRounded);
+				json.collisionWidth, json.collisionHeight, json.isRounded, 
+				json.defaultUiTop);
 		callback(entity);
 	});
 };

@@ -2,7 +2,6 @@
 	"name": "Ball",
 	"maxHp": 10,
 	"atk": 1,
-	"monsterHeight": 1,
 	"behaviorPattern": " ",
 	"attackPattern": " ",
 	"stateMachine": {
@@ -825,6 +824,7 @@
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,
-		"isRounded": true
+		"isRounded": true,
+		"defaultUiTop": 0
 	}
 }

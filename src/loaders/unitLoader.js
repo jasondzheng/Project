@@ -56,7 +56,8 @@ UnitLoader._helperLoadEntity = function(id, callback) {
 				DynamicMapEntityLoader.Types.UNIT, function(unitEntity) {
 			callback(UnitLoader.loadedEntities[id] = new UnitEntity(id, unitData.name,
 					unitData.maxHp, unitData.atk, unitData.behaviorPattern, 
-					unitData.attackPattern, unitData.stateMachine, unitEntity));
+					unitData.attackPattern, unitData.stateMachine, unitEntity, 
+					unitData.hpBarWidth));
 		});
 	});
 };     

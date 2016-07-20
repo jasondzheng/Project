@@ -38,6 +38,7 @@ window.onload = function() {
 			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
+			UnitHpDrawer.drawHpBars(ctx);
 			if (startTimes.length == 30) {
 				var timestamp = Date.now();
 				var framesPerSecond = 30000 / (timestamp - startTimes[0]);
@@ -105,6 +106,7 @@ var setupTickCycle = function(loadedMap) {
 			BeatDrawer.tick();
 			SoundPlayer.tick();
 			trackCameraOnPlayerDebugDebug();
+			UnitHpDrawer.tick();
 			delta -= tickWindow;
 		}
 		lastOperated = currTime - delta;

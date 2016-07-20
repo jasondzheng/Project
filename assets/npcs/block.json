@@ -492,7 +492,8 @@
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,
-		"isRounded": false
+		"isRounded": false,
+		"defaultUiTop": 0
 	},
 	"trades": {},
 	"shops": {}

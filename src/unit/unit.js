@@ -6,7 +6,7 @@
 
 
 var UnitEntity = function(id, name, maxHp, atk, behaviorPattern, attackPattern, 
-		stateMachine, visualEntity) {
+		stateMachine, visualEntity, hpBarWidth) {
 	this.id = id;
 	this.name = name;
 	this.maxHp = maxHp;
@@ -15,6 +15,7 @@ var UnitEntity = function(id, name, maxHp, atk, behaviorPattern, attackPattern,
 	this.attackPattern = attackPattern;
 	this.stateMachine = stateMachine;
 	this.visualEntity = visualEntity;
+	this.hpBarWidth = hpBarWidth || UnitHpDrawer.DEFAULT_BAR_WIDTH;
 };
 
 

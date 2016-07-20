@@ -617,7 +617,8 @@
 		},
 		"collisionWidth": 1,
 		"collisionHeight": 1,
-		"isRounded": true
+		"isRounded": true,
+		"defaultUiTop": 0
 	}
 }
 
