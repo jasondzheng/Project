@@ -1,0 +1,114 @@
+Long(long)term Wishlist:
+	
+	______________________________________________________________________________
+	UI
+	------------------------------------------------------------------------------
+
+	Combo Indicator:
+		Displays current combo
+	Menu Button:
+		Expand/collapse
+		Item/Equipment/Settings buttons
+		Exit Button
+		Save Button
+	Items/Equipment/Settings Window:
+		Items/Equipment
+			Draggable/closeable/scrollable tab-ed window
+			Grid view of items/equipment
+			Mouse-over dialog for items/equipment
+				Description
+			Click dialog for items/equipment
+				Toss/Equip
+					"Are you sure?" dialog
+			Item Sepcific
+				Same items stack
+					Number visible in corner 
+			Equipment Specific
+				Character view with equiped items
+		Settings
+			BGM bar (clickable arrows or click&drag)
+			SFX bar (clickable arrows or click&drag)
+	NPC Trade window:
+		Player side similar to Items/Equipment window
+		Trader side has mouse-over dialog with trade requirements
+			click dialog only possible if player has reqs
+				"Are you sure?" dialog
+	Dialogue Overlay
+		Event triggerable
+		Click to advance dialogue
+	
+	______________________________________________________________________________
+	SCENES
+	------------------------------------------------------------------------------
+
+	Start Menu
+		Start Button
+		Exit Button
+			"Are you sure?" dialog
+		Settings Button
+			BGM bar (clickable arrows or click&drag)
+			SFX bar (clickable arrows or click&drag)
+	Load Menu
+		Back Button
+		Saved States Button
+			Character Images, stats, progress
+			Difficulty Options Buttons when clicked
+		Delete Saved States Button
+			"Are you sure?" dialog
+		Settings Button
+			BGM bar (clickable arrows or click&drag)
+			SFX bar (clickable arrows or click&drag)
+	Cut Scenes
+		Event triggerable
+		Play cut scene
+			Cut off user input
+
+	______________________________________________________________________________
+	FUNCTIONALITY (excluding currently finished)
+	------------------------------------------------------------------------------
+
+	SavedData
+		Progress point in the story
+			Story defined in json
+		Invetory data
+		Current HP
+		Rewriteable upon save button click
+	Player
+		Death event handled
+			exit or return to last saved state
+	Units
+		Behaviors(described above)
+		Attack matches given beatmap
+		Randomly generate drops when killed
+		Able to trigger events when killed (Bosses)
+	Drops
+		Static entities with item ID
+		When is colliding with item-pickup radius and item pickup key pressed
+			adds item to inventory, destroys visualinstance
+	Inventory
+		Max number of items
+	Maps
+		Event trigger tiles (map switch, dialog, cut scene, etc)
+			(or just invisible passable static entities that trigger when isColliding)
+		Possible events recorded in json
+	NPCs
+		Can be traders
+			if so, contains catalog of items up for trade
+				catalog strucutre defined in json
+		Teleport NPC
+	Dialogue
+		Structure defined in JSON
+		Triggerable by event
+	Sprites
+		Refactor images to single sprite sheets and include data to 
+				interpret/separate images
+		Add support for custom text character images
+
+	______________________________________________________________________________
+	EXTRA
+	------------------------------------------------------------------------------
+
+	Scrolling Credits
+	Beatmap Editor
+	Map editor
+	"Buy this song" button
