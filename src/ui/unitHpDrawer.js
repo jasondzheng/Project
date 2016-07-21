@@ -65,7 +65,7 @@ UnitHpDrawer.tick = function() {
 			delete UnitHpDrawer.hpBars[id];
 		}
 		if (hpBar.shownHp != hpBar.unit.hp) {
-			hpBar.shownHp--;
+			hpBar.shownHp += (hpBar.unit.hp - hpBar.shownHp) > 0 ? 1 : -1;
 		} else if (hpBar.unit.hp == 0) {
 			hpBar.opacity -= UnitHpDrawer.OPACITY_DECR_RATE;
 		}
@@ -118,25 +118,7 @@ UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp,
 		return;
 	}
 	var hpFraction = (hp - 1) / (maxHp - 1);
-	var color;
-	if (hpFraction > .5) {
-		var colorFraction = (hpFraction - .5) / .5;
-		color = 'rgb(' + Math.floor(UnitHpDrawer.HP_COLOR_INFO.midRed + 
-						UnitHpDrawer.HP_COLOR_INFO.midRedDelta * colorFraction) + ', ' + 
-				Math.floor(UnitHpDrawer.HP_COLOR_INFO.midGreen + 
-						UnitHpDrawer.HP_COLOR_INFO.midGreenDelta * colorFraction) + ', ' +
-				Math.floor(UnitHpDrawer.HP_COLOR_INFO.midBlue + 
-						UnitHpDrawer.HP_COLOR_INFO.midBlueDelta * colorFraction)  + ')';
-	} else {
-		var colorFraction = hpFraction / .5;
-		color = 'rgb(' + Math.floor(UnitHpDrawer.HP_COLOR_INFO.botRed + 
-						UnitHpDrawer.HP_COLOR_INFO.botRedDelta * colorFraction) + ', ' + 
-				Math.floor(UnitHpDrawer.HP_COLOR_INFO.botGreen + 
-						UnitHpDrawer.HP_COLOR_INFO.botGreenDelta * colorFraction) + ', ' +
-				Math.floor(UnitHpDrawer.HP_COLOR_INFO.botBlue + 
-						UnitHpDrawer.HP_COLOR_INFO.botBlueDelta * colorFraction)  + ')';
-	}
-	ctx.fillStyle = color;
+	ctx.fillStyle = UnitHpDrawer.getHpColor(hpFraction);
 	var hpWidth = Math.floor(hpFraction * (width - UnitHpDrawer.HP_BAR_HEIGHT));
 	ctx.beginPath();
 	ctx.ellipse(rectStart, midHeight, UnitHpDrawer.HP_BAR_HEIGHT_HALF - 
@@ -154,3 +136,27 @@ UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp,
 			0 /* rotation */, 3 * Math.PI / 2, Math.PI / 2);
 	ctx.fill();
 };
+
+
+// Provides the desired HP bar color for a given HP Fraction, following a 
+// gradient that transitions from green to yellow to red. Also used within 
+// PlayerHpDrawer.
+UnitHpDrawer.getHpColor = function(hpFraction) {
+	if (hpFraction > .5) {
+		hpFraction = (hpFraction - .5) / .5;
+		return 'rgb(' + Math.floor(UnitHpDrawer.HP_COLOR_INFO.midRed + 
+						UnitHpDrawer.HP_COLOR_INFO.midRedDelta * hpFraction) + ', ' + 
+				Math.floor(UnitHpDrawer.HP_COLOR_INFO.midGreen + 
+						UnitHpDrawer.HP_COLOR_INFO.midGreenDelta * hpFraction) + ', ' +
+				Math.floor(UnitHpDrawer.HP_COLOR_INFO.midBlue + 
+						UnitHpDrawer.HP_COLOR_INFO.midBlueDelta * hpFraction)  + ')';
+	} else {
+		hpFraction /= .5;
+		return 'rgb(' + Math.floor(UnitHpDrawer.HP_COLOR_INFO.botRed + 
+						UnitHpDrawer.HP_COLOR_INFO.botRedDelta * hpFraction) + ', ' + 
+				Math.floor(UnitHpDrawer.HP_COLOR_INFO.botGreen + 
+						UnitHpDrawer.HP_COLOR_INFO.botGreenDelta * hpFraction) + ', ' +
+				Math.floor(UnitHpDrawer.HP_COLOR_INFO.botBlue + 
+						UnitHpDrawer.HP_COLOR_INFO.botBlueDelta * hpFraction)  + ')';
+	}
+}

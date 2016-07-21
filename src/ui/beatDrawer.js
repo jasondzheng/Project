@@ -149,7 +149,7 @@ BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
 };
 
 
-BeatDrawer.draw = function(ctx, centerX, centerY) {
+BeatDrawer.drawBeats = function(ctx, centerX, centerY) {
 	for (var i = BeatDrawer._windowStart; i < BeatDrawer._windowEnd; i++) {
 		var beat = BeatDrawer._queue[i % BeatDrawer._queue.length];
 		var time = (i < BeatDrawer._queue.length ? 0 : BeatDrawer._songPlayTime) + 

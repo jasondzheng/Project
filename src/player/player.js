@@ -3,7 +3,7 @@
  * for manipulating the character.
  */
 
-var Player = function(id, visualInstance, x, y) {
+var Player = function(id, visualInstance, x, y, saveData) {
 	this.id = id;
 	this.visualInstance = visualInstance;
 	this.containingMap;
@@ -11,7 +11,25 @@ var Player = function(id, visualInstance, x, y) {
 	this._direction = Direction.DOWN;
 	this._collisionIgnoreList = [this];
 	this.attackCombo = 0;
+	// TODO: remove the debug object and this default value for save data
+	this.applySaveData(saveData || Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG);
 };
+
+
+// Applies player statistics from save data. Creates new fields for all relevant
+// values within the player object.
+Player.prototype.applySaveData = function(saveData) {
+	this.hp = saveData.hp;
+	this.maxHp = saveData.maxHp;
+};
+
+
+// A debug default save data to use because saving isn't implemented yet.
+Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
+	hp: 99,
+	maxHp: 100
+};
+
 
 // The animation states the player can be in. This should be supported for all
 // animated actions the player can take, like being idle, attacking, etc

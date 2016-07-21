@@ -35,10 +35,11 @@ window.onload = function() {
 
 		var drawLoop = function() {
 			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
-			BeatDrawer.draw(ctx, ScreenProps.EXP_WIDTH_HALF, 
+			BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
 			UnitHpDrawer.drawHpBars(ctx);
+			PlayerHpDrawer.drawHp(ctx);
 			if (startTimes.length == 30) {
 				var timestamp = Date.now();
 				var framesPerSecond = 30000 / (timestamp - startTimes[0]);
@@ -107,6 +108,7 @@ var setupTickCycle = function(loadedMap) {
 			SoundPlayer.tick();
 			trackCameraOnPlayerDebugDebug();
 			UnitHpDrawer.tick();
+			PlayerHpDrawer.tick();
 			delta -= tickWindow;
 		}
 		lastOperated = currTime - delta;

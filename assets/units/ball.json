@@ -26,253 +26,253 @@
 			"spawn1": {
 				"sprite": "spawn/1",
 				"edge": {
-					"x": 50,
-					"y": 134
+					"x": 49,
+					"y": 150
 				}
 			},
 			"spawn2": {
 				"sprite": "spawn/2",
 				"edge": {
-					"x": 50,
-					"y": 134
+					"x": 49,
+					"y": 150
 				}
 			},
 			"spawn3": {
 				"sprite": "spawn/3",
 				"edge": {
-					"x": 50,
-					"y": 134
+					"x": 49,
+					"y": 150
 				}
 			},
 			"spawn4": {
 				"sprite": "spawn/4",
 				"edge": {
-					"x": 50,
-					"y": 134
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDown1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDown2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDown3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDown4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownLeft1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownLeft2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownLeft3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownLeft4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkLeft1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkLeft2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkLeft3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkLeft4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpLeft1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpLeft2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpLeft3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpLeft4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUp1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUp2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUp3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUp4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpRight1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpRight2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpRight3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkUpRight4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkRight1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkRight2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkRight3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkRight4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownRight1": {
 				"sprite": "walk/1",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownRight2": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownRight3": {
 				"sprite": "walk/3",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			},
 			"walkDownRight4": {
 				"sprite": "walk/2",
 				"edge": {
-					"x": 50,
-					"y": 200
+					"x": 49,
+					"y": 150
 				}
 			}
 		},
