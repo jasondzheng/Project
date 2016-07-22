@@ -1,0 +1,10 @@
+Fix UITop
+Add in animations for monster attacks
+----
+Create Action for basic attack, which should self contain damage calcs for the player (keep in mind many of these occur across other instances)
+
+Add in animations for player
+Add in methods for deploying animations
+Add in checks to prevent movement/attacking during flinchback
+
+Done?

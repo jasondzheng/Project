@@ -329,6 +329,90 @@
 					"x": 100,
 					"y": 300
 				}
+			},
+			"damageReceivedDown1": {
+				"sprite": "damageReceived/down1",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDown2": {
+				"sprite": "damageReceived/down2",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDown3": {
+				"sprite": "damageReceived/down3",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedLeft1": {
+				"sprite": "damageReceived/left1",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedLeft2": {
+				"sprite": "damageReceived/left2",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedLeft3": {
+				"sprite": "damageReceived/left3",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownLeft1": {
+				"sprite": "damageReceived/downLeft1",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownLeft2": {
+				"sprite": "damageReceived/downLeft2",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownLeft3": {
+				"sprite": "damageReceived/downLeft3",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownRight1": {
+				"sprite": "damageReceived/downRight1",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownRight2": {
+				"sprite": "damageReceived/downRight2",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
+			},
+			"damageReceivedDownRight3": {
+				"sprite": "damageReceived/downRight3",
+				"edge": {
+					"x": 49,
+					"y": 300
+				}
 			}
 		},
 		"animations": {
@@ -520,39 +604,39 @@
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackDown1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDown2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDown1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackDownLeft": {
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackDownLeft1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDownLeft2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDownLeft1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackDownRight": {
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackDownRight1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDownRight2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackDownRight1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackUp": {
@@ -566,52 +650,180 @@
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackUpLeft1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackUpLeft2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackUpLeft1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackUpRight": {
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackUpRight1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackUpRight2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackUpRight1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackLeft": {
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackLeft1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackLeft2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackLeft1",
-					"duration": 2
+					"duration": 3
 				}]
 			},
 			"basicAttackRight": {
 				"isLooped": false,
 				"frameRefs": [{
 					"frame": "basicAttackRight1",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackRight2",
-					"duration": 2
+					"duration": 3
 				}, {
 					"frame": "basicAttackRight1",
-					"duration": 2
+					"duration": 3
+				}]
+			},
+			"damageReceivedDown": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDown2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedDownLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDownLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedDownRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDownRight2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedUp": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDown2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDown3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedUpLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDownRight2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownRight3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedUpRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedDownLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedDownLeft3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedLeft": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft3",
+					"duration": 4
+				}]
+			},
+			"damageReceivedRight": {
+				"isLooped": false,
+				"frameRefs": [{
+					"frame": "damageReceivedLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft1",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft2",
+					"duration": 4
+				}, {
+					"frame": "damageReceivedLeft3",
+					"duration": 4
 				}]
 			}
 		},

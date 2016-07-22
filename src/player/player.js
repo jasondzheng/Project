@@ -36,7 +36,8 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 Player.AnimationStates = {
 	IDLE: 'idle',
 	WALKING: 'walk',
-	BASIC_ATTACKING: 'basicAttack'
+	BASIC_ATTACKING: 'basicAttack',
+	DAMAGE_RECEIVING: 'damageReceived'
 };
 
 // The player's walk speed, in MIN_MOVE_SPEED units.
@@ -64,6 +65,15 @@ Player.prototype.getPositionX = function() {
 Player.prototype.getPositionY = function() {
 	return this.visualInstance.y;
 };
+
+
+Player.prototype.receiveDamage = function(damage) {
+	this.hp -= damage;
+	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
+				DynamicMapEntity.getActionDirectionFamilyName(
+						Player.AnimationStates.DAMAGE_RECEIVING, this._direction)));
+	this.visualInstance._animationState = Player.AnimationStates.DAMAGE_RECEIVING;
+}
 
 
 Player.prototype.canMove = function() {

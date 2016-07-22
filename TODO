@@ -4,29 +4,14 @@ beats increase damage																								?
 hp display: see hp values go down                                   x																
 unit dying in the attack applier																		x
 player health																												X
-enemy unit attacks (player can have negative hp)
-player reaction to enemy attacks
+enemy unit attacks (player can have negative hp)										?
+player reaction to enemy attacks																		?
 enemy actions
 	chase
-	attack
+	attack (should be covered by enemy unit attacks)
 enemy behaviors
 	aggressive
 		chase and attack
 	passive
 		if youre near attack
 		otherwise move randomly within a radius per each waypoint
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

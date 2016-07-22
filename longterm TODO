@@ -4,10 +4,12 @@ Long(long)term Wishlist:
 	UI
 	------------------------------------------------------------------------------
 
-	Combo Indicator:
-		Displays current combo
+	Click detection scaling to match canvas resize																D
+	Combo Indicator:																															
+		Displays current combo 																											D
+		Beat marker visual indication of successful/failed combo 										D?
 	Menu Button:
-		Expand/collapse
+		Expand/collapse																															D
 		Item/Equipment/Settings buttons
 		Exit Button
 		Save Button
@@ -36,6 +38,7 @@ Long(long)term Wishlist:
 	Dialogue Overlay
 		Event triggerable
 		Click to advance dialogue
+		Ideally includes support for animations
 	
 	______________________________________________________________________________
 	SCENES
@@ -73,6 +76,9 @@ Long(long)term Wishlist:
 		Invetory data
 		Current HP
 		Rewriteable upon save button click
+	BeatMap
+		Difficulty levels supported in json
+		Includes beat approach rate as well
 	Player
 		Death event handled
 			exit or return to last saved state
@@ -80,11 +86,14 @@ Long(long)term Wishlist:
 		Behaviors(described above)
 		Attack matches given beatmap
 		Randomly generate drops when killed
+			creates appropriate static entities with drop IDs
 		Able to trigger events when killed (Bosses)
 	Drops
 		Static entities with item ID
 		When is colliding with item-pickup radius and item pickup key pressed
-			adds item to inventory, destroys visualinstance
+			moves visualInstance towards player position
+			when within certain distance from player
+				adds item to inventory, destroys visualinstance
 	Inventory
 		Max number of items
 	Maps
@@ -95,6 +104,7 @@ Long(long)term Wishlist:
 		Can be traders
 			if so, contains catalog of items up for trade
 				catalog strucutre defined in json
+			on trade, replaces player inventory items with item traded for
 		Teleport NPC
 	Dialogue
 		Structure defined in JSON
@@ -110,5 +120,5 @@ Long(long)term Wishlist:
 
 	Scrolling Credits
 	Beatmap Editor
-	Map editor
+	Map Editor
 	"Buy this song" button

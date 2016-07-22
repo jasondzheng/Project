@@ -19,6 +19,7 @@ var UnitActionManager = function(unit) {
 	this._behavior = UnitBehaviors.IdleBehavior;
 	this._animationState;
 	this._collisionIgnoreList = [unit];
+	this._oldQueueLength = 0;
 };
 
 // Minimum distance to move within a tick
@@ -30,20 +31,31 @@ UnitActionManager.AnimationStates = {
 	WALKING: 'walk',
 	SPAWNING: 'spawn',
 	DAMAGE_TAKEN: 'damageTaken',
-	DESPAWNING: 'despawn'
-}
+	DESPAWNING: 'despawn',
+	BASIC_ATTACKING: 'basicAttack'
+};
 
 
 // Consumes the queue, requesting new actions if the queue is empty
 UnitActionManager.prototype.tick = function() {
+	var startQueueLength = this._actionQueue.length;
 	while (this._actionQueue.length > 0 && this._actionQueue[0].isDone()) {
+		if (this._actionQueue[0].onEnd) {
+			this._actionQueue[0].onEnd();
+		}
 		this._actionQueue.shift();
-	}
+	}	
 	if (this._actionQueue.length > 0) {
+		if ((startQueueLength != this._actionQueue.length || 
+				(startQueueLength != this._oldQueueLength && 
+						this._oldQueueLength == 0)) && this._actionQueue[0].onStart) {
+			this._actionQueue[0].onStart();
+		}
 		this._actionQueue[0].tick();
 	} else {
 		(this._actionQueue[0] = this._behavior.getNextBehavior(this)).tick();
 	}
+	this._oldQueueLength = this._actionQueue.length;
 };
 
 
@@ -340,6 +352,7 @@ UnitActionManager.DamageTakenAction = function(uam) {
 	this._uam = uam;
 };
 
+
 UnitActionManager.DamageTakenAction.prototype.tick = function() {
 	if (this._uam._animationState != 
 			UnitActionManager.AnimationStates.DAMAGE_TAKEN) {
@@ -351,6 +364,7 @@ UnitActionManager.DamageTakenAction.prototype.tick = function() {
 		this._uam._animationState = UnitActionManager.AnimationStates.DAMAGE_TAKEN;
 	}
 };
+
 
 UnitActionManager.DamageTakenAction.prototype.isDone = function() {
 	return this._uam._animationState == 
@@ -387,5 +401,53 @@ UnitActionManager.DespawnAction.prototype.tick = function() {
 
 
 UnitActionManager.DespawnAction.prototype.isDone = function() {
+	return this._isCompleted;
+};
+
+
+UnitActionManager.BasicAttackAction = function(uam, direction) {
+	this._uam = uam;
+	this._direction = direction;
+	this._attackRadius = 1;
+	this._isCompleted = false;
+};
+
+
+UnitActionManager.BasicAttackAction.prototype.onStart = function() {
+	// Do damage calcs
+	this._uam.unit.direction = this._direction;
+
+	var unitVisualInstance = this._uam.unit.visualInstance;
+	var playerVisualInstance = GameState.player.visualInstance;
+	if (this._uam.unit.direction == 
+					Direction.getDirectionFromCoords(playerVisualInstance.x - 
+					unitVisualInstance.x, playerVisualInstance.y - 
+							unitVisualInstance.y) &&
+			CollisionDetector.areShapesColliding(unitVisualInstance.x, 
+					unitVisualInstance.y, 2 * this._attackRadius, 
+					2 * this._attackRadius, unitVisualInstance.isRounded, 
+					playerVisualInstance.x, playerVisualInstance.y, 
+					playerVisualInstance.getCollisionWidth, 
+					playerVisualInstance.getCollisionHeight, 
+					playerVisualInstance.isRounded)) {
+		GameState.player.receiveDamage(this._uam.unit.unitEntity.atk);
+	}
+
+	this._uam.unit.visualInstance.setAnimation(
+			this._uam.unit.visualInstance.getAnimNameFromFamily(
+					DynamicMapEntity.getActionDirectionFamilyName(
+							UnitActionManager.AnimationStates.BASIC_ATTACKING, 
+							this._direction)));
+	this._uam._animationState = 
+			UnitActionManager.AnimationStates.BASIC_ATTACKING;
+};
+
+
+UnitActionManager.BasicAttackAction.prototype.tick = function() {
+	this._isCompleted = this._uam.unit.visualInstance.isAtLastFrameOfAnimation();
+};
+
+
+UnitActionManager.BasicAttackAction.prototype.isDone = function() {
 	return this._isCompleted;
 };
