@@ -1,0 +1,7 @@
+rewrite chase and test 
+write enemy behaviors
+	aggressive
+		chase and attack
+	passive
+		if youre near attack
+		otherwise move randomly within a radius per each waypoint

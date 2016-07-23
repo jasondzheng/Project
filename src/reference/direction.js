@@ -34,7 +34,7 @@ Direction._angles;
 	Direction._angles = {};
 	for (var i = 0; i < Direction._angleSegments.length; i++) {
 		Direction._angles[Direction._angleSegments[i]] = 
-				(Math.PI + 7 * i * Math.PI / 4) % (Math.PI * 2);
+				(Math.PI + i * Math.PI / 4) % (Math.PI * 2);
 	}
 })();
 
@@ -52,7 +52,6 @@ Direction.getDirectionFromCoords = function(x, y) {
 
 // Lock a cartesian angle to a direction.
 Direction.lockAngleToDirection = function(angle) {
-	angle = -angle;
 	if (angle >= 7 * Math.PI / 8) {
 		angle -= Math.PI * 2;
 	}

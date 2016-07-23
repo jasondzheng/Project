@@ -67,15 +67,17 @@ Player.prototype.getPositionY = function() {
 };
 
 
+// Decrements hp by the damage provided and sets animation and animation state 
+// to DAMAGE_RECEIVING
 Player.prototype.receiveDamage = function(damage) {
-	this.hp -= damage;
+	this.hp = Math.max(this.hp - damage, 0);
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
 				DynamicMapEntity.getActionDirectionFamilyName(
 						Player.AnimationStates.DAMAGE_RECEIVING, this._direction)));
 	this.visualInstance._animationState = Player.AnimationStates.DAMAGE_RECEIVING;
 }
 
-
+// Checks if player is able to issue a move command
 Player.prototype.canMove = function() {
 	return this._animationState == Player.AnimationStates.IDLE || 
 			this._animationState == Player.AnimationStates.WALKING || (
@@ -121,6 +123,7 @@ Player.prototype.tryMove = function(deltaX, deltaY) {
 };
 
 
+// Sets the animation and animation state of the player to BASIC_ATTACKING
 Player.prototype.basicAttack = function() {
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
 			DynamicMapEntity.getActionDirectionFamilyName(
@@ -129,9 +132,11 @@ Player.prototype.basicAttack = function() {
 };
 
 
+// Checks if the player can issue a basic attack command
 Player.prototype.canBasicAttack = function() {
-	return this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
-			this.visualInstance.isAtLastFrameOfAnimation();
+	return this._animationState != Player.AnimationStates.DAMAGE_RECEIVING && 
+			(this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
+					this.visualInstance.isAtLastFrameOfAnimation());
 };
 
 
