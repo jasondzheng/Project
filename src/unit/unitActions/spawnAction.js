@@ -1,6 +1,10 @@
 /** 
  * Represents playing a spawn animation.
  */
+
+// #AFTER src/unit/unitActionManager.js
+
+
 UnitActionManager.SpawnAction = function(uam) {
 	this._uam = uam;
 	this._isCompleted = false;

@@ -1,3 +1,6 @@
+
+// #AFTER src/unit/unitActionManager.js
+
 UnitActionManager.BasicAttackAction = function(uam, direction) {
 	this._uam = uam;
 	this._direction = direction;

@@ -1,5 +1,17 @@
 #!/usr/bin/python
 
+'''
+Used for assembling the source js files required by the client to run. Iterates
+through all js files in src, appending them in iterated order unless a specific
+ordering is provided using the below syntax:
+
+	// #AFTER <path relative to this file>
+
+This ensures the script in question loads after the specified path's script.
+Please use sparingly as repeated use increases the dependency on this assembly
+script as well as increases the risk of a circular dependency being formed.
+'''
+
 import sys
 import os
 import re

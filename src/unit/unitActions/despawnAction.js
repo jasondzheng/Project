@@ -1,3 +1,5 @@
+// #AFTER src/unit/unitActionManager.js
+
 UnitActionManager.DespawnAction = function(uam) {
 	this._uam = uam;
 	this._isCompleted = false;

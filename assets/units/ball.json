@@ -2,7 +2,7 @@
 	"name": "Ball",
 	"maxHp": 10,
 	"atk": 20,
-	"behaviorPattern": "aggressiveBehaviorNormal",
+	"behaviorPattern": "passiveBehavior",
 	"attackPattern": " ",
 	"stateMachine": {
 		"init": "

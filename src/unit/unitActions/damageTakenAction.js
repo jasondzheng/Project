@@ -1,3 +1,5 @@
+// #AFTER src/unit/unitActionManager.js
+
 //TODO comment
 UnitActionManager.DamageTakenAction = function(uam) {
 	this._uam = uam;

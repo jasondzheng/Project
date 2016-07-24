@@ -1,6 +1,10 @@
 /** 
  * Represents staying idle for a given number of ticks.
  */
+
+// #AFTER src/unit/unitActionManager.js
+
+
 UnitActionManager.StayIdleAction = function(duration, uam) {
 	this._uam = uam;
 	this._duration = duration;

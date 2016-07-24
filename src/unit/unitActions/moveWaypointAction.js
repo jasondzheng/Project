@@ -1,6 +1,10 @@
 /** 
  * Represents static movement to a fixed waypoint at a fixed speed.
  */
+
+// #AFTER src/unit/unitActionManager.js
+
+
 UnitActionManager.MoveWaypointAction = function(targetX, targetY, speed, uam) {
 	this._targetX = targetX;
 	this._targetY = targetY;

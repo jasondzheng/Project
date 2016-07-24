@@ -2,6 +2,9 @@
  * Represents chasing a player, randomly moving if unable to continue chase.
  * Terminates when either close enough or too far from the player.
  */
+
+// #AFTER src/unit/unitActionManager.js
+
 UnitActionManager.ChaseAction = function(uam, minRadius, maxRadius, speed) {
 	this._uam = uam;
 	this._minRadius = minRadius;
