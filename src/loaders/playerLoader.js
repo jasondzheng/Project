@@ -7,6 +7,7 @@ var PlayerLoader = {};
 
 PlayerLoader.PLAYER_PATH = '../assets/players/'
 
+// Loads a player given its id
 PlayerLoader.load = function(id, callback) {
 	JSONLoader.load(PlayerLoader.PLAYER_PATH + id + '.json', function(data) {
 		DynamicMapEntityLoader.load(id, data.entity, 

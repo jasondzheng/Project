@@ -9,6 +9,7 @@ var CallbackDeferrer = function() {
 };
 
 
+// Adds a function to the queue of functions to be called.
 CallbackDeferrer.prototype.add = function(invokedFunction, argsCallback, 
 		returnArgNames) {
 	this._callQueue.push({
@@ -19,6 +20,7 @@ CallbackDeferrer.prototype.add = function(invokedFunction, argsCallback,
 };
 
 
+// Calls the functions and processes their return arguments in the queue.
 CallbackDeferrer.prototype.after = function(opt_callback) {
 	var that = this;
 	var genericCallback = function() {

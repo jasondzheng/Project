@@ -1,3 +1,8 @@
+/**
+ * An attack action that amkes the unit attack in a specified direction. Applies
+ * damage to the player if within bounds.
+ */
+
 
 // #AFTER src/unit/unitActionManager.js
 
@@ -16,6 +21,8 @@ UnitActionManager.BasicAttackAction.prototype.onStart = function() {
 	// Checks for application of damage before doing so
 	var unitVisualInstance = this._uam.unit.visualInstance;
 	var playerVisualInstance = this._uam.unit.containingMap.player.visualInstance;
+	// Check if the player is in the same direction and within an attack radius 
+	// from the unit attacking.
 	if (this._uam.unit.direction == 
 					Direction.getDirectionFromCoords(playerVisualInstance.x - 
 							unitVisualInstance.x, playerVisualInstance.y - 
@@ -47,6 +54,8 @@ UnitActionManager.BasicAttackAction.prototype.tick = function() {
 
 
 UnitActionManager.BasicAttackAction.prototype.isDone = function() {
+	// Returns true if the unit state was attacking and the animation is at its 
+	// last frame.
 	return this._uam._animationState == 
 					UnitActionManager.AnimationStates.BASIC_ATTACKING && 
 			this._uam.unit.visualInstance.isAtLastFrameOfAnimation();

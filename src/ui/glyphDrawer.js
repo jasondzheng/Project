@@ -19,7 +19,6 @@ GlyphDrawer.GLYPH_DERIVATIONS = [{
 
 GlyphDrawer.glyphs = {};
 
-
 // Loads all of the game glyphsets. Also creates derived glyphsets.
 GlyphDrawer.loadGlyphs = function(callback) {
 	var glyphsToLoad = GlyphDrawer.GLYPH_NAMES.length;
@@ -87,6 +86,10 @@ GlyphDrawer.loadGlyphs = function(callback) {
 };
 
 
+// Draws text on the screen with the provided glyph setName in a bounded 
+// rectangle. Text will begin drawing at the provided x, y coordinate and 
+// linebreaks will only occur on spaces. The drawer will stop drawing at the end
+// of text or when the current character height exceeds the provided height.
 GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 	var glyphset = GlyphDrawer.glyphs[setName];
 	if (!glyphset) {
@@ -122,6 +125,7 @@ GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 						drawnCharProps.width, drawnCharProps.height);
 				letterX += drawnCharProps.width + GlyphDrawer.CHAR_SPACING;
 			}
+			// Update variables after a line is drawn.
 			currLine++;
 			lineStart = possibleLineEnd + 1;
 			possibleLineEnd = lineStart;

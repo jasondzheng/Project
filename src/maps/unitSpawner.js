@@ -1,4 +1,7 @@
 /**
+ * Manages the spawning of enemy units on a given map with the provided spawn 
+ * behavior. Provides functions for spawning outside of the behavior (forceSpawn 
+ * and fillUnitQuotas).
  */
 
 var UnitSpawner = function(containingMap, spawnBehavior) {
@@ -110,7 +113,7 @@ UnitSpawner.prototype.tick = function() {
 };
 
 
-// 
+// Makes changes to the unit spawner upon a unit death
 UnitSpawner.prototype.notifyOnUnitDeath = function(unit) {
 	this._instanceCounts[unit.unitEntity.id]--;
 };

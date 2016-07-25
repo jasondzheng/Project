@@ -1,3 +1,8 @@
+/**
+ * Provides functions for preloading unit entities and loading specific unit 
+ * instances from the preloaded entities
+ */
+
 var UnitLoader = {};
 
 UnitLoader.PATH = '../assets/units';

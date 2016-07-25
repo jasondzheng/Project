@@ -1,16 +1,22 @@
 /**
- *
+ * A set of behaviors for units. Each behavior has a getNexAction function that 
+ * anticipates an empty queue (the condition that it will be called on).
  */
 
 var UnitBehaviors = {};
 
+
+// Behavior that provides a new Idle Action of 1 second on every call to 
+// getNextAction.
 UnitBehaviors.IdleBehavior = {};
 
 UnitBehaviors.IdleBehavior.getNextAction = function(uam) {
 	return new UnitActionManager.StayIdleAction(60, uam);
 };
 
-
+// Behavior that moves the unit in a random direction of a random dinstance 
+// within the maximum move radius. Unit will stop upon collision. When the unit 
+// is within attacking distance of the player, it will attack the player.
 UnitBehaviors.PassiveBehavior = {};
 
 UnitBehaviors.PassiveBehavior.MOVE_CHANCE = 0.5;
@@ -49,10 +55,14 @@ UnitBehaviors.PassiveBehavior.getNextAction = function(uam) {
 };
 
 
+// Creates a variant of aggressive behavior given the minimum chase distance and 
+// maximum chase distance.
 UnitBehaviors._createAggressiveBehavior = function(minChaseDistance, 
 		maxChaseDistance) {
+	// Behavior that will attack if within minimum chase distance, chase if within 
+	// a maximum chase distance but not within a minimum chase distnace, and stay
+	// idle if outside a mazimum chase distance.
 	var result = {};
-
 	result.getNextAction = function(uam) {
 		// find distance from player
 		var unitVisualInstance = uam.unit.visualInstance;

@@ -12,6 +12,9 @@ var MoveInstruction = function(x, y, speed, direction) {
 };
 
 
+
+// Generates a random movement pattern based on its provided speed, walk rate, 
+// turn rate, and rectangular bounds for movement.
 MovePattern._genRandomClassPattern = function(speed, walkRate, turnRate, 
 		boxWidth, boxHeight) {
 	var result = {};
@@ -65,7 +68,7 @@ MovePattern._genRandomClassPattern = function(speed, walkRate, turnRate,
 	return result;
 };
 
-
+// Generates patterns with all combinations of speed names and size names.
 (function() {
 	var speedNames = ['Slow', 'Mid', 'Fast'];
 	var sizeNames = ['Small', 'Med', 'Large'];

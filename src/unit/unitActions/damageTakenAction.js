@@ -1,3 +1,7 @@
+/**
+ * An action that represents a unit taking damage
+ */
+
 // #AFTER src/unit/unitActionManager.js
 
 //TODO comment

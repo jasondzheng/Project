@@ -1,5 +1,10 @@
-var UnitHpDrawer = {};
+/**
+ * Draws HP bars above every unit that is provided. Anticipates MapDrawer to
+ * call updateUnitDrawPosition to signal all units which need HP bars to be
+ * drawn.
+ */
 
+var UnitHpDrawer = {};
 
 UnitHpDrawer.DEFAULT_BAR_WIDTH = 2;
 UnitHpDrawer.MIN_BAR_WIDTH = 48;
@@ -19,12 +24,14 @@ UnitHpDrawer.HP_COLOR_INFO = {
 	botGreen: 70,
 	botBlue: 41
 };
+// The differences in color values between the top and mid colors
 UnitHpDrawer.HP_COLOR_INFO.midRedDelta = UnitHpDrawer.HP_COLOR_INFO.topRed - 
 		UnitHpDrawer.HP_COLOR_INFO.midRed;
 UnitHpDrawer.HP_COLOR_INFO.midGreenDelta = UnitHpDrawer.HP_COLOR_INFO.topGreen - 
 		UnitHpDrawer.HP_COLOR_INFO.midGreen;
 UnitHpDrawer.HP_COLOR_INFO.midBlueDelta = UnitHpDrawer.HP_COLOR_INFO.topBlue - 
 		UnitHpDrawer.HP_COLOR_INFO.midBlue;
+// The differences in color values between the mid and bottom colors
 UnitHpDrawer.HP_COLOR_INFO.botRedDelta = UnitHpDrawer.HP_COLOR_INFO.midRed - 
 		UnitHpDrawer.HP_COLOR_INFO.botRed;
 UnitHpDrawer.HP_COLOR_INFO.botGreenDelta = UnitHpDrawer.HP_COLOR_INFO.midGreen - 
@@ -32,11 +39,14 @@ UnitHpDrawer.HP_COLOR_INFO.botGreenDelta = UnitHpDrawer.HP_COLOR_INFO.midGreen -
 UnitHpDrawer.HP_COLOR_INFO.botBlueDelta = UnitHpDrawer.HP_COLOR_INFO.midBlue - 
 		UnitHpDrawer.HP_COLOR_INFO.botBlue;
 
-
+// Listing of all HP bars to be drawn, by unit id
 UnitHpDrawer.hpBars = {};
+// Common parity among all HP bars that should be drawn. Used to identify which
+// entries are stale due to units dying.
 UnitHpDrawer.parity = false;
 
 
+// Updates the position of a unit; used for tracking the unit with its HP bar.
 UnitHpDrawer.updateUnitDrawPosition = function(unit, centerX, bottomY) {
 	var hpBar = UnitHpDrawer.hpBars[unit.uid];
 	if (hpBar) {
@@ -57,6 +67,9 @@ UnitHpDrawer.updateUnitDrawPosition = function(unit, centerX, bottomY) {
 
 
 UnitHpDrawer.tick = function() {
+	// Processes HP bars. Changes visual HP by 1 HP per tick to match actual HP.
+	// Slowly fades HP bars when HP = 0; when opacity is low enough, remove the hp
+	// bar. 
 	var idsToProcess = Object.keys(UnitHpDrawer.hpBars);
 	for (var i = 0; i < idsToProcess.length; i++) {
 		var id = idsToProcess[i];
@@ -74,6 +87,7 @@ UnitHpDrawer.tick = function() {
 };
 
 
+// Draws all HP bars within UnitDrawer.hpBars
 UnitHpDrawer.drawHpBars = function(ctx) {
 	for (var id in UnitHpDrawer.hpBars) {
 		if (!UnitHpDrawer.hpBars.hasOwnProperty(id)) {
@@ -89,6 +103,7 @@ UnitHpDrawer.drawHpBars = function(ctx) {
 };
 
 
+// Draws an HP bar given its center x, bottom y, HP, max HP, and width.
 UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp, 
 		width) {
 	width *= UnitHpDrawer.MIN_BAR_WIDTH;
@@ -113,10 +128,10 @@ UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp,
 			UnitHpDrawer.HP_BAR_HEIGHT_HALF, UnitHpDrawer.HP_BAR_HEIGHT_HALF, 
 			0 /* rotation */, 3 * Math.PI / 2, Math.PI / 2);
 	ctx.fill();
-	// Draw the HP
 	if (hp <= 0) {
 		return;
 	}
+	// Draw the HP
 	var hpFraction = (hp - 1) / (maxHp - 1);
 	ctx.fillStyle = UnitHpDrawer.getHpColor(hpFraction);
 	var hpWidth = Math.floor(hpFraction * (width - UnitHpDrawer.HP_BAR_HEIGHT));
@@ -138,7 +153,7 @@ UnitHpDrawer._helperDrawHpBar = function(ctx, centerX, bottomY, hp, maxHp,
 };
 
 
-// Provides the desired HP bar color for a given HP Fraction, following a 
+// Provides the desired HP bar color for a given HP fraction, following a 
 // gradient that transitions from green to yellow to red. Also used within 
 // PlayerHpDrawer.
 UnitHpDrawer.getHpColor = function(hpFraction) {
@@ -159,4 +174,4 @@ UnitHpDrawer.getHpColor = function(hpFraction) {
 				Math.floor(UnitHpDrawer.HP_COLOR_INFO.botBlue + 
 						UnitHpDrawer.HP_COLOR_INFO.botBlueDelta * hpFraction)  + ')';
 	}
-}
+};

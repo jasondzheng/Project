@@ -1,3 +1,7 @@
+/**
+ * An action that removes a unit from the map and visually despawns that unit.
+ */
+
 // #AFTER src/unit/unitActionManager.js
 
 UnitActionManager.DespawnAction = function(uam) {

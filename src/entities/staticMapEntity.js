@@ -59,6 +59,8 @@ var StaticMapEntityLoader = {};
 // Expected static entity directory
 StaticMapEntityLoader.STATIC_MAP_ENTITY_DIR = '../assets/img/staticEntities/';
 
+
+// Loads all static map entities in the provided map
 StaticMapEntityLoader.loadAll = function(json, mapName, callback) {
 	if (Object.keys(json).length == 0) {
 		callback({});

@@ -47,7 +47,7 @@ var UnitInstance = function(unitEntity, x, y, startingDirection,
 	this._helperEval(this._state.onEnter);
 };
 
-
+// Counter to ensure no UnitInstance uid's are the same
 UnitInstance._uidCounter = 0;
 
 

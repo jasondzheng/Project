@@ -27,6 +27,7 @@ window.onload = function() {
 
 		var startTimes = [];
 
+		// Initialize player position and register to the map
 		player.setPositionX(4);
 		player.setPositionY(4);
 		map.registerPlayer(player);
@@ -40,6 +41,7 @@ window.onload = function() {
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
 			UnitHpDrawer.drawHpBars(ctx);
 			PlayerHpDrawer.drawHp(ctx);
+			// Draws FPS
 			if (startTimes.length == 30) {
 				var timestamp = Date.now();
 				var framesPerSecond = 30000 / (timestamp - startTimes[0]);
@@ -60,6 +62,9 @@ window.onload = function() {
 	});
 };
 
+
+// Currently Unused. Moves the map in direction of the quadrant of the screen 
+// that the mouse is in.
 var bindMouse = function() {
 	var canvas = document.querySelector('#screen');
 
@@ -91,6 +96,8 @@ var bindMouse = function() {
 	}, 33);
 };
 
+
+// Ticks all elements on the map every tickWindow milliseconds.
 var setupTickCycle = function(loadedMap) {
 	var tickWindow = 1000 / 60;
 	var lastOperated = Date.now();
@@ -115,6 +122,9 @@ var setupTickCycle = function(loadedMap) {
 	}, 0);
 };
 
+
+// Ties camera movement to the player movement, ensuring that the player is the 
+// middle of the screen at all times.
 var trackCameraOnPlayerDebugDebug = function() {
 	if (GameState.player) {
 		viewerLoc.x = GameState.player.getPositionX();

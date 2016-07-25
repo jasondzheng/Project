@@ -61,7 +61,7 @@ Map.prototype.registerUnitInstance = function(unitInstance) {
 	unitInstance.containingMap = this;
 };
 
-
+// Deregisters an existing UnitInstance from the map
 Map.prototype.deregisterUnitInstance = function(unitInstance) {
 	this.unitInstances.splice(this.unitInstances.indexOf(unitInstance), 1);
 	unitInstance.containingMap = null;

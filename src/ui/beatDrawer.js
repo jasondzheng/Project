@@ -6,29 +6,37 @@
 
 var BeatDrawer = {};
 
+// Strings to indicate the style of beat
 BeatDrawer.BEAT_STYLE = 'beat';
 BeatDrawer.HOLD_START_STYLE = 'holdStart';
 BeatDrawer.HOLD_END_STYLE = 'holdEnd';
 
+// Collors and thickness of each beat
 BeatDrawer.COLOR_OUTER = '#000000';
 BeatDrawer.STROKE_OUTER = 6;
 BeatDrawer.COLOR_INNER = 'rgb(145, 155, 255)';
 BeatDrawer.STROKE_INNER = 5;
 
+// Beat indicator fill color
 BeatDrawer.BOUND_COLOR_OUTER = 'rgba(0, 0, 0, 0.5)';
 BeatDrawer.BOUND_COLOR_INNER = 'rgba(255, 255, 255, 0.5)';
 
 BeatDrawer.FILL_INDICATOR_COLOR = '#000000';
 
+// Maximimum physical size of a beat
 BeatDrawer.OUTER_RAD_1 = 275;
 BeatDrawer.OUTER_RAD_2 = 220;
+// Mininum physical size of a beat
 BeatDrawer.INNER_RAD_1 = 46;
 BeatDrawer.INNER_RAD_2 = 36;
 
+// Opcaity of a Hold note
 BeatDrawer.HOLD_ALPHA = 0.275;
 
+// Interval in which a player can consume each note
 BeatDrawer.NOTE_HIT_GRACE = 0.2;
 
+// Initialized dynamic fields to be used in the beat drawer
 BeatDrawer._queue;
 BeatDrawer._songPlayTime;
 BeatDrawer._showInterval = 1.75;
@@ -47,6 +55,7 @@ BeatDrawer.setWindowInterval = function(seconds) {
 };
 
 
+// Sets up the beat queue and intializes the window starts and window ends to 0.
 BeatDrawer.setQueue = function(queue, songPlayTime) {
 	BeatDrawer._queue = queue;
 	BeatDrawer._songPlayTime = songPlayTime;
@@ -58,13 +67,18 @@ BeatDrawer.setQueue = function(queue, songPlayTime) {
 
 BeatDrawer.tick = function() {
 	if (SoundPlayer.currTrack) {
+		// Advances time along with the Sound Player.
 		BeatDrawer._advanceTime(
 				SoundPlayer.currTrack.audio[SoundPlayer.currParity].currentTime);
 	}
 };
 
 
+// Updates the window starts and ends to match their positions at the given 
+// time.
 BeatDrawer._advanceTime = function(newTime) {
+	// Fix any beat indexes when the wraparound happens so that they are relative
+	// to the current time as opposed to the old unrewinded time
 	if (BeatDrawer._time > newTime) {
 		BeatDrawer._windowStart -= BeatDrawer._queue.length;
 		BeatDrawer._windowEnd -= BeatDrawer._queue.length;
@@ -75,16 +89,20 @@ BeatDrawer._advanceTime = function(newTime) {
 		BeatDrawer._hitWindowStart -= BeatDrawer._queue.length;
 		BeatDrawer._hitWindowEnd -= BeatDrawer._queue.length;
 	}
+	// Update the time
 	BeatDrawer._time = newTime;
+	// Find the new window start
 	for (; BeatDrawer._queue[
 			BeatDrawer._windowStart % BeatDrawer._queue.length].time + 
 			(BeatDrawer._windowStart < BeatDrawer._queue.length ? 0 : 
 					BeatDrawer._songPlayTime) < newTime; 
 			BeatDrawer._windowStart++) {
+		// If the window start is a hold start, set hold start to window start time
 		if (BeatDrawer._queue[BeatDrawer._windowStart % 
 				BeatDrawer._queue.length].style == BeatDrawer.HOLD_START_STYLE) {
 			BeatDrawer._holdStart = BeatDrawer._queue[
 					BeatDrawer._windowStart % BeatDrawer._queue.length].time;
+			// Find the corresponding hold end to the newly identified hold start
 			for (var i = BeatDrawer._windowStart % BeatDrawer._queue.length; 
 					i < BeatDrawer._queue.length; i++) {
 				if (BeatDrawer._queue[i].style == BeatDrawer.HOLD_END_STYLE) {
@@ -93,12 +111,15 @@ BeatDrawer._advanceTime = function(newTime) {
 					break;
 				}
 			}
+		// If the window start is the end of a hold the hold is over and fields are
+		// cleared out
 		} else if (BeatDrawer._queue[
 				BeatDrawer._windowStart % BeatDrawer._queue.length].style == 
 				BeatDrawer.HOLD_END_STYLE) {
 			BeatDrawer._holdStart = BeatDrawer._holdDuration = undefined;
 		}
 	}
+	// Find new window end
 	for (BeatDrawer._windowEnd = 
 			Math.max(BeatDrawer._windowStart, BeatDrawer._windowEnd); 
 			BeatDrawer._queue[BeatDrawer._windowEnd % BeatDrawer._queue.length].time + 
@@ -125,12 +146,14 @@ BeatDrawer._advanceTime = function(newTime) {
 };
 
 
+// Returns true if currently in a hold
 BeatDrawer.isInHold = function() {
 	return BeatDrawer._hitHoldEnd != undefined && 
 			BeatDrawer._time < BeatDrawer._hitHoldEnd;
-}
+};
 
 
+// Tries to consume a note if any are available in the hit window
 BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
 	if (BeatDrawer._hitWindowStart != BeatDrawer._hitWindowEnd) {
 		console.log('Consumed 1 of ' + (BeatDrawer._hitWindowEnd - BeatDrawer._hitWindowStart) + ' notes');
@@ -149,6 +172,7 @@ BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
 };
 
 
+// Draws all beats between windowStart and windowEnd.
 BeatDrawer.drawBeats = function(ctx, centerX, centerY) {
 	for (var i = BeatDrawer._windowStart; i < BeatDrawer._windowEnd; i++) {
 		var beat = BeatDrawer._queue[i % BeatDrawer._queue.length];
@@ -179,6 +203,7 @@ BeatDrawer.drawBeats = function(ctx, centerX, centerY) {
 };
 
 
+// Draws an individual beat given its center coordinates, color, and fraction
 BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor, 
 		outerColor, fraction) {
 	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
@@ -204,7 +229,9 @@ BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor,
 	ctx.globalAlpha = 1;
 };
 
-
+// Draws the beginning of a hold given its center coordinates, color, and 
+// fraction. Will draw the beginnning at the minimum radius if it is cut off 
+// from the beat window.
 BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 		outerColor, fraction, isCutShort) {
 	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
@@ -236,6 +263,9 @@ BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 };
 
 
+// Draws the end of a hold given its center coordinates, color, and 
+// fraction. Will draw the end at the maximum radius if it is cut off 
+// from the beat window.
 BeatDrawer._helperDrawHoldBeatEnd = function(ctx, centerX, centerY, color, 
 		outerColor, fraction, isCutShort) {
 	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
@@ -265,7 +295,8 @@ BeatDrawer._helperDrawHoldBeatEnd = function(ctx, centerX, centerY, color,
 	ctx.globalAlpha = 1;
 };
 
-
+// Fills the entire beat area if within a hold and both the hold start and end 
+// are not visible/.
 BeatDrawer._helperDrawUnboundFill = function(ctx, centerX, centerY, color) {
 	ctx.lineWidth = 1;
 	ctx.fillStyle = color;
@@ -280,6 +311,8 @@ BeatDrawer._helperDrawUnboundFill = function(ctx, centerX, centerY, color) {
 };
 
 
+// Draws the (static) center marker ellipse that lies below the player at all 
+// times. 
 BeatDrawer._helperDrawMarkerBeat = function(ctx, centerX, centerY, innerColor, 
 		outerColor, fraction) {
 	var axisA = (BeatDrawer.OUTER_RAD_1 - BeatDrawer.INNER_RAD_1) * fraction + 
