@@ -14,16 +14,23 @@ NPCLoader.NPC_PATH = '../assets/npcs';
 NPCLoader.loadInstance = function(id, x, y, startingDirection, containingMap, 
 		callback) {
 	NPCLoader._helperLoadEntity(id, function(entity) {
-		callback(new NPCInstance(entity, x, y, startingDirection, containingMap));
+		var instance = 
+				new NPCInstance(entity, x, y, startingDirection, containingMap);
+		entity.referrers.push(instance);
+		callback(instance);
 	});	
 };
 
 
 // Unloads an NPC's dependencies.
 NPCLoader.unloadInstance = function(npcInstance) {
-	NPCLoader.loadedEntities[npcInstance.npcEntity.id] = null;
-	DynamicMapEntityLoader.unload(npcInstance.npcEntity.visualEntity);
+	npcInstance.npcEntity.referrers.splice(
+			npcInstance.npcEntity.referrers.indexOf(npcInstance), 1);
+	if (npcInstance.npcEntity.referrers.length == 0) {
+		NPCLoader._helperUnloadEntity(npcInstance.npcEntity.id);
+	}
 	npcInstance.npcEntity = null;
+	npcInstance.visualInstance = null;
 };
 
 
@@ -37,9 +44,24 @@ NPCLoader._helperLoadEntity = function(id, callback) {
 	JSONLoader.loadWithoutWhitespace(path, function(obj) {
 		DynamicMapEntityLoader.load(id, obj.entity, 
 				DynamicMapEntityLoader.Types.NPC, function(entity) {
-			NPCLoader.loadedEntities[id] = new NPCEntity(id, obj.name, obj.movement, 
-					obj.stateMachine, obj.trades, obj.shops, entity);
-			callback(NPCLoader.loadedEntities[id]);
+			var resourceManager = new ResourceManager(obj.resources);
+			resourceManager.load(function() {
+				var newNpcEntity = NPCLoader.loadedEntities[id] = 
+						new NPCEntity(id, obj.name, obj.movement, obj.stateMachine, 
+								obj.trades, obj.shops, entity, resourceManager);
+				newNpcEntity.referrers = [];
+				callback(newNpcEntity);
+			});
 		})
 	});
+};
+
+
+// Helper to unload an NPC entity.
+NPCLoader._helperUnloadEntity = function(id) {
+	var entity = NPCLoader.loadedEntities[id]; 
+	NPCLoader.loadedEntities[id] = null;
+	DynamicMapEntityLoader.unload(npcInstance.npcEntity.visualEntity);
+	entity.resourceManager.unload();
+	entity.resourceManager = null;
 };

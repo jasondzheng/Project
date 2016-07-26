@@ -32,11 +32,11 @@ DialogDrawer.RIGHT_BUBBLE_ANCHOR = {
 
 // Position of bubble tails
 DialogDrawer.LEFT_BUBBLE_TAIL_POS = {
-	x: 285,
+	x: 288,
 	y: 216
 };
 DialogDrawer.RIGHT_BUBBLE_TAIL_POS = {
-	x: 956,
+	x: 954,
 	y: 216
 };
 
@@ -58,15 +58,22 @@ DialogDrawer.BUBBLE_INDEX_TO_ASSET = [
 	'bubbleLarge'
 ];
 
+// Duration of the bubble animation entry.
+DialogDrawer.BUBBLE_ENTRY_ANIM_DURATION = 30;
+
 
 // A queue of actions to process.
 DialogDrawer._actionQueue = [];
 // Whether or not a dialog is in progress
 DialogDrawer._dialogMode = false;
+// The prior input mode before entering the dialog.
+DialogDrawer._oldInputMode;
 // The length of the action queue when last processed.
 DialogDrawer._oldQueueLength = 0;
 // A listing of assets required to draw the dialog interface
 DialogDrawer._assets;
+// Whether or not the dialog is ready to advance
+DialogDrawer._readyToAdvance = false;
 
 
 // Loads all assets needed to draw dialogs. Does not load glyphsets, as those 
@@ -102,7 +109,9 @@ DialogDrawer.tick = function() {// Consumes actions on the dialog queue.
 				DialogDrawer._actionQueue[0].onStart) {
 			DialogDrawer._actionQueue[0].onStart();
 		}
-		DialogDrawer._actionQueue[0].tick();
+		if (DialogDrawer._actionQueue[0].tick) {
+			DialogDrawer._actionQueue[0].tick();
+		}
 	}
 	DialogDrawer._oldQueueLength = DialogDrawer._actionQueue.length;
 };
@@ -112,106 +121,161 @@ DialogDrawer.tick = function() {// Consumes actions on the dialog queue.
 DialogDrawer.drawDialogOverlay = function(ctx) {
 	if (DialogDrawer._actionQueue.length > 0) {
 		var action = DialogDrawer._actionQueue[0];
-		if (action instanceof DialogDrawer.ShowMessageAction) {
-			// Draw a backshade before drawing any other dialog components
-			ctx.fillStyle = DialogDrawer.BACKSHADE_COLOR;
-			ctx.fillRect(0, 0, ScreenProps.EXP_WIDTH, ScreenProps.EXP_HEIGHT);
-			// Draw portraits
-			if (action.leftPortrait1) {
-				ctx.drawImage(action.leftPortrait1, DialogDrawer.PORTRAIT_1_LEFT, 
-						DialogDrawer.PORTRAIT_BOTTOM - action.leftPortrait1.height);
-			}
-			if (action.leftPortrait2) {
-				ctx.drawImage(action.leftPortrait2, DialogDrawer.PORTRAIT_2_LEFT, 
-						DialogDrawer.PORTRAIT_BOTTOM - action.leftPortrait2.height);
-			}
-			if (action.rightPortrait1) {
-				ctx.drawImage(action.rightPortrait1, 
-						DialogDrawer.PORTRAIT_3_RIGHT - action.rightPortrait1.width, 
-						DialogDrawer.PORTRAIT_BOTTOM - action.rightPortrait1.height);
-			}
-			if (action.rightPortrait2) {
-				ctx.drawImage(action.rightPortrait2, 
-						DialogDrawer.PORTRAIT_4_RIGHT - action.rightPortrait2.width,
-						DialogDrawer.PORTRAIT_BOTTOM - action.rightPortrait2.height);
-			}
-			// Draw dialog bubbles, ignoring animation
-			// TODO: add animation constants later
-			var bubbleX, bubbleY;
-			var msgWidth = 
-					DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.widths[action.bubbleSize];
-			var msgHeight = 
-					DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.heights[action.bubbleSize];
-			if (action.bubbleIsFromLeft) {
-				ctx.drawImage(DialogDrawer._assets.tailLeft, 
-						DialogDrawer.LEFT_BUBBLE_TAIL_POS.x, 
-						DialogDrawer.LEFT_BUBBLE_TAIL_POS.y);
-				bubbleX = DialogDrawer.LEFT_BUBBLE_ANCHOR.x;
-				bubbleY = DialogDrawer.LEFT_BUBBLE_ANCHOR.y;
-			} else {
-				ctx.drawImage(DialogDrawer._assets.tailRight, 
-						DialogDrawer.RIGHT_BUBBLE_TAIL_POS.x, 
-						DialogDrawer.RIGHT_BUBBLE_TAIL_POS.y);
-				bubbleX = DialogDrawer.RIGHT_BUBBLE_ANCHOR.x - DialogDrawer._assets[
-								DialogDrawer.BUBBLE_INDEX_TO_ASSET[action.bubbleSize]].width;
-				bubbleY = DialogDrawer.LEFT_BUBBLE_ANCHOR.y;
-			}
-			ctx.drawImage(DialogDrawer._assets[
-							DialogDrawer.BUBBLE_INDEX_TO_ASSET[action.bubbleSize]], bubbleX,
-					bubbleY);
-			GlyphDrawer.drawText(ctx, DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.glyphset, 
-					action.message, bubbleX + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offX,
-					bubbleY + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offY, msgWidth, 
-					msgHeight);
+		if (action.draw) {
+			action.draw(ctx);
 		}
 	}
 };
 
 
+// Signals for the dialog drawer to advance the dialog.
+DialogDrawer.signalAdvance = function() {
+	DialogDrawer._readyToAdvance = true;
+};
+
+
+// Queues up a message to be displayed. Requests a set of portraits, bubble
+// size, bubble tail direction (true for left), and the message to be
+// displayed. Uses rules for glyph drawer to determine if message is (partially)
+// shown or not.
 DialogDrawer.showMessage = function(leftPortrait1, leftPortrait2, 
 		rightPortrait1, rightPortrait2, bubbleSize, bubbleIsFromLeft, message) {
+	DialogDrawer._actionQueue.push(new DialogDrawer._ShowMessageAction(
+			leftPortrait1, leftPortrait2, rightPortrait1, rightPortrait2, bubbleSize,
+			bubbleIsFromLeft, message));
 };
 
 
-DialogDrawer.ShowMessageAction = function(leftPortrait1, leftPortrait2, 
+// Class recording an action to show a message. See DialogDrawer.showMessage.
+DialogDrawer._ShowMessageAction = function(leftPortrait1, leftPortrait2, 
 		rightPortrait1, rightPortrait2, bubbleSize, bubbleIsFromLeft, message) {
-	this.leftPortrait1 = leftPortrait1;
-	this.leftPortrait2 = leftPortrait2;
-	this.rightPortrait1 = rightPortrait1;
-	this.rightPortrait2 = rightPortrait2;
-	this.bubbleSize = bubbleSize;
-	this.bubbleIsFromLeft = bubbleIsFromLeft;
-	this.message = message;
+	this._leftPortrait1 = leftPortrait1;
+	this._leftPortrait2 = leftPortrait2;
+	this._rightPortrait1 = rightPortrait1;
+	this._rightPortrait2 = rightPortrait2;
+	this._bubbleSize = bubbleSize;
+	this._bubbleIsFromLeft = bubbleIsFromLeft;
+	this._message = message;
+	this._bubbleEntryCounter = DialogDrawer.BUBBLE_ENTRY_ANIM_DURATION;
 };
 
 
-DialogDrawer.ShowMessageAction.prototype.onStart = function() {
+DialogDrawer._ShowMessageAction.prototype.onStart = function() {
+	// Diverts input mode to dialog system
+	if (!DialogDrawer._dialogMode) {
+		DialogDrawer._dialogMode = true;
+		DialogDrawer._oldInputMode = InputRouter.getMode();
+		InputRouter.setMode(InputRouter.Modes.DIALOG_INPUT);
+	}
 };
 
 
-DialogDrawer.ShowMessageAction.prototype.tick = function() {
+DialogDrawer._ShowMessageAction.prototype.tick = function() {
+	// Used for message entry animation
+	if (this._bubbleEntryCounter > 0) {
+		this._bubbleEntryCounter--;
+	}
 };
 
 
-DialogDrawer.ShowMessageAction.prototype.onEnd = function() {
+DialogDrawer._ShowMessageAction.prototype.draw = function(ctx) {
+	// Draw a backshade before drawing any other dialog components
+	ctx.fillStyle = DialogDrawer.BACKSHADE_COLOR;
+	ctx.fillRect(0, 0, ScreenProps.EXP_WIDTH, ScreenProps.EXP_HEIGHT);
+	// Draw portraits
+	if (this._leftPortrait1) {
+		ctx.drawImage(this._leftPortrait1, DialogDrawer.PORTRAIT_1_LEFT, 
+				DialogDrawer.PORTRAIT_BOTTOM - this._leftPortrait1.height);
+	}
+	if (this._leftPortrait2) {
+		ctx.drawImage(this._leftPortrait2, DialogDrawer.PORTRAIT_2_LEFT, 
+				DialogDrawer.PORTRAIT_BOTTOM - this._leftPortrait2.height);
+	}
+	if (this._rightPortrait1) {
+		ctx.drawImage(this._rightPortrait1, 
+				DialogDrawer.PORTRAIT_3_RIGHT - this._rightPortrait1.width, 
+				DialogDrawer.PORTRAIT_BOTTOM - this._rightPortrait1.height);
+	}
+	if (this._rightPortrait2) {
+		ctx.drawImage(this._rightPortrait2, 
+				DialogDrawer.PORTRAIT_4_RIGHT - this._rightPortrait2.width,
+				DialogDrawer.PORTRAIT_BOTTOM - this._rightPortrait2.height);
+	}
+	// Draw dialog bubbles, ignoring animation
+	var bubbleX, bubbleY;
+	var msgWidth = 
+			DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.widths[this._bubbleSize];
+	var msgHeight = 
+			DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.heights[this._bubbleSize];
+	var bubbleImg = DialogDrawer._assets[
+			DialogDrawer.BUBBLE_INDEX_TO_ASSET[this._bubbleSize]];
+	if (this._bubbleIsFromLeft) {
+		bubbleX = DialogDrawer.LEFT_BUBBLE_ANCHOR.x;
+		bubbleY = DialogDrawer.LEFT_BUBBLE_ANCHOR.y;
+		// Handle bubble positioning for entry animation
+		var entryAnimPos = -(bubbleX + bubbleImg.width) * 
+				(this._bubbleEntryCounter / 
+						DialogDrawer.BUBBLE_ENTRY_ANIM_DURATION);
+		ctx.drawImage(DialogDrawer._assets.tailLeft, 
+				DialogDrawer.LEFT_BUBBLE_TAIL_POS.x + entryAnimPos, 
+				DialogDrawer.LEFT_BUBBLE_TAIL_POS.y);
+		bubbleX += entryAnimPos;
+	} else {
+		bubbleX = DialogDrawer.RIGHT_BUBBLE_ANCHOR.x - bubbleImg.width;
+		bubbleY = DialogDrawer.LEFT_BUBBLE_ANCHOR.y;
+		// Handle bubble positioning for entry animation
+		var entryAnimPos = (ScreenProps.EXP_WIDTH - bubbleX) * 
+				(this._bubbleEntryCounter / 
+						DialogDrawer.BUBBLE_ENTRY_ANIM_DURATION);
+		ctx.drawImage(DialogDrawer._assets.tailRight, 
+				DialogDrawer.RIGHT_BUBBLE_TAIL_POS.x + entryAnimPos, 
+				DialogDrawer.RIGHT_BUBBLE_TAIL_POS.y);
+		bubbleX += entryAnimPos;
+	}
+	ctx.drawImage(bubbleImg, bubbleX, bubbleY);
+	GlyphDrawer.drawText(ctx, DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.glyphset, 
+			this._message, bubbleX + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offX,
+			bubbleY + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offY, msgWidth, 
+			msgHeight);
 };
 
 
-DialogDrawer.ShowMessageAction.prototype.isDone = function() {
+DialogDrawer._ShowMessageAction.prototype.onEnd = function() {
+	DialogDrawer._readyToAdvance = false;
 };
 
 
-DialogDrawer.endDialog = function(callback) {
+DialogDrawer._ShowMessageAction.prototype.isDone = function() {
+	return DialogDrawer._readyToAdvance;
 };
 
 
-DialogDrawer.EndDialogAction = function(callback) {
+// Notifies the dialog drawer that a dialog has finished. Must be called after
+// 1 or more invocations to showMessage. An optional callback is used to
+// resume code flow after the dialog has finished. Returns input to the
+// previous input owner.
+DialogDrawer.endDialog = function(opt_callback) {
+	DialogDrawer._actionQueue.push(
+			new DialogDrawer._EndDialogAction(opt_callback));
 };
 
 
-DialogDrawer.EndDialogAction.prototype.onEnd = function() {
+// Class recording an action to end a dialog. See DialogDrawer.endDialog.
+DialogDrawer._EndDialogAction = function(opt_callback) {
+	this._callback = opt_callback;
 };
 
 
-DialogDrawer.EndDialogAction.prototype.isDone = function() {
+DialogDrawer._EndDialogAction.prototype.onEnd = function() {
+	// Restores input mode
+	DialogDrawer._dialogMode = false;
+	InputRouter.setMode(DialogDrawer._oldInputMode);
+	if (this._callback) {
+		this._callback();
+	}
+};
+
+
+DialogDrawer._EndDialogAction.prototype.isDone = function() {
+	return true;
 };

@@ -1,3 +1,5 @@
+var DISABLE_CORRECTIVE_TICKING = true;
+
 var viewerLoc = {
 	x: 0,
 	y: 0
@@ -12,6 +14,12 @@ window.onload = function() {
 	deferrer.add(PlayerLoader.load, function(accumulatedArgs) {
 		return ['domino'];
 	}, ['player']);
+	deferrer.add(GlyphDrawer.loadGlyphs, function(accumulatedArgs) {
+		return [];
+	}, []);
+	deferrer.add(DialogDrawer.loadAssets, function(accumulatedArgs) {
+		return [];
+	}, []);
 	deferrer.after(function(accumulatedArgs) {
 		var map = accumulatedArgs[0].map;
 		var player = accumulatedArgs[1].player;
@@ -41,6 +49,8 @@ window.onload = function() {
 			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
 			UnitHpDrawer.drawHpBars(ctx);
 			PlayerHpDrawer.drawHp(ctx);
+			// Draw dialog over all map content
+			DialogDrawer.drawDialogOverlay(ctx);
 			// Draws FPS
 			if (startTimes.length == 30) {
 				var timestamp = Date.now();
@@ -116,7 +126,12 @@ var setupTickCycle = function(loadedMap) {
 			trackCameraOnPlayerDebugDebug();
 			UnitHpDrawer.tick();
 			PlayerHpDrawer.tick();
+			DialogDrawer.tick();
 			delta -= tickWindow;
+			if (DISABLE_CORRECTIVE_TICKING) {
+				delta = 0;
+				break;
+			}
 		}
 		lastOperated = currTime - delta;
 	}, 0);

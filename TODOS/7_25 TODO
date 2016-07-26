@@ -1,0 +1,9 @@
+Talk to NPC
+	NPC stops if within radius of talk button
+	NPC changes direction
+	NPC resumes movement when dialog ends
+Event Infrastructure
+	Condition Infrastructure
+		Player In Zone Condition
+	Warp Player Action
+		Specify map, location

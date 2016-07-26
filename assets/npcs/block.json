@@ -1,6 +1,10 @@
 {
 	"name": "Block",
 	"movement": "randomMidLarge",
+	"resources": {
+		"portraitLeft": "../assets/img/portraits/domino/dominoLeft.png",
+		"portraitRight": "../assets/img/portraits/domino/dominoRight.png"
+	},
 	"stateMachine": {
 		"init": "
 			this._counter = 0;

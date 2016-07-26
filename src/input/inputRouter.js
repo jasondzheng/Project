@@ -5,6 +5,22 @@
 
 var InputRouter = {};
 
+InputRouter.Modes = {
+	PLAYER_MAP_MOVEMENT: {
+		tick: function() {
+			InputRouter._helperHandlePlayerMovement();
+		}
+	},
+	DIALOG_INPUT: {
+		tick: function() {
+			InputRouter._helperHandleDialogInput();
+		}
+	}
+};
+
+// The current mode of the InputRouter
+InputRouter._currentMode = InputRouter.Modes.PLAYER_MAP_MOVEMENT;
+
 // A set of keyCodes corresponding to all possbile inputs
 InputRouter.KeyMapping = {
 	LEFT: 37,
@@ -12,14 +28,28 @@ InputRouter.KeyMapping = {
 	RIGHT: 39,
 	DOWN: 40,
 	ATTACK: 'z'.toUpperCase().charCodeAt(0),
- 	ATTACK_ALT: 'x'.toUpperCase().charCodeAt(0)
+ 	ATTACK_ALT: 'x'.toUpperCase().charCodeAt(0),
+ 	DIALOG_ADV: ' '.charCodeAt(0)
 };
+
 
 // Respond to inputs on the tick, routing them to the appropriate handler for
 // processing. Currently there is only one behavior, which is to move the
 // player.
 InputRouter.tick = function() {
-	InputRouter._helperHandlePlayerMovement();
+	InputRouter._currentMode.tick();
+};
+
+
+// Sets the mode to one of the above input modes.
+InputRouter.setMode = function(mode) {
+	InputRouter._currentMode = mode;
+};
+
+
+// Gets the current input mode.
+InputRouter.getMode = function() {
+	return InputRouter._currentMode;
 };
 
 
@@ -73,5 +103,16 @@ InputRouter._helperHandlePlayerMovement = function() {
 				break;
 			}
 		}
+	}
+};
+
+
+// Advance dialog and deal with dialog-specific inputs like choice selection.
+InputRouter._helperHandleDialogInput = function() {
+	// Only advances dialog right now. This happens when the DIALOG_ADV key is
+	// lifted up from a depressed state.
+	if (KeyTracker.getValue(InputRouter.KeyMapping.DIALOG_ADV) == 
+			KeyTracker.KeyStatus.UP) {
+		DialogDrawer.signalAdvance();
 	}
 };

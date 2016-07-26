@@ -7,7 +7,7 @@
  */
 
 var NPCEntity = function(id, name, movement, stateMachine, trades, shops, 
-		visualEntity) {
+		visualEntity, resourceManager) {
 	this.id = id;
 	this.name = name;
 	this.movement = movement;
@@ -15,6 +15,7 @@ var NPCEntity = function(id, name, movement, stateMachine, trades, shops,
 	this.trades = trades;
 	this.shops = shops;
 	this.visualEntity = visualEntity;
+	this.resourceManager = resourceManager;
 };
 
 
@@ -67,6 +68,12 @@ NPCInstance.prototype.getPositionX = function() {
 
 NPCInstance.prototype.getPositionY = function() {
 	return this.visualInstance.y;
+};
+
+
+// Getter for resources, used by gamescripts.
+NPCInstance.prototype._rsrc = function(alias) {
+	return this.npcEntity.resourceManager.get(alias);
 };
 
 
