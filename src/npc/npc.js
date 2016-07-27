@@ -41,7 +41,19 @@ var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
 	};
 
 	// Create the movement manager
-	this.movementManager = new NPCMovementManager(this); 
+	this.movementManager = new NPCMovementManager(this);
+
+	/* A set of gamescript editable functions and values determining the behavior
+	 * of the NPC.
+	 */
+
+	// The inner function responsible for handling talking to the NPC. If not
+	// provided, the NPC will ignore attempts to talk to it.
+	this._onTalk = null;
+
+
+	// Curried talk cleanup function made here
+	this._helperCreateCleanupTalkFn();
 
 	// Handle all state machine inits here. This includes init'ing the object
 	// at the beginning of the state machine, as well as the onEnter for
@@ -74,6 +86,28 @@ NPCInstance.prototype.getPositionY = function() {
 // Getter for resources, used by gamescripts.
 NPCInstance.prototype._rsrc = function(alias) {
 	return this.npcEntity.resourceManager.get(alias);
+};
+
+
+// Initiates talk mode. NPC will stop moving and face the direction of the 
+// player.
+NPCInstance.prototype.initiateTalk = function(directionToNpc) {
+	if (this._onTalk) {
+		this.movementManager.setTalkMode(true);
+		this.movementManager.setIdle(Direction.reverse(directionToNpc));
+		this._onTalk(this._cleanupTalk);
+	}
+};
+
+
+// Helper to curry the cleanupTalk function. 
+NPCInstance.prototype._helperCreateCleanupTalkFn = function() {
+	var that = this;
+	// Cleanup talk function cleans up any state initailized for the NPC
+	// dialogue.
+	NPCInstance.prototype._cleanupTalk = function() {
+		that.movementManager.setTalkMode(false);
+	};
 };
 
 

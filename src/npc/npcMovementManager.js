@@ -8,6 +8,7 @@ var NPCMovementManager = function(npc) {
 	this._waypath = [];
 	this._movementType = MovePattern.getType(npc.npcEntity.movement);
 	this._collisionIgnoreList = [npc];
+	this._talkMode = false;
 	this.setIdle(npc.direction);
 };
 
@@ -66,7 +67,7 @@ NPCMovementManager.prototype.tick = function() {
 			// Upon collision, switch to idle state and clear waypath
 			this.setIdle(targetDirection);
 		}
-	} else {
+	} else if (!this._talkMode){
 		var moveInstruction = this._movementType.genWaypoint(this.npc);
 		if (moveInstruction) {
 			if (moveInstruction.direction != undefined) {
@@ -90,6 +91,12 @@ NPCMovementManager.prototype.setIdle = function(direction) {
 		this._walkState = NPCMovementManager.WalkStates.IDLE;
 		this.npc.direction = direction;
 	}
+	this._waypath.length = 0;
+};
+
+
+NPCMovementManager.prototype.setTalkMode = function(talkMode) {
+	this._talkMode = talkMode;
 	this._waypath.length = 0;
 };
 

@@ -46,7 +46,7 @@ DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS = {
 	offY: 30,
 	widths: [238, 238, 238],
 	heights: [116, 176, 219],
-	glyphset: 'test' /* TODO: replace with real glyphset */
+	glyphset: 'test_2' /* TODO: replace with real glyphset */
 };
 
 // Backshade color

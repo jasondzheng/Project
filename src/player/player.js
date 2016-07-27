@@ -46,6 +46,9 @@ Player.WALK_SPEED = 5;
 // The minimum amount allowed to move for the player (to avoid teleporting)
 Player.MIN_MOVE_SPEED = 1 / 60;
 
+// The dimension delta in which the player is able to talk to NPCs.
+Player.TALK_DIM_DELTA = 0.1;
+
 
 Player.prototype.setPositionX = function(x) {
 	this.visualInstance.x = x;
@@ -75,7 +78,8 @@ Player.prototype.receiveDamage = function(damage) {
 				DynamicMapEntity.getActionDirectionFamilyName(
 						Player.AnimationStates.DAMAGE_RECEIVING, this._direction)));
 	this.visualInstance._animationState = Player.AnimationStates.DAMAGE_RECEIVING;
-}
+};
+
 
 // Checks if player is able to issue a move command
 Player.prototype.canMove = function() {
@@ -123,6 +127,14 @@ Player.prototype.tryMove = function(deltaX, deltaY) {
 };
 
 
+// Checks if the player can issue a basic attack command
+Player.prototype.canBasicAttack = function() {
+	return this._animationState != Player.AnimationStates.DAMAGE_RECEIVING && 
+			(this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
+					this.visualInstance.isAtLastFrameOfAnimation());
+};
+
+
 // Sets the animation and animation state of the player to BASIC_ATTACKING
 Player.prototype.basicAttack = function() {
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
@@ -132,11 +144,39 @@ Player.prototype.basicAttack = function() {
 };
 
 
-// Checks if the player can issue a basic attack command
-Player.prototype.canBasicAttack = function() {
-	return this._animationState != Player.AnimationStates.DAMAGE_RECEIVING && 
-			(this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
+// Checks if player is able to issue a talk command
+Player.prototype.canTalk = function() {
+	return this._animationState == Player.AnimationStates.IDLE || 
+			this._animationState == Player.AnimationStates.WALKING || (
+					this._animationState == Player.AnimationStates.BASIC_ATTACKING &&
 					this.visualInstance.isAtLastFrameOfAnimation());
+};
+
+
+// Attemps to talk to any nearby NPCs in the direction of player 
+Player.prototype.tryTalk = function() {
+	var collidingNpcs = this.containingMap.findNpcCollisions(
+			this.visualInstance.x, this.visualInstance.y, 
+			this.visualInstance.getCollisionWidth() + Player.TALK_DIM_DELTA,
+			this.visualInstance.getCollisionHeight() + Player.TALK_DIM_DELTA,
+			this.visualInstance.isRounded(), this._collisionIgnoreList);
+	for (var i = 0; i < collidingNpcs.length; i++) {
+		var collidingNpc = collidingNpcs[i];
+		if (Direction.getDirectionFromCoords(
+						collidingNpc.visualInstance.x - this.visualInstance.x, 
+						collidingNpc.visualInstance.y - this.visualInstance.y) == 
+				this._direction) {
+			if (this._animationState != Player.AnimationStates.IDLE) {
+				this.visualInstance.setAnimation(
+						this.visualInstance.getAnimNameFromFamily(
+								DynamicMapEntity.getActionDirectionFamilyName(
+										Player.AnimationStates.IDLE, this._direction)));
+				this._animationState = Player.AnimationStates.IDLE;
+			}
+			collidingNpc.initiateTalk(this._direction);
+			return;
+		}
+	}
 };
 
 

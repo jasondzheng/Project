@@ -70,10 +70,12 @@ GlyphDrawer.loadGlyphs = function(callback) {
 							derivedGlyphset.glyphs.height = baseGlyphset.glyphs.height * 
 									GlyphDrawer.GLYPH_DERIVATIONS[j].size;
 							var ctx = derivedGlyphset.glyphs.getContext('2d');
+							// GlyphDrawer._helperDrawScaled(baseGlyphset.glyphs, 0, 0, 
+							// 		GlyphDrawer.GLYPH_DERIVATIONS[j].size);
 							ctx.drawImage(baseGlyphset.glyphs, 0, 0, 
 									derivedGlyphset.glyphs.width, 
 									derivedGlyphset.glyphs.height);
-							GlyphDrawer.glyphs[GlyphDrawer.GLYPH_DERIVATIONS[j].glyphs + 
+							GlyphDrawer.glyphs[GlyphDrawer.GLYPH_DERIVATIONS[j].glyphset + 
 											'_' + GlyphDrawer.GLYPH_DERIVATIONS[j].size] = 
 									derivedGlyphset;
 						}

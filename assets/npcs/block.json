@@ -14,6 +14,15 @@
 			"idle": {
 				"onEnter": "
 					console.log('Entered idle');
+					this._onTalk = function(callback) {
+						DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+								this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+								true /* bubbleIsFromLeft */, 'AGL AGL AGL AGL'); 
+						DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+								this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+								false /* bubbleIsFromLeft */, 'agl agl agl agl');
+						DialogDrawer.endDialog(callback);
+					};
 				",
 				"onExit": "
 					console.log('Exited idle');

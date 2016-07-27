@@ -29,7 +29,8 @@ InputRouter.KeyMapping = {
 	DOWN: 40,
 	ATTACK: 'z'.toUpperCase().charCodeAt(0),
  	ATTACK_ALT: 'x'.toUpperCase().charCodeAt(0),
- 	DIALOG_ADV: ' '.charCodeAt(0)
+ 	DIALOG_ADV: 'c'.toUpperCase().charCodeAt(0),
+ 	TALK: 'c'.toUpperCase().charCodeAt(0)
 };
 
 
@@ -55,22 +56,26 @@ InputRouter.getMode = function() {
 
 // Move the player in accordance to the arrow keys.
 InputRouter._helperHandlePlayerMovement = function() {
-	if (!GameState.player) {
+	var player = GameState.player;
+	if (!player) {
 		return;
 	}
 	if ((KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) <= 
 					KeyTracker.KeyStatus.HELD || 
 			KeyTracker.getValue(InputRouter.KeyMapping.ATTACK_ALT) <= 
 					KeyTracker.KeyStatus.HELD) && 
-			GameState.player.canBasicAttack()) {
+			player.canBasicAttack()) {
 		var keyPressWasDown = KeyTracker.getValue(InputRouter.KeyMapping.ATTACK) == 
 						KeyTracker.KeyStatus.DOWN || 
 				KeyTracker.getValue(InputRouter.KeyMapping.ATTACK_ALT) == 
 						KeyTracker.KeyStatus.DOWN;
-		GameState.player.basicAttack();
-		PlayerAttackApplier.BasicCloseRangedAttack.apply(GameState.player, 
+		player.basicAttack();
+		PlayerAttackApplier.BasicCloseRangedAttack.applyAttack(player, 
 				keyPressWasDown);
-	} else if (GameState.player.canMove()) {
+	} else if (KeyTracker.getValue(InputRouter.KeyMapping.TALK) == 
+			KeyTracker.KeyStatus.UP && player.canTalk()) {
+		player.tryTalk();
+	} else if (player.canMove()) {
 		var xVelocity = 0, yVelocity = 0;
 		if (KeyTracker.getValue(InputRouter.KeyMapping.LEFT) <= 
 				KeyTracker.KeyStatus.HELD) {
@@ -89,7 +94,7 @@ InputRouter._helperHandlePlayerMovement = function() {
 			yVelocity++;
 		}
 		if (xVelocity == 0 && yVelocity == 0) {
-			GameState.player.tryMove(xVelocity, yVelocity);
+			player.tryMove(xVelocity, yVelocity);
 			return;	
 		}
 		if (xVelocity != 0 && yVelocity != 0) {
@@ -99,7 +104,7 @@ InputRouter._helperHandlePlayerMovement = function() {
 		xVelocity *= Player.MIN_MOVE_SPEED;
 		yVelocity *= Player.MIN_MOVE_SPEED;
 		for (var i = 0; i < Player.WALK_SPEED; i++) {
-			if (!GameState.player.tryMove(xVelocity, yVelocity)) {
+			if (!player.tryMove(xVelocity, yVelocity)) {
 				break;
 			}
 		}

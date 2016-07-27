@@ -71,3 +71,10 @@ Direction.getRandom = function() {
 Direction.getAngle = function(direction) {
 	return Direction._angles[direction];
 };
+
+
+// Gets the reverse of a direction.
+Direction.reverse = function(direction) {
+	return Direction._angleSegments[
+			(Direction._angleSegments.indexOf(direction) + 4) % 8];
+};

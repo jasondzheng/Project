@@ -162,6 +162,26 @@ Map.prototype.findUnitCollisions = function(centerX, centerY, width, height,
 };
 
 
+// Finds all colliding NPCs within the specified shape.
+Map.prototype.findNpcCollisions = function(centerX, centerY, width, height, 
+		isRounded, opt_ignoreList) {
+	var collisions = [];
+	for (var i = 0; i < this.npcInstances.length; i++) {
+		var currentInstance = this.npcInstances[i];
+		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
+						height, isRounded, currentInstance.visualInstance.x, 
+						currentInstance.visualInstance.y, 
+						currentInstance.visualInstance.getCollisionWidth(), 
+						currentInstance.visualInstance.getCollisionHeight(), 
+						currentInstance.visualInstance.isRounded()) &&
+				(!opt_ignoreList || opt_ignoreList.indexOf(currentInstance) == -1)) {
+			collisions.push(currentInstance);
+		}
+	}
+	return collisions;
+};
+
+
 // Helper function to detect whether a collision has happened or not. Keep in
 // sync with findCollisions.
 Map.prototype.isColliding = function(centerX, centerY, width, height, 

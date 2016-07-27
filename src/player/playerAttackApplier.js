@@ -9,7 +9,7 @@ var PlayerAttackApplier = {};
  */
 PlayerAttackApplier.BasicCloseRangedAttack = {
 	ATTACK_RADIUS: 2,
-	apply: function(player) {
+	applyAttack: function(player) {
 		var collidingUnits = player.containingMap.findUnitCollisions(
 				player.visualInstance.x, player.visualInstance.y, 
 				PlayerAttackApplier.BasicCloseRangedAttack.ATTACK_RADIUS, 
