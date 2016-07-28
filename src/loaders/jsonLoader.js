@@ -33,9 +33,20 @@ JSONLoader.loadWithoutWhitespace = function(url, opt_callback,
 				opt_failCallback();
 			}
 		} else if (opt_callback) {
-			opt_callback(JSON.parse(xhr.responseText.replace(
+			var responseText = xhr.responseText;
+			var commentIndex;
+			while ((commentIndex = responseText.indexOf('//')) != -1) {
+				var commentEnd = responseText.indexOf('\n', commentIndex);
+				if (commentEnd == -1) {
+					commentEnd = responseText.length;
+				}
+				responseText = responseText.substring(0, commentIndex) + 
+						responseText.substring(commentEnd);
+			}
+			responseText = responseText.replace(
 					/\s+(?=((\\[\\']|[^\\'])*'(\\[\\']|[^\\'])*')*(\\[\\']|[^\\'])*$)/g, 
-					'')));
+					'');
+			opt_callback(JSON.parse(responseText));
 		}
 	};
 	xhr.open('GET', url, true);

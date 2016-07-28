@@ -12,7 +12,6 @@ var NPCMovementManager = function(npc) {
 	this.setIdle(npc.direction);
 };
 
-// TODO: comment this class
 
 NPCMovementManager.WalkStates = {
 	IDLE: 'idle',
@@ -81,6 +80,7 @@ NPCMovementManager.prototype.tick = function() {
 };
 
 
+// Set the NPC to an idle state
 NPCMovementManager.prototype.setIdle = function(direction) {
 	if (this._walkState != NPCMovementManager.WalkStates.IDLE || 
 			this.npc.direction != direction) {
@@ -95,12 +95,14 @@ NPCMovementManager.prototype.setIdle = function(direction) {
 };
 
 
+// Set the talkmode of the NPC
 NPCMovementManager.prototype.setTalkMode = function(talkMode) {
 	this._talkMode = talkMode;
 	this._waypath.length = 0;
 };
 
 
+// Add a waypoint for the NPC to move to
 NPCMovementManager.prototype.queueWaypoint = function(x, y, speed) {
 	this._waypath.push({
 		x: x,
@@ -110,6 +112,7 @@ NPCMovementManager.prototype.queueWaypoint = function(x, y, speed) {
 };
 
 
+// Helper function to calculate the distance between two points
 NPCMovementManager.prototype._helperCalculateDistance = function(x1, y1, x2, 
 		y2) {
 	x2 -= x1;

@@ -5,7 +5,7 @@
  */
 
 var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances, npcInstances, tracks, spawnBehavior) {
+		staticMapInstances, npcInstances, events, tracks, spawnBehavior) {
 	// The name of the map
 	this.name = name;
 
@@ -35,6 +35,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// The player on this map, if any
 	this.player;
 
+	// All events on the map
+	this.events = events;
+
 	// Tracks
 	this.tracks = tracks;
 
@@ -44,6 +47,10 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	// When the map is finalized, link all instances to this map.
 	for (var i = 0; i < npcInstances.length; i++) {
 		npcInstances[i].containingMap = this;
+	}
+
+	for (var i = 0; i < events.length; i++) {
+		events[i].containingMap = this;
 	}
 };
 

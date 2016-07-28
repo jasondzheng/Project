@@ -49,7 +49,8 @@ MapLoader.load = function(mapName, opt_callback) {
 		if (opt_callback) {
 			opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
 					tileset, mapData.dummyTile, mapData.staticMapEntities, 
-					mapData.staticMapInstances, npcInstances, tracks, 
+					mapData.staticMapInstances, npcInstances, 
+					[] /* TODO: fill in events legally */, tracks, 
 					mapData.spawnBehavior));
 		};
 	});
@@ -64,6 +65,12 @@ MapLoader.unload = function(map) {
 	}
 	// TODO: fill in all that debt and properly unload everything, including
 	// npcs, unit entities, etc
+
+	// Empty out map constituent arrays
+	map.npcInstances.length = 0;
+	map.unitInstances.length = 0;
+	map.unitSpawner = null;
+	map.player = null;
 };
 
 

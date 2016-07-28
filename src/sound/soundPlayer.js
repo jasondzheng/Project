@@ -12,9 +12,9 @@ SoundPlayer.currParity = 0;
 // perfect loop
 SoundPlayer.setTrack = function(track) {
 	if (SoundPlayer.currTrack != undefined) {
-		SoundPlayer.currTrack[currParity].audio.onended = null;
-		SoundPlayer.currTrack[currParity].audio.pause();
-		SoundPlayer.currTrack[currParity].audio.currTime = 0;
+		SoundPlayer.currTrack.audio[SoundPlayer.currParity].onended = null;
+		SoundPlayer.currTrack.audio[SoundPlayer.currParity].pause();
+		SoundPlayer.currTrack.audio[SoundPlayer.currParity].currTime = 0;
 	}
 	var audio = track.audio[SoundPlayer.currParity];
 	BeatDrawer.setQueue(track.beatmap.notes, audio.duration);

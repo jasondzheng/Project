@@ -43,12 +43,16 @@ window.onload = function() {
 		map.unitSpawner.fillUnitQuotas();
 
 		var drawLoop = function() {
-			MapDrawer.drawMap(ctx, map, viewerLoc.x, viewerLoc.y);
-			BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
-					ScreenProps.EXP_HEIGHT_HALF);
-			MapDrawer.drawEntities(ctx, map, viewerLoc.x, viewerLoc.y);
-			UnitHpDrawer.drawHpBars(ctx);
-			PlayerHpDrawer.drawHp(ctx);
+			if (GameState.map) {
+				MapDrawer.drawMap(ctx, GameState.map, viewerLoc.x, viewerLoc.y);
+				BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
+						ScreenProps.EXP_HEIGHT_HALF);
+				MapDrawer.drawEntities(ctx, GameState.map, viewerLoc.x, viewerLoc.y);
+				UnitHpDrawer.drawHpBars(ctx);
+				PlayerHpDrawer.drawHp(ctx);
+			}
+			// Draw screen effects right above all maps and unit UI
+			ScreenEffectDrawer.drawEffect(ctx);
 			// Draw dialog over all map content
 			DialogDrawer.drawDialogOverlay(ctx);
 			// Draws FPS
@@ -120,13 +124,16 @@ var setupTickCycle = function(loadedMap) {
 		while (delta >= tickWindow) {
 			KeyTracker.tick();
 			InputRouter.tick();
-			loadedMap.tickAll();
+			if (GameState.map) {
+				GameState.map.tickAll();
+			}
 			BeatDrawer.tick();
 			SoundPlayer.tick();
 			trackCameraOnPlayerDebugDebug();
 			UnitHpDrawer.tick();
 			PlayerHpDrawer.tick();
 			DialogDrawer.tick();
+			ScreenEffectDrawer.tick();
 			delta -= tickWindow;
 			if (DISABLE_CORRECTIVE_TICKING) {
 				delta = 0;

@@ -70,11 +70,8 @@ GlyphDrawer.loadGlyphs = function(callback) {
 							derivedGlyphset.glyphs.height = baseGlyphset.glyphs.height * 
 									GlyphDrawer.GLYPH_DERIVATIONS[j].size;
 							var ctx = derivedGlyphset.glyphs.getContext('2d');
-							// GlyphDrawer._helperDrawScaled(baseGlyphset.glyphs, 0, 0, 
-							// 		GlyphDrawer.GLYPH_DERIVATIONS[j].size);
-							ctx.drawImage(baseGlyphset.glyphs, 0, 0, 
-									derivedGlyphset.glyphs.width, 
-									derivedGlyphset.glyphs.height);
+							GlyphDrawer._helperDrawScaled(ctx, baseGlyphset.glyphs, 0, 0, 
+									GlyphDrawer.GLYPH_DERIVATIONS[j].size);
 							GlyphDrawer.glyphs[GlyphDrawer.GLYPH_DERIVATIONS[j].glyphset + 
 											'_' + GlyphDrawer.GLYPH_DERIVATIONS[j].size] = 
 									derivedGlyphset;
@@ -133,6 +130,23 @@ GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 			possibleLineEnd = lineStart;
 			widthLeft = width;
 			height -= glyphset.lineSpacing + GlyphDrawer.LINE_SPACING;
+		}
+	}
+};
+
+
+// Helper to pixel-perfect enlarge an image before drawing to a canvas context.
+GlyphDrawer._helperDrawScaled = function(ctx, img, x, y, scale) {
+	ctx.drawImage(img, 0, 0);
+	var imageData = ctx.getImageData(0, 0, img.width, img.height);
+	ctx.clearRect(0, 0, img.width, img.height);
+	for (var j = 0; j < img.height; j++) {
+		for (var i = 0; i < img.width; i++) {
+			ctx.fillStyle = 'rgba(' + imageData.data[(i + j * img.width) * 4] + ', ' + 
+					imageData.data[(i + j * img.width) * 4 + 1] + ', ' + 
+					imageData.data[(i + j * img.width) * 4 + 2] + ', ' + 
+					imageData.data[(i + j * img.width) * 4 + 3] + ')';
+			ctx.fillRect(i * 2, j * 2, 2, 2);
 		}
 	}
 };
