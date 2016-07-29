@@ -23,9 +23,16 @@ var NPCEntity = function(id, name, movement, stateMachine, trades, shops,
  * Instance representation of an NPC. Takes an NPC entity and instatiates
  * it along with its own visualInstance.
  */
-var NPCInstance = function(npcEntity, x, y, startingDirection, containingMap) {
+var NPCInstance = function(npcEntity, id, x, y, startingDirection, 
+		containingMap) {
 	// The entity this instance is based off of
 	this.npcEntity = npcEntity;
+
+	// The ID of this NPC. Keep in mind this is completely different from the
+	// ID of the entity, which is an ID to distinguish type of NPC. This ID
+	// is used to distinguish 2 separate instances (which may or may not have
+	// the same type (entity) ID).
+	this.id = id;
 
 	// The containing map the NPC is on
 	this.containingMap = containingMap;

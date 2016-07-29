@@ -11,11 +11,11 @@ NPCLoader.NPC_PATH = '../assets/npcs';
 
 // Instantiates an NPC instance given an NPC id. Preloads the NPC entity
 // beforehand if needed.
-NPCLoader.loadInstance = function(id, x, y, startingDirection, containingMap, 
-		callback) {
-	NPCLoader._helperLoadEntity(id, function(entity) {
+NPCLoader.loadInstance = function(entityId, id, x, y, startingDirection, 
+		containingMap, callback) {
+	NPCLoader._helperLoadEntity(entityId, function(entity) {
 		var instance = 
-				new NPCInstance(entity, x, y, startingDirection, containingMap);
+				new NPCInstance(entity, id, x, y, startingDirection, containingMap);
 		entity.referrers.push(instance);
 		callback(instance);
 	});	

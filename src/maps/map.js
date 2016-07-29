@@ -28,6 +28,7 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 	// NPC instances
 	this.npcInstances = npcInstances;
+	this.npcInstanceArray = [];
 
 	// Unit instances
 	this.unitInstances = [];
@@ -45,8 +46,12 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	this.unitSpawner = new UnitSpawner(this, spawnBehavior);
 
 	// When the map is finalized, link all instances to this map.
-	for (var i = 0; i < npcInstances.length; i++) {
-		npcInstances[i].containingMap = this;
+	for (var id in npcInstances) {
+		if (!npcInstances.hasOwnProperty(id)) {
+			continue;
+		}
+		npcInstances[id].containingMap = this;
+		this.npcInstanceArray.push(npcInstances[id]);
 	}
 
 	for (var i = 0; i < events.length; i++) {
@@ -56,8 +61,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 
 // Registers a newly created NPC instance to this map.
-Map.prototype.registerNPCInstance = function(npcInstance) {
-	this.npcInstances.push(npcInstance);
+Map.prototype.registerNpcInstance = function(npcInstance) {
+	this.npcInstances[npcInstance.id] = npcInstance;
+	this.npcInstanceArray.push(npcInstance);
 	npcInstance.containingMap = this;
 };
 
@@ -68,10 +74,19 @@ Map.prototype.registerUnitInstance = function(unitInstance) {
 	unitInstance.containingMap = this;
 };
 
+
 // Deregisters an existing UnitInstance from the map
 Map.prototype.deregisterUnitInstance = function(unitInstance) {
 	this.unitInstances.splice(this.unitInstances.indexOf(unitInstance), 1);
 	unitInstance.containingMap = null;
+};
+
+
+// Deregisters an NPC from this map.
+Map.prototype.deregisterNpcInstance = function(npcInstance) {
+	this.npcInstanceArray.splice(this.npcInstanceArray.indexOf(npcInstance), 1);
+	npcInstance.containingMap = null;
+	delete this.npcInstances[npcInstance.id];
 };
 
 
@@ -85,8 +100,11 @@ Map.prototype.registerPlayer = function(player) {
 // Tick all tickables contained in the map
 Map.prototype.tickAll = function() {
 	this.unitSpawner.tick();
-	for (var i = 0; i < this.npcInstances.length; i++) {
-		this.npcInstances[i].tick();
+	for (var i = 0; i < this.events.length; i++) {
+		this.events[i].tick();
+	}
+	for (var i = 0; i < this.npcInstanceArray.length; i++) {
+		this.npcInstanceArray[i].tick();
 	}
 	for (var i = 0; i < this.unitInstances.length; i++) {
 		this.unitInstances[i].tick();
@@ -113,8 +131,8 @@ Map.prototype.findCollisions = function(centerX, centerY, width, height,
 		}
 	}
 	// Then compare NPCS
-	for (var i = 0; i < this.npcInstances.length; i++) {
-		var currentInstance = this.npcInstances[i];
+	for (var i = 0; i < this.npcInstanceArray.length; i++) {
+		var currentInstance = this.npcInstanceArray[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
 				height, isRounded, currentInstance.visualInstance.x, 
 				currentInstance.visualInstance.y, 
@@ -173,8 +191,8 @@ Map.prototype.findUnitCollisions = function(centerX, centerY, width, height,
 Map.prototype.findNpcCollisions = function(centerX, centerY, width, height, 
 		isRounded, opt_ignoreList) {
 	var collisions = [];
-	for (var i = 0; i < this.npcInstances.length; i++) {
-		var currentInstance = this.npcInstances[i];
+	for (var i = 0; i < this.npcInstanceArray.length; i++) {
+		var currentInstance = this.npcInstanceArray[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
 						height, isRounded, currentInstance.visualInstance.x, 
 						currentInstance.visualInstance.y, 
@@ -206,8 +224,8 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 		}
 	}
 	// Then compare NPCS
-	for (var i = 0; i < this.npcInstances.length; i++) {
-		var currentInstance = this.npcInstances[i];
+	for (var i = 0; i < this.npcInstanceArray.length; i++) {
+		var currentInstance = this.npcInstanceArray[i];
 		if (CollisionDetector.areShapesColliding(centerX, centerY, width, 
 						height, isRounded, currentInstance.visualInstance.x, 
 						currentInstance.visualInstance.y, 

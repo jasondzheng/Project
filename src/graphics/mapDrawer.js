@@ -66,8 +66,8 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	// Add static map entities
 	var entitiesToDraw = map.staticMapInstances.slice(0);
 	// Add npcs
-	for (var i = 0; i < map.npcInstances.length; i++) {
-		entitiesToDraw.push(map.npcInstances[i]);
+	for (var i = 0; i < map.npcInstanceArray.length; i++) {
+		entitiesToDraw.push(map.npcInstanceArray[i]);
 	}
 	// Add units
 	for (var i = 0; i < map.unitInstances.length; i++) {

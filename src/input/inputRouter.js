@@ -15,6 +15,9 @@ InputRouter.Modes = {
 		tick: function() {
 			InputRouter._helperHandleDialogInput();
 		}
+	},
+	DISABLED: {
+		tick: function() {}
 	}
 };
 

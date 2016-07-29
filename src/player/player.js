@@ -70,6 +70,11 @@ Player.prototype.getPositionY = function() {
 };
 
 
+Player.prototype.getDirection = function() {
+	return this._direction;
+};
+
+
 // Decrements hp by the damage provided and sets animation and animation state 
 // to DAMAGE_RECEIVING
 Player.prototype.receiveDamage = function(damage) {
@@ -124,6 +129,20 @@ Player.prototype.tryMove = function(deltaX, deltaY) {
 		this._animationState = targetAnimationState;
 	}
 	return targetX == this.visualInstance.x && targetY == this.visualInstance.y;
+};
+
+
+// Convenience function to idle the player.
+Player.prototype.setIdle = function(opt_direction) {
+	opt_direction = opt_direction || this._direction;
+	if (Player.AnimationStates.IDLE != this._animationState || 
+			opt_direction != this._direction) {
+		this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
+				DynamicMapEntity.getActionDirectionFamilyName(
+						Player.AnimationStates.IDLE, opt_direction)));
+		this._direction = opt_direction;
+		this._animationState = Player.AnimationStates.IDLE;
+	}
 };
 
 

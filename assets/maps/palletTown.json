@@ -94,7 +94,8 @@
 	],
 	"npcs": [
 		{
-			"id": "block",
+			"entityId": "block",
+			"id": "block01",
 			"x": 2,
 			"y": 2,
 			"startingDirection": "down"
@@ -118,5 +119,39 @@
 				"height": 10
 			}
 		]
-	}
+	},
+	"events": [
+		{
+			"id": "warpTile",
+			"variableData": {
+				"set": false
+			},
+			"states": [
+				{
+					"condition": "
+						this.set && ConditionHelper.playerInRectZone(this, 7, 11.5, 
+								1, 1) && this.containingMap.player.getDirection() == 
+										Direction.UP;
+					",
+					"body": "
+						this.set = false;
+						InputRouter.setMode(InputRouter.Modes.DISABLED);
+						var player = this.containingMap.player;
+						player.setIdle();
+						EventHelper.switchMap(this, 'palletTown', 0.5, 10, function() {
+							InputRouter.setMode(InputRouter.Modes.PLAYER_MAP_MOVEMENT);
+						});
+					"
+				}, {
+					"condition": "
+						!this.set && !ConditionHelper.playerInRectZone(this, 7, 11.5, 
+								1, 1);
+					",
+					"body": "
+						this.set = true;
+					"
+				}
+			]
+		}
+	]
 }

@@ -9,7 +9,7 @@ var EventHelper = {};
 
 // Switches maps, loading in the next map and moving the player to the
 // designated location.
-EventHelper.switchMap = function(event, mapName, x, y, callback) {
+EventHelper.switchMap = function(event, mapId, x, y, opt_callback) {
 	var player = event.containingMap.player;
 	ScreenEffectDrawer.fadeOut(function() {
 		ScreenEffectDrawer.stayBlack();
@@ -17,7 +17,7 @@ EventHelper.switchMap = function(event, mapName, x, y, callback) {
 		player.containingMap = GameState.map = null;
 		event.containingMap.player = null;
 		MapLoader.unload(event.containingMap);
-		MapLoader.load(mapName, function(newMap) {
+		MapLoader.load(mapId, function(newMap) {
 			GameState.map = newMap;
 			// Reattach player to the given coordinates
 			newMap.registerPlayer(player);
@@ -27,7 +27,11 @@ EventHelper.switchMap = function(event, mapName, x, y, callback) {
 			// settings
 			newMap.unitSpawner.fillUnitQuotas();
 			SoundPlayer.setTrack(newMap.tracks[Object.keys(newMap.tracks)[0]]);
-			ScreenEffectDrawer.fadeIn(callback);
+			ScreenEffectDrawer.fadeIn(function() {
+				if (opt_callback) {
+					opt_callback();
+				}
+			});
 		});
 	});
 };

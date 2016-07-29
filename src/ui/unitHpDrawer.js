@@ -41,6 +41,7 @@ UnitHpDrawer.HP_COLOR_INFO.botBlueDelta = UnitHpDrawer.HP_COLOR_INFO.midBlue -
 
 // Listing of all HP bars to be drawn, by unit id
 UnitHpDrawer.hpBars = {};
+UnitHpDrawer.hpBarsArray = [];
 // Common parity among all HP bars that should be drawn. Used to identify which
 // entries are stale due to units dying.
 UnitHpDrawer.parity = false;
@@ -62,6 +63,7 @@ UnitHpDrawer.updateUnitDrawPosition = function(unit, centerX, bottomY) {
 			shownHp: unit.hp,
 			opacity: 1.0
 		};
+		UnitHpDrawer.hpBarsArray.push(UnitHpDrawer.hpBars[unit.uid]);
 	}
 };
 
@@ -69,13 +71,13 @@ UnitHpDrawer.updateUnitDrawPosition = function(unit, centerX, bottomY) {
 UnitHpDrawer.tick = function() {
 	// Processes HP bars. Changes visual HP by 1 HP per tick to match actual HP.
 	// Slowly fades HP bars when HP = 0; when opacity is low enough, remove the hp
-	// bar. 
-	var idsToProcess = Object.keys(UnitHpDrawer.hpBars);
-	for (var i = 0; i < idsToProcess.length; i++) {
-		var id = idsToProcess[i];
-		var hpBar =  UnitHpDrawer.hpBars[id];
+	// bar.	
+	for (var i = 0; i < UnitHpDrawer.hpBarsArray.length; i++) {
+		var hpBar =  UnitHpDrawer.hpBarsArray[i];
 		if (UnitHpDrawer.parity != hpBar.parity && hpBar.opacity <= 10e-6) {
-			delete UnitHpDrawer.hpBars[id];
+			UnitHpDrawer.hpBarsArray.splice(i--, 1);
+			delete UnitHpDrawer.hpBars[hpBar.unit.uid];
+			continue;
 		}
 		if (hpBar.shownHp != hpBar.unit.hp) {
 			hpBar.shownHp += (hpBar.unit.hp - hpBar.shownHp) > 0 ? 1 : -1;
@@ -89,11 +91,8 @@ UnitHpDrawer.tick = function() {
 
 // Draws all HP bars within UnitDrawer.hpBars
 UnitHpDrawer.drawHpBars = function(ctx) {
-	for (var id in UnitHpDrawer.hpBars) {
-		if (!UnitHpDrawer.hpBars.hasOwnProperty(id)) {
-			continue;
-		}
-		var hpBar = UnitHpDrawer.hpBars[id];
+	for (var i = 0; i < UnitHpDrawer.hpBarsArray.length; i++) {
+		var hpBar =  UnitHpDrawer.hpBarsArray[i];
 		ctx.globalAlpha = hpBar.opacity;
 		UnitHpDrawer._helperDrawHpBar(ctx, hpBar.centerX, hpBar.bottomY, 
 				hpBar.shownHp, hpBar.unit.unitEntity.maxHp, 

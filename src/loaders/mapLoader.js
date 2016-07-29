@@ -15,7 +15,7 @@ MapLoader.TILESET_DIR = '../assets/img/tilesets/';
 // Static function to load a map.
 MapLoader.load = function(mapName, opt_callback) {
 	var deferrer = new CallbackDeferrer();
-	deferrer.add(JSONLoader.load, function(accumulatedArgs) {
+	deferrer.add(JSONLoader.loadWithoutWhitespace, function(accumulatedArgs) {
 		return [MapLoader.DIR + mapName + '.json'];
 	}, ['mapData']);
 	deferrer.add(TileLoader.load, function(accumulatedArgs) {
@@ -33,12 +33,16 @@ MapLoader.load = function(mapName, opt_callback) {
 	deferrer.add(MapLoader._helperLoadAllTracks, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['tracks']);
+	deferrer.add(MapLoader._helperLoadAllEvents, function(accumulatedArgs) {
+		return [accumulatedArgs[0].mapData];
+	}, ['events']);
 	deferrer.after(function(accumulatedArgs) {
 		var mapData = accumulatedArgs[0].mapData;
 		var tileset = accumulatedArgs[1].tileset;
 		var staticMapEntities = accumulatedArgs[2].staticMapEntities;
 		var npcInstances = accumulatedArgs[3].npcInstances;
 		var tracks = accumulatedArgs[5].tracks;
+		var events = accumulatedArgs[6].events;
 		mapData.staticMapEntities = staticMapEntities;
 		for (var i = 0; i < mapData.staticMapInstances.length; i++) {
 			// Convert to StaticMapInstance
@@ -50,8 +54,7 @@ MapLoader.load = function(mapName, opt_callback) {
 			opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
 					tileset, mapData.dummyTile, mapData.staticMapEntities, 
 					mapData.staticMapInstances, npcInstances, 
-					[] /* TODO: fill in events legally */, tracks, 
-					mapData.spawnBehavior));
+					events, tracks, mapData.spawnBehavior));
 		};
 	});
 };
@@ -67,7 +70,7 @@ MapLoader.unload = function(map) {
 	// npcs, unit entities, etc
 
 	// Empty out map constituent arrays
-	map.npcInstances.length = 0;
+	map.npcInstances = {};
 	map.unitInstances.length = 0;
 	map.unitSpawner = null;
 	map.player = null;
@@ -76,30 +79,24 @@ MapLoader.unload = function(map) {
 
 // Helper to load NPC instances
 MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
+	var resultingInstances = {};
 	if (mapData.npcs.length == 0) {
-		callback([]);
+		callback(resultingInstances);
 		return;
 	}
-	var instanceQueue = [];
+	var instancesToLoad = mapData.npcs.length;
 	for (var i = 0; i < mapData.npcs.length; i++) {
-		instanceQueue.push(mapData.npcs[i]);
+		var nextInstanceData = mapData.npcs[i];
+		NPCLoader.loadInstance(nextInstanceData.entityId, nextInstanceData.id, 
+				nextInstanceData.x, nextInstanceData.y, 
+				nextInstanceData.startingDirection, null /* containingMap */, 
+				function(instance) {
+			resultingInstances[instance.id] = instance;		
+			if (--instancesToLoad == 0) {
+				callback(resultingInstances);
+			}
+		});	
 	}
-	var resultingInstances = [];
-	var aggregateCallback = function(instance) {
-		resultingInstances.push(instance);
-		if (instanceQueue.length > 0) {
-			var nextInstanceData = instanceQueue.shift();
-			NPCLoader.loadInstance(nextInstanceData.id, nextInstanceData.x, 
-					nextInstanceData.y, nextInstanceData.startingDirection, 
-					null /* containingMap */, aggregateCallback);
-		} else {
-			callback(resultingInstances);
-		}
-	};
-	var nextInstanceData = instanceQueue.shift();
-	NPCLoader.loadInstance(nextInstanceData.id, nextInstanceData.x, 
-			nextInstanceData.y, nextInstanceData.startingDirection, 
-			null /* containingMap */, aggregateCallback);
 };
 
 
@@ -110,4 +107,14 @@ MapLoader._helperLoadAllTracks = function(mapData, callback) {
 		tracksToLoad[mapData.tracks[i]] = mapData.tracks[i];
 	}
 	SoundLoader.loadBeatmaps(tracksToLoad, callback);
+};
+
+
+// Helper to load all events
+MapLoader._helperLoadAllEvents = function(mapData, callback) {
+	var events = [];
+	for (var i = 0; i < mapData.events.length; i++) {
+		events.push(EventLoader.load(mapData.events[i]));
+	}
+	callback(events);
 };
