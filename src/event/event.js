@@ -46,5 +46,11 @@ Event.prototype._helperEval = function(code) {
 var EventLoader = {};
 
 EventLoader.load = function(json) {
-	return new Event(json.id, json.states, json.variableData);
+	// Checks if templating is required, otherwise processes normally.
+	if (json.eventTemplate) {
+		var template = EventTemplate.getTemplate(json.eventTemplate);
+		return new Event(json.id, template.states, template.variableData);
+	} else {
+		return new Event(json.id, json.states, json.variableData);
+	}
 };

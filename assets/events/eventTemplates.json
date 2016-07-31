@@ -1,0 +1,41 @@
+{
+	"warpTile": {
+		"transformFns": {
+			"opt_direction": "
+				this.opt_direction ? 
+						' && this.containingMap.player.getDirection() == ' + 
+								this.opt_direction : 
+						'';
+			"
+		},
+		"variableData": {
+			"set": false
+		},
+		"states": [
+			{
+				"condition": "
+					this.set && ConditionHelper.playerInRectZone(this, #tileX#, #tileY#, 
+							#width#, #height#) #opt_direction#;
+				",
+				"body": "
+					this.set = false;
+					InputRouter.setMode(InputRouter.Modes.DISABLED);
+					var player = this.containingMap.player;
+					player.setIdle();
+					EventHelper.switchMap(this, '#mapId#', #targetX#, #targetY#, 
+							function() {
+						InputRouter.setMode(InputRouter.Modes.PLAYER_MAP_MOVEMENT);
+					});
+				"
+			}, {
+				"condition": "
+					!this.set && !ConditionHelper.playerInRectZone(this, #tileX#, #tileY#, 
+							#width#, #height#);
+				",
+				"body": "
+					this.set = true;
+				"
+			}
+		]
+	}
+}

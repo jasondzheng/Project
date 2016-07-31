@@ -122,36 +122,31 @@
 	},
 	"events": [
 		{
-			"id": "warpTile",
-			"variableData": {
-				"set": false
-			},
-			"states": [
-				{
-					"condition": "
-						this.set && ConditionHelper.playerInRectZone(this, 7, 11.5, 
-								1, 1) && this.containingMap.player.getDirection() == 
-										Direction.UP;
-					",
-					"body": "
-						this.set = false;
-						InputRouter.setMode(InputRouter.Modes.DISABLED);
-						var player = this.containingMap.player;
-						player.setIdle();
-						EventHelper.switchMap(this, 'palletTown', 0.5, 10, function() {
-							InputRouter.setMode(InputRouter.Modes.PLAYER_MAP_MOVEMENT);
-						});
-					"
-				}, {
-					"condition": "
-						!this.set && !ConditionHelper.playerInRectZone(this, 7, 11.5, 
-								1, 1);
-					",
-					"body": "
-						this.set = true;
-					"
-				}
-			]
+			"id": "warpTile1",
+			"eventTemplate": {
+				"_template": "warpTile",
+				"tileX": "7",
+				"tileY": "11.5",
+				"width": "1",
+				"height": "0.6",
+				"mapId": "palletTown",
+				"targetX": "18.5",
+				"targetY": "12.2",
+				"opt_direction": "Direction.UP"
+			}
+		}, {
+			"id": "warpTile2",
+			"eventTemplate": {
+				"_template": "warpTile",
+				"tileX": "18",
+				"tileY": "11.5",
+				"width": "1",
+				"height": "0.6",
+				"mapId": "palletTown",
+				"targetX": "7.5",
+				"targetY": "12.2",
+				"opt_direction": "Direction.UP"
+			}
 		}
 	]
 }

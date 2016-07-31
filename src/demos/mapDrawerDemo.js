@@ -8,6 +8,9 @@ var viewerLoc = {
 window.onload = function() {
 	ScreenResizeManager.init();
 	var deferrer = new CallbackDeferrer();
+	deferrer.add(EventTemplate.init, function(accumulatedArgs) {
+		return [];
+	}, []);
 	deferrer.add(MapLoader.load, function(accumulatedArgs) {
 		return ['palletTown'];
 	}, ['map']);
@@ -21,8 +24,8 @@ window.onload = function() {
 		return [];
 	}, []);
 	deferrer.after(function(accumulatedArgs) {
-		var map = accumulatedArgs[0].map;
-		var player = accumulatedArgs[1].player;
+		var map = accumulatedArgs[1].map;
+		var player = accumulatedArgs[2].player;
 
 		// Register map and player in the GameState
 		GameState.map = map;
