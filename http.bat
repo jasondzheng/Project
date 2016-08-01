@@ -1,4 +1,5 @@
-C:\Users\Jason\AppData\Local\Programs\Python\Python35-32\python.exe .\clientgen.py
+python .\clientgen.py
+python .\startupScripts\itemCatalogGen.py
 call "C:\Program Files\nodejs\nodevars.bat"
 http-server
 PAUSE

@@ -1,0 +1,19 @@
+{
+	"garbage": {
+		"name": "Garbage",
+		"description": "This is garbage",
+		"isUseable": false,
+		"price": 10,
+		"isKeyItem": false
+	},
+	"potion": {
+		"name": "Potion",
+		"description": "Heals 10 HP",
+		"isUseable": true,
+		"consumeCount": 1,
+		"usageProperties": {
+		},
+		"price": 100,
+		"isKeyItem": false
+	}
+}

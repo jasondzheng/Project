@@ -21,13 +21,16 @@ var Player = function(id, visualInstance, x, y, saveData) {
 Player.prototype.applySaveData = function(saveData) {
 	this.hp = saveData.hp;
 	this.maxHp = saveData.maxHp;
+	// Player's inventory
+	this.inventory = Inventory.load(saveData.inventory);
 };
 
 
 // A debug default save data to use because saving isn't implemented yet.
 Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	hp: 99,
-	maxHp: 100
+	maxHp: 100,
+	inventory: null
 };
 
 

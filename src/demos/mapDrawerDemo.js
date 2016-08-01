@@ -23,6 +23,9 @@ window.onload = function() {
 	deferrer.add(DialogDrawer.loadAssets, function(accumulatedArgs) {
 		return [];
 	}, []);
+	deferrer.add(Item.loadItems, function(accumulatedArgs) {
+		return [];
+	}, []);
 	deferrer.after(function(accumulatedArgs) {
 		var map = accumulatedArgs[1].map;
 		var player = accumulatedArgs[2].player;
