@@ -108,9 +108,8 @@ GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 		if (currChar == ' ') {
 			possibleLineEnd = i;
 		}
-		if ((widthLeft -= charProps.width + GlyphDrawer.CHAR_SPACING) < 0 || 
-				i == text.length - 1) {
-			if (i == text.length - 1) {
+		if ((widthLeft -= charProps.width) < 0 || i == text.length - 1) {
+			if (i == text.length - 1 && widthLeft >= 0) {
 				possibleLineEnd = text.length;
 			}
 			// Draw all characters from possibleLineEnd to lineStart
@@ -148,5 +147,41 @@ GlyphDrawer._helperDrawScaled = function(ctx, img, x, y, scale) {
 					imageData.data[(i + j * img.width) * 4 + 3] + ')';
 			ctx.fillRect(i * 2, j * 2, 2, 2);
 		}
+	}
+};
+
+
+// Draws a portion of a line of glyphs. Only supports single lines of glyphs.
+GlyphDrawer.drawCutText = function(ctx, setName, text, x, y, srcX, srcY, 
+		width, height) {
+	var glyphset = GlyphDrawer.glyphs[setName];
+	if (!glyphset) {
+		throw 'Unavailable glyphset [' + setName + ']';
+	}
+	// The position of the current letter to draw, if positioned without clipping.
+	var letterX = 0;
+	// The point in the clipping rectangle at which the next glyph ought to
+	// be if drawn normally.
+	var portionX = srcX;
+	// iteratre through all characters
+	for (var i = 0; i < text.length; i++) {
+		var currChar = text.charAt(i);
+		var charProps = glyphset.glyphData[text.charAt(i)];
+		// Check for collision of the current glyph and the clipping rectangle.
+		if (letterX < srcX + width && letterX + charProps.width > srcX &&
+    		0 < srcY + height && charProps.height > srcY) {
+			var drawnX1 = portionX - letterX;
+			var drawnX2 = Math.min(charProps.width, srcX + width - letterX);
+			var drawnY1 = Math.max(0, srcY);
+			var drawnY2 = Math.min(charProps.height, drawnY1 + height);
+			ctx.drawImage(glyphset.glyphs, charProps.x + drawnX1, 
+					charProps.y + drawnY1, drawnX2 - drawnX1, drawnY2 - drawnY1, 
+					x + Math.max(letterX - srcX, 0), 
+					y + glyphset.linePos - charProps.lineHeight, 
+					drawnX2 - drawnX1, drawnY2 - drawnY1);
+			// Update portionX since a new character was drawn in the clipping rect.
+			portionX += drawnX2 - drawnX1 + GlyphDrawer.CHAR_SPACING;
+		}
+		letterX += charProps.width + GlyphDrawer.CHAR_SPACING;
 	}
 };

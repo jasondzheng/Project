@@ -23,6 +23,12 @@ window.onload = function() {
 	deferrer.add(DialogDrawer.loadAssets, function(accumulatedArgs) {
 		return [];
 	}, []);
+	deferrer.add(ScrollBar.load, function(accumulatedArgs) {
+		return [];
+	}, []);
+	deferrer.add(InventoryTabDrawer.init, function(accumulatedArgs) {
+		return [];
+	}, []);
 	deferrer.add(Item.loadItems, function(accumulatedArgs) {
 		return [];
 	}, []);
@@ -38,6 +44,10 @@ window.onload = function() {
 		var ctx = canvas.getContext('2d');
 
 		KeyTracker.attachToScreen(document.body);
+		MouseTracker.attachToScreen(canvas);
+
+		KeyInputRouter.setMode(KeyInputRouter.Modes.PLAYER_MAP_MOVEMENT);
+		MouseInputRouter.setMode(MouseInputRouter.Modes.PLAYER_MAP_MOVEMENT);
 
 		var startTimes = [];
 
@@ -45,6 +55,12 @@ window.onload = function() {
 		player.setPositionX(4);
 		player.setPositionY(4);
 		map.registerPlayer(player);
+
+		// TODO: remove these lines
+		InventoryTabDrawer.setInventory(player.inventory);
+		player.inventory.add('garbage', 5);
+		player.inventory.add('potion', 5);
+		player.inventory.add('armor', 5);
 
 		map.unitSpawner.fillUnitQuotas();
 
@@ -57,6 +73,8 @@ window.onload = function() {
 				UnitHpDrawer.drawHpBars(ctx);
 				PlayerHpDrawer.drawHp(ctx);
 			}
+			// Inventory over all map UI
+			InventoryTabDrawer.draw(ctx);
 			// Draw screen effects right above all maps and unit UI
 			ScreenEffectDrawer.drawEffect(ctx);
 			// Draw dialog over all map content
@@ -129,7 +147,9 @@ var setupTickCycle = function(loadedMap) {
 		}
 		while (delta >= tickWindow) {
 			KeyTracker.tick();
-			InputRouter.tick();
+			KeyInputRouter.tick();
+			MouseTracker.tick();
+			MouseInputRouter.tick();
 			if (GameState.map) {
 				GameState.map.tickAll();
 			}

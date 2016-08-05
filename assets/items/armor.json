@@ -1,0 +1,9 @@
+{
+	"name": "Armor",
+	"description": "This is armor",
+	"isUseable": false,
+	"price": 10,
+	"isKeyItem": false,
+	"equipData": {
+	}
+}

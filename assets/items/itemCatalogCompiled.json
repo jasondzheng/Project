@@ -12,8 +12,18 @@
 		"isUseable": true,
 		"consumeCount": 1,
 		"usageProperties": {
+			"heal": 10
 		},
 		"price": 100,
 		"isKeyItem": false
+	},
+	"armor": {
+		"name": "Armor",
+		"description": "This is armor",
+		"isUseable": false,
+		"price": 10,
+		"isKeyItem": false,
+		"equipData": {
+		}
 	}
 }

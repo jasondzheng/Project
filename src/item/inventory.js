@@ -12,9 +12,9 @@ var Inventory = function() {
 
 
 // Number of maximum item slots available 
-Inventory.NUM_ITEM_SLOTS = 50;
+Inventory.NUM_ITEM_SLOTS = 48;
 // Number of maximum equip item slots available
-Inventory.NUM_EQUIP_SLOTS = 50;
+Inventory.NUM_EQUIP_SLOTS = 48;
 // Number of max stack amount of normal items
 Inventory.MAX_ITEM_COUNT = 999;
 
@@ -73,15 +73,39 @@ Inventory.prototype.add = function(itemId, quantity) {
 };
 
 
+// Checks if the quantity of an item with itemID can be added to the inventory
 Inventory.prototype.canAdd = function(itemId, quantity) {
-	// TODO: do this later
+	var item = Item.getItem(itemId);
+	if (item.equipData) {
+		for (var i = 0; i < this.equipEntries.length; i++) {
+			if (this.equipEntries[i] == null && --quantity == 0) {
+				return true;
+			}
+		}
+		return false;
+	} else {
+		var hasEmptySlot = false;
+		for (var i = 0; i < this.itemEntries.length; i++) {
+			if (this.itemEntries[i] != null && this.itemEntries[i].item == item) {
+				return this.itemEntries[i].quantity + quantity <= 
+						Inventory.MAX_ITEM_COUNT;
+			}
+			if (this.itemEntries[i] == null) {
+				var hasEmptySlot = true;
+			}
+		}
+		return hasEmptySlot && (quantity <= Inventory.MAX_ITEM_COUNT);
+	}
 };
 
 
 // Either destroys an item instance or decrememnts a counts value by 'number' of 
 // the provided item instance.
-Inventory.prototype.toss = function(slotNumber, quantity, isFromEquip) {
+Inventory.prototype.remove = function(slotNumber, quantity, isFromEquip) {
 	var entry = (isFromEquip ? this.equipEntries : this.itemEntries)[slotNumber];
+	if (entry == null) {
+		throw 'Remove incorrectly referencing null slot';
+	}
 	if (entry.quantity > quantity) {
 		entry.quantity -= quantity;
 	} else if (entry.quantity == quantity) {

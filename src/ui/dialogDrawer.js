@@ -67,7 +67,8 @@ DialogDrawer._actionQueue = [];
 // Whether or not a dialog is in progress
 DialogDrawer._dialogMode = false;
 // The prior input mode before entering the dialog.
-DialogDrawer._oldInputMode;
+DialogDrawer._oldKeyInputMode;
+DialogDrawer._oldMouseInputMode;
 // The length of the action queue when last processed.
 DialogDrawer._oldQueueLength = 0;
 // A listing of assets required to draw the dialog interface
@@ -164,8 +165,10 @@ DialogDrawer._ShowMessageAction.prototype.onStart = function() {
 	// Diverts input mode to dialog system
 	if (!DialogDrawer._dialogMode) {
 		DialogDrawer._dialogMode = true;
-		DialogDrawer._oldInputMode = InputRouter.getMode();
-		InputRouter.setMode(InputRouter.Modes.DIALOG_INPUT);
+		DialogDrawer._oldKeyInputMode = KeyInputRouter.getMode();
+		DialogDrawer._oldMouseInputMode = MouseInputRouter.getMode();
+		KeyInputRouter.setMode(KeyInputRouter.Modes.DIALOG_INPUT);
+		MouseInputRouter.setMode(MouseInputRouter.Modes.DIALOG_INPUT);
 	}
 };
 
@@ -269,7 +272,8 @@ DialogDrawer._EndDialogAction = function(opt_callback) {
 DialogDrawer._EndDialogAction.prototype.onEnd = function() {
 	// Restores input mode
 	DialogDrawer._dialogMode = false;
-	InputRouter.setMode(DialogDrawer._oldInputMode);
+	KeyInputRouter.setMode(DialogDrawer._oldKeyInputMode);
+	MouseInputRouter.setMode(DialogDrawer._oldMouseInputMode);
 	if (this._callback) {
 		this._callback();
 	}

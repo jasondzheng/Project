@@ -6,6 +6,9 @@ var ScreenResizeManager = {};
 // An option to disable screen resize
 ScreenResizeManager.RESIZE_ENABLED = true;
 
+// The scale at which the screen resize manager has rescaled the canvas to.
+ScreenResizeManager.scale = 1;
+
 
 // Initializes the screen resize manager and binds handles so that the canvas
 // resizes appropriately when the screen size changes
@@ -20,10 +23,11 @@ ScreenResizeManager.init = function() {
 	
 	// Resize operation
 	var resizeToFit = function() {
-		var scale = Math.min(window.innerWidth / ScreenProps.EXP_WIDTH, 
-			window.innerHeight / ScreenProps.EXP_HEIGHT);
-		var scaledWidth = ScreenProps.EXP_WIDTH * scale;
-		var scaledHeight = ScreenProps.EXP_HEIGHT * scale;
+		ScreenResizeManager.scale = 
+				Math.min(window.innerWidth / ScreenProps.EXP_WIDTH, 
+						window.innerHeight / ScreenProps.EXP_HEIGHT);
+		var scaledWidth = ScreenProps.EXP_WIDTH * ScreenResizeManager.scale;
+		var scaledHeight = ScreenProps.EXP_HEIGHT * ScreenResizeManager.scale;
 		canvas.style.width = scaledWidth + 'px';
 		canvas.style.height = scaledHeight + 'px';
 		canvas.style.top = (window.innerHeight - scaledHeight) / 2 + 'px';

@@ -28,7 +28,7 @@ Player.prototype.applySaveData = function(saveData) {
 
 // A debug default save data to use because saving isn't implemented yet.
 Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
-	hp: 99,
+	hp: 9,
 	maxHp: 100,
 	inventory: null
 };
@@ -85,7 +85,13 @@ Player.prototype.receiveDamage = function(damage) {
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
 				DynamicMapEntity.getActionDirectionFamilyName(
 						Player.AnimationStates.DAMAGE_RECEIVING, this._direction)));
-	this.visualInstance._animationState = Player.AnimationStates.DAMAGE_RECEIVING;
+	this._animationState = Player.AnimationStates.DAMAGE_RECEIVING;
+};
+
+
+// Increases player's current HP
+Player.prototype.increaseCurrentHp = function(amount) {
+	this.hp = Math.min(this.hp + amount, this.maxHp);
 };
 
 

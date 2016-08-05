@@ -23,6 +23,7 @@ Item.CATALOG_PATH = '../assets/items/itemCatalogCompiled.json';
 // A catalog of items by their IDs.
 Item._catalog;
 
+
 // Loader that loads all items into the item catalog. Needs to be called at the
 // beginning of the game so items are preloaded and can be looked up.
 Item.loadItems = function(callback) {
@@ -58,10 +59,3 @@ Item.loadItems = function(callback) {
 Item.getItem = function(id) {
 	return Item._catalog[id];
 };
-
-
-// Evaluates a function included in the item .json
-// Cleanup will be done by the caller based on isConsumed
-Item.prototype.use = function() {
-};
-
