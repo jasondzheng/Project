@@ -44,7 +44,7 @@ JSONLoader.loadWithoutWhitespace = function(url, opt_callback,
 						responseText.substring(commentEnd);
 			}
 			responseText = responseText.replace(
-					/[\n\r\t]+(?=((\\[\\']|[^\\'])*'(\\[\\']|[^\\'])*')*(\\[\\']|[^\\'])*$)/g, 
+					/[\n\r\t]+/g,
 					'');
 			opt_callback(JSON.parse(responseText));
 		}

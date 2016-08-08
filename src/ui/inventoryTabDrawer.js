@@ -1,3 +1,7 @@
+/**
+ * Responsible for drawing and handling the input to the inventory and settings
+ * tabbed interface.
+ */
 var InventoryTabDrawer = {};
 
 InventoryTabDrawer.PATH = '../assets/img/ui/tabView/';
@@ -5,6 +9,7 @@ InventoryTabDrawer.PATH = '../assets/img/ui/tabView/';
 // Assets used for drawing the tab window.
 InventoryTabDrawer.BODY_IMG;
 InventoryTabDrawer.CELL_IMG;
+InventoryTabDrawer.DESCRIPTION_BACK;
 InventoryTabDrawer.TAB_ICON_IMGS;
 InventoryTabDrawer.TAB_BACK_IMGS;
 
@@ -28,6 +33,8 @@ InventoryTabDrawer.CELLS_PER_ROW = 4;
 InventoryTabDrawer.NUM_ITEM_ROWS;
 InventoryTabDrawer.NUM_EQUIP_ROWS;
 
+InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+
 // Offset at which to draw each scrollbar
 InventoryTabDrawer.SCROLLBAR_OFFSET_X;
 InventoryTabDrawer.SCROLLBAR_OFFSET_Y;
@@ -38,6 +45,9 @@ InventoryTabDrawer.DEFAULT_Y = 100;
 
 // The font to draw quantities in the inventory display.
 InventoryTabDrawer.QUANTITY_FONT = 'test';
+
+// The font the draw the item descripttion.
+InventoryTabDrawer.DESCRIPTION_FONT = 'test';
 
 // The position of the quantity text WRT the cell topleft corner.
 InventoryTabDrawer.QUANTITY_OFFSET_X = 26;
@@ -75,19 +85,27 @@ InventoryTabDrawer._lastStartClickX;
 InventoryTabDrawer._lastStartClickY;
 
 // The current drag mode (what is being dragged).
-InventoryTabDrawer._dragMode;
+InventoryTabDrawer._dragMode = null;
 
 InventoryTabDrawer.DragModes = {
 	TAB: 0,
-	SCROLL: 1
+	SCROLL: 1,
+	ITEM: 2
 };
 
+// TODO: comment
+InventoryTabDrawer._currentHoveredCellIndex;
+InventoryTabDrawer._draggedItemIndex;
+
+InventoryTabDrawer._draggedItemX;
+InventoryTabDrawer._draggedItemY;
 
 // Loads all images required for the tab window.
 InventoryTabDrawer.init = function(callback) {
 	ImgUtils.loadImages({
 		body: InventoryTabDrawer.PATH + 'body.png',
 		cell: InventoryTabDrawer.PATH + 'cell.png',
+		descriptionBack: InventoryTabDrawer.PATH + 'descriptionBack.png',
 		itemsIcon: InventoryTabDrawer.PATH + 'itemsIcon.png',
 		equipmentIcon: InventoryTabDrawer.PATH + 'equipmentIcon.png',
 		settingsIcon: InventoryTabDrawer.PATH + 'settingsIcon.png',
@@ -97,6 +115,7 @@ InventoryTabDrawer.init = function(callback) {
 	}, function(imgs) {
 		InventoryTabDrawer.BODY_IMG = imgs.body;
 		InventoryTabDrawer.CELL_IMG = imgs.cell;
+		InventoryTabDrawer.DESCRIPTION_BACK = imgs.descriptionBack;
 		InventoryTabDrawer.TAB_ICON_IMGS = [
 			imgs.itemsIcon,
 			imgs.equipmentIcon,
@@ -142,6 +161,8 @@ InventoryTabDrawer.init = function(callback) {
 							InventoryTabDrawer.CELL_SPACING -
 					(InventoryTabDrawer.BODY_IMG.height - 
 							2 * InventoryTabDrawer.CELL_EDGE_OFFSET);
+		InventoryTabDrawer.CELL_IMG_WIDTH_HALF = 
+				InventoryTabDrawer.CELL_IMG.width / 2;
 		callback();
 	});
 };
@@ -175,6 +196,7 @@ InventoryTabDrawer.onStartClick = function(x, y) {
 	var currentScrollBar = 
 			InventoryTabDrawer._scrollBars[InventoryTabDrawer.currentTab];
 	var possibleTabIndex;
+	var possibleCellIndex;
 	if (currentScrollBar.isInBubble(
 			normalizedX - InventoryTabDrawer.SCROLLBAR_OFFSET_X, 
 			normalizedY - InventoryTabDrawer.SCROLLBAR_OFFSET_Y)) {
@@ -185,11 +207,21 @@ InventoryTabDrawer.onStartClick = function(x, y) {
 		InventoryTabDrawer._dragTabDeltaX = normalizedX;
 		InventoryTabDrawer._dragTabDeltaY = normalizedY;
 		InventoryTabDrawer._dragMode = InventoryTabDrawer.DragModes.TAB;
+	} else if ((possibleCellIndex = 
+			InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
+					normalizedX, normalizedY)) != -1) {
+		InventoryTabDrawer._dragMode = InventoryTabDrawer.DragModes.ITEM;
+		InventoryTabDrawer._draggedItemIndex = possibleCellIndex;
+		InventoryTabDrawer._draggedItemX = x - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+		InventoryTabDrawer._draggedItemY = y - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
 	} else {
 		// Nulling ought to be last thing done, if no drags are found
 		InventoryTabDrawer._dragMode = null;
 		InventoryTabDrawer._dragTabDeltaX = null;
 		InventoryTabDrawer._dragTabDeltaY = null;
+		InventoryTabDrawer._draggedItemIndex = null;
+		InventoryTabDrawer._draggedItemX = null;
+		InventoryTabDrawer._draggedItemY = null;
 	}
 };
 
@@ -206,6 +238,10 @@ InventoryTabDrawer.onDrag = function(x, y) {
 	} else if (InventoryTabDrawer._dragMode == InventoryTabDrawer.DragModes.TAB) {
 		InventoryTabDrawer._x = x - InventoryTabDrawer._dragTabDeltaX;
 		InventoryTabDrawer._y = y - InventoryTabDrawer._dragTabDeltaY;
+	} else if (
+			InventoryTabDrawer._dragMode == InventoryTabDrawer.DragModes.ITEM) {
+		InventoryTabDrawer._draggedItemX = x - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+		InventoryTabDrawer._draggedItemY = y - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
 	}
 };
 
@@ -236,8 +272,8 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 					normalizedX, normalizedY)) != -1) {
 		// Check for tab change
 		this.currentTab = possibleTabIndex;
-	} else if (isDoubleClick && InventoryTabDrawer._dragMode == null && 
-			startAndEndSameLoc && (possibleItemIndex = 
+	} else if (isDoubleClick && startAndEndSameLoc && 
+			(possibleItemIndex = 
 					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
 							normalizedX, normalizedY)) != -1) {
 		// Check for click on item
@@ -257,11 +293,25 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 	InventoryTabDrawer._dragMode = null;
 	InventoryTabDrawer._dragTabDeltaX = null;
 	InventoryTabDrawer._dragTabDeltaY = null;
+	InventoryTabDrawer._draggedItemIndex = null;
+	InventoryTabDrawer._draggedItemX = null;
+	InventoryTabDrawer._draggedItemY = null;
 };
 
 
 InventoryTabDrawer.onHover = function(x, y) {
-
+	var normalizedX = x - InventoryTabDrawer._x;
+	var normalizedY = y - InventoryTabDrawer._y;
+	var possibleItemIndex;
+	if (InventoryTabDrawer._dragMode == null && 
+			(InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB || 
+			InventoryTabDrawer.currentTab == InventoryTabDrawer.EQUIPMENT_TAB)) {
+		InventoryTabDrawer._currentHoveredCellIndex = 
+				InventoryTabDrawer._helperGetInventorySlotFromClickCoords(normalizedX, 
+						normalizedY);
+	} else {
+		InventoryTabDrawer._currentHoveredCellIndex = null;
+	}
 };
 
 
@@ -314,6 +364,9 @@ InventoryTabDrawer._drawItems = function(ctx, x, y) {
 	InventoryTabDrawer._scrollBars[InventoryTabDrawer.ITEMS_TAB].draw(ctx, 
 			x + InventoryTabDrawer.SCROLLBAR_OFFSET_X, 
 			y + InventoryTabDrawer.SCROLLBAR_OFFSET_Y);
+	InventoryTabDrawer._helperMaybeDrawDescription(ctx, x, y);
+	InventoryTabDrawer._helperMaybeDrawDraggedItem(ctx, x, y, 
+			false /* isEquips */);
 };
 
 
@@ -331,6 +384,9 @@ InventoryTabDrawer._drawEquipment = function(ctx, x, y) {
 	InventoryTabDrawer._scrollBars[InventoryTabDrawer.EQUIPMENT_TAB].draw(ctx, 
 			x + InventoryTabDrawer.SCROLLBAR_OFFSET_X, 
 			y + InventoryTabDrawer.SCROLLBAR_OFFSET_Y);
+	InventoryTabDrawer._helperMaybeDrawDescription(ctx, x, y);
+	InventoryTabDrawer._helperMaybeDrawDraggedItem(ctx, x, y, 
+			true /* isEquips */);
 };
 
 
@@ -343,7 +399,7 @@ InventoryTabDrawer._drawSettings = function(ctx, x, y) {
 InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset, 
 		isEquips) {
 	var cellHeight = InventoryTabDrawer.CELL_IMG.height;
-	var itemArray = isEquips ? InventoryTabDrawer._inventory.equipEntries : 
+	var itemsArray = isEquips ? InventoryTabDrawer._inventory.equipEntries : 
 			InventoryTabDrawer._inventory.itemEntries;
 	var windowY = InventoryTabDrawer.BODY_IMG.height - 
 			2 * InventoryTabDrawer.CELL_EDGE_OFFSET;
@@ -362,7 +418,11 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 							y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 									InventoryTabDrawer.CELL_EDGE_OFFSET, 
 							cellWidth, cellPartialHeight);
-				var itemEntry = itemArray[itemIndex++];
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex) {
+					itemIndex++;
+					continue;
+				}
+				var itemEntry = itemsArray[itemIndex++];
 				if (itemEntry) {
 					var cellX = x + InventoryTabDrawer.CELL_EDGE_OFFSET + 
 							i * (InventoryTabDrawer.CELL_IMG.width + 
@@ -375,8 +435,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 						var cellY = drawY + yPos;
 						var clipY = InventoryTabDrawer.CELL_IMG.height - 
 								InventoryTabDrawer.QUANTITY_OFFSET_Y - cellPartialHeight;
-						// TODO: replace with actual number + ''
-						var quantityStr = 'GL';
+						var quantityStr = itemEntry.quantity.toString();
 						GlyphDrawer.drawCutText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
 								quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 
 										(InventoryTabDrawer.QUANTITY_MAX_GLYPHS - 
@@ -400,7 +459,11 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 						y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 								InventoryTabDrawer.CELL_EDGE_OFFSET + yPos, 
 						cellWidth, cellPartialHeight);
-				var itemEntry = itemArray[itemIndex++];
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex){
+					itemIndex++;
+					continue;
+				}
+				var itemEntry = itemsArray[itemIndex++];
 				if (itemEntry) {
 					var cellX = x + InventoryTabDrawer.CELL_EDGE_OFFSET + 
 							i * (InventoryTabDrawer.CELL_IMG.width + 
@@ -411,8 +474,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 							cellPartialHeight, cellX, cellY, cellWidth, cellPartialHeight);
 					if (!isEquips && cellPartialHeight > 
 							InventoryTabDrawer.QUANTITY_OFFSET_Y) {
-						// TODO: replace with actual number + ''
-						var quantityStr = 'GL';
+						var quantityStr = itemEntry.quantity.toString();
 						GlyphDrawer.drawCutText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
 								quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 
 										(InventoryTabDrawer.QUANTITY_MAX_GLYPHS - 
@@ -433,7 +495,11 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 										InventoryTabDrawer.CELL_SPACING), 
 						y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 								InventoryTabDrawer.CELL_EDGE_OFFSET + yPos);
-				var itemEntry = itemArray[itemIndex++];
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex){
+					itemIndex++;
+					continue;
+				}
+				var itemEntry = itemsArray[itemIndex++];
 				if (itemEntry) {
 					var cellX = x + InventoryTabDrawer.CELL_EDGE_OFFSET + 
 							i * (InventoryTabDrawer.CELL_IMG.width + 
@@ -442,8 +508,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 							InventoryTabDrawer.CELL_EDGE_OFFSET + yPos;
 					ctx.drawImage(itemEntry.item.sprite, cellX, cellY);
 					if (!isEquips) {
-						// TODO: replace with actual number + ''
-						var quantityStr = 'GL';
+						var quantityStr = itemEntry.quantity.toString();
 						GlyphDrawer.drawText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
 								quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 
 										(InventoryTabDrawer.QUANTITY_MAX_GLYPHS - 
@@ -458,6 +523,58 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 				}
 			}			
 		}
+	}
+};
+
+
+// Draw the current dragge item (if exists) with its center at the current mouse
+// position.
+InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
+	if (InventoryTabDrawer._draggedItemIndex == null) {
+		return;
+	}
+	var itemsArray = isEquips ? InventoryTabDrawer._inventory.equipEntries : 
+			InventoryTabDrawer._inventory.itemEntries;
+	var itemEntry = itemsArray[InventoryTabDrawer._draggedItemIndex];
+	if (itemEntry) {
+		var cellX = InventoryTabDrawer._draggedItemX;
+		var cellY = InventoryTabDrawer._draggedItemY;
+		ctx.drawImage(itemEntry.item.sprite, cellX, cellY);
+		if (!isEquips) {
+			var quantityStr = itemEntry.quantity.toString();
+			GlyphDrawer.drawText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
+					quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 
+							(InventoryTabDrawer.QUANTITY_MAX_GLYPHS - 
+									quantityStr.length) * 
+											InventoryTabDrawer.QUANTITY_DELTA_X, 
+					cellY + InventoryTabDrawer.QUANTITY_OFFSET_Y, 
+					InventoryTabDrawer.CELL_IMG.width - 
+							InventoryTabDrawer.QUANTITY_OFFSET_X, 
+					InventoryTabDrawer.CELL_IMG.height - 
+							InventoryTabDrawer.QUANTITY_OFFSET_Y);
+		}
+	}
+};
+
+
+// Draws the description if the mouse if hovering over a non-null inventory 
+// slot.
+InventoryTabDrawer._helperMaybeDrawDescription = function(ctx, x, y) {
+	var itemIndex = InventoryTabDrawer._currentHoveredCellIndex;
+	var entries = (InventoryTabDrawer.currentTab == 
+					InventoryTabDrawer.ITEMS_TAB) ? 
+			InventoryTabDrawer._inventory.itemEntries : 
+			InventoryTabDrawer._inventory.equipEntries;
+	if (entries[itemIndex] != null) {
+		var descriptionX = x - InventoryTabDrawer.DESCRIPTION_BACK.width;
+		var descriptionY = y + InventoryTabDrawer.TAB_BACK_IMGS[0].height;
+		ctx.drawImage(InventoryTabDrawer.DESCRIPTION_BACK, descriptionX, 
+				descriptionY);
+		GlyphDrawer.drawText(ctx, InventoryTabDrawer.DESCRIPTION_FONT, 
+				entries[itemIndex].item.description /*use actual description*/, 
+						descriptionX, descriptionY, 
+						InventoryTabDrawer.DESCRIPTION_BACK.width, 
+						InventoryTabDrawer.DESCRIPTION_BACK.height);
 	}
 };
 
@@ -493,6 +610,28 @@ InventoryTabDrawer._helperGetInventorySlotFromClickCoords = function(
 			Math.floor(normalizedX / cellXDelta) + 
 					Math.floor(normalizedY / cellXDelta) * 
 							InventoryTabDrawer.CELLS_PER_ROW;
+};
+
+
+// Antcipates the mouse posiiton to be inside the rectangular window bounds
+InventoryTabDrawer._helperGetCellRelativeCoords = function(normalizedX, 
+		normalizedY) {
+	var inventoryTop = InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
+			InventoryTabDrawer.CELL_EDGE_OFFSET;
+	var inventoryLeft = InventoryTabDrawer.CELL_EDGE_OFFSET;
+	var cellXDelta = 
+			InventoryTabDrawer.CELL_IMG.width + InventoryTabDrawer.CELL_SPACING;
+	var pixOffset = InventoryTabDrawer._scrollBars[
+			InventoryTabDrawer.ITEMS_TAB].getScrollFraction() * 
+			InventoryTabDrawer.SCROLLABLE_PIXELS;
+	var cellPositionGap = 
+			InventoryTabDrawer.CELL_IMG.height + InventoryTabDrawer.CELL_SPACING;
+	var offset = pixOffset % cellPositionGap;
+	var index = Math.floor(pixOffset / cellPositionGap) * 
+			InventoryTabDrawer.CELLS_PER_ROW;
+	var offsetNormalizedX = normalizedX - inventoryLeft;
+	var offsetNormalizedY = normalizedY + offset - inventoryTop;
+	return {x: offsetNormalizedX % cellXDelta, y: offsetNormalizedY % cellXDelta};
 };
 
 

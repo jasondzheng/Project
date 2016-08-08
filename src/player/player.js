@@ -19,6 +19,7 @@ var Player = function(id, visualInstance, x, y, saveData) {
 // Applies player statistics from save data. Creates new fields for all relevant
 // values within the player object.
 Player.prototype.applySaveData = function(saveData) {
+	this.id = saveData.id;
 	this.hp = saveData.hp;
 	this.maxHp = saveData.maxHp;
 	// Player's inventory
@@ -28,9 +29,21 @@ Player.prototype.applySaveData = function(saveData) {
 
 // A debug default save data to use because saving isn't implemented yet.
 Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
+	id: 'domino',
 	hp: 9,
 	maxHp: 100,
 	inventory: null
+};
+
+
+// Creates save data JSON representing this player.
+Player.prototype.createSaveData = function() {
+	return {
+		id: this.id,
+		hp: this.hp,
+		maxHp: this.maxHp,
+		inventory: this.inventory.write()
+	};
 };
 
 

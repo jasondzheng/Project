@@ -25,6 +25,16 @@ SoundPlayer.setTrack = function(track) {
 };
 
 
+SoundPlayer.pauseCurrentTrack = function() {
+	SoundPlayer.currTrack.audio[SoundPlayer.currParity].pause();
+};
+
+
+SoundPlayer.resumeCurrentTrack = function() {
+	SoundPlayer.currTrack.audio[SoundPlayer.currParity].play();
+};
+
+
 // An update function to check if the current track is finished; if so, plays 
 // the other track
 SoundPlayer.tick = function() {

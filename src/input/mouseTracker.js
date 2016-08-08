@@ -6,7 +6,7 @@
 var MouseTracker = {};
 
 // Tolerance for same click locations.
-MouseTracker.SAME_LOC_TOLERANCE = 4;
+MouseTracker.SAME_LOC_TOLERANCE = 8;
 
 // Time tolerance of a double click in ms.
 MouseTracker.DOUBLE_CLICK_TIME_DELTA = 500;

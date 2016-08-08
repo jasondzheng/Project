@@ -5,6 +5,9 @@
 		"portraitLeft": "../assets/img/portraits/domino/dominoLeft.png",
 		"portraitRight": "../assets/img/portraits/domino/dominoRight.png"
 	},
+	"gameVars": {
+		"blockIsAnnoyed": false
+	},
 	"stateMachine": {
 		"init": "
 			this._counter = 0;
@@ -15,14 +18,32 @@
 				"onEnter": "
 					console.log('Entered idle');
 					this._onTalk = function(callback) {
-						DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
-								this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
-								true /* bubbleIsFromLeft */, 'AGL AGL AGL AGL');
-						// Swapping dialog to the other NPC portrait
-						DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
-								this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
-								false /* bubbleIsFromLeft */, 'agl agl agl agl');
-						DialogDrawer.endDialog(callback);
+						if (!GS.getVar('blockIsAnnoyed')) {
+							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+									true /* bubbleIsFromLeft */, 'Now I can talk with many ' + 
+									'characters');
+							// Swapping dialog to the other NPC portrait
+							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+									false /* bubbleIsFromLeft */, 'agl agl agl agl');
+							DialogDrawer.endDialog(function() {
+								GS.setVar('blockIsAnnoyed', true);
+								callback();
+							});
+						} else {
+							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+									true /* bubbleIsFromLeft */, 'I\\'m annoyed now');
+							// Swapping dialog to the other NPC portrait
+							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
+									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
+									false /* bubbleIsFromLeft */, 'agl agl agl agl');
+							DialogDrawer.endDialog(function() {
+								GS.setVar('blockIsAnnoyed', true);
+								callback();
+							});
+						}
 					};
 				",
 				"onExit": "
@@ -31,30 +52,6 @@
 				"tick": "
 				",
 				"transitions": [
-					{
-						"state": "panic",
-						"condition": "
-							this._counter > 100
-						"
-					}
-				]
-			},
-			"panic": {
-				"onEnter": "
-					console.log('Entered panic');
-				",
-				"onExit": "
-					console.log('Exited panic');
-				",
-				"tick": "
-				",
-				"transitions": [
-					{
-						"state": "idle",
-						"condition": "
-							this._counter == 0
-						"
-					}
 				]
 			}
 		} 

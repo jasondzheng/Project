@@ -21,8 +21,50 @@ Inventory.MAX_ITEM_COUNT = 999;
 
 // Loads an inventory from a save data's JSON
 Inventory.load = function(inventoryData) {
-	// TODO: implement properly
-	return new Inventory();
+	var result = new Inventory();
+	if (inventoryData) {
+		for (var key in inventoryData.itemEntries) {
+			result.itemEntries[parseInt(key)] = {
+				item: Item.getItem(inventoryData.itemEntries[key].id),
+				quantity: inventoryData.itemEntries[key].quantity
+			}
+		}
+		for (var key in inventoryData.equipEntries) {
+			result.equipEntries[parseInt(key)] = {
+				item: Item.getItem(inventoryData.equipEntries[key].id),
+				quantity: inventoryData.equipEntries[key].quantity
+			}
+		}
+	}
+	return result;
+};
+
+
+// Writes an inventory into a JSON object
+Inventory.prototype.write = function() {
+	var savedItemEntries = {}, savedEquipEntries = {};
+	for (var i = 0; i < this.itemEntries.length; i++) {
+		if (this.itemEntries[i] == null) {
+			continue;
+		}
+		savedItemEntries[i + ''] = {
+			id: this.itemEntries[i].item.id,
+			quantity: this.itemEntries[i].quantity
+		};
+	}
+	for (var i = 0; i < this.equipEntries.length; i++) {
+		if (this.equipEntries[i] == null) {
+			continue;
+		}
+		savedEquipEntries[i + ''] = {
+			id: this.equipEntries[i].item.id,
+			quantity: this.equipEntries[i].quantity
+		};
+	}
+	return {
+		itemEntries: savedItemEntries,
+		equipEntries: savedEquipEntries
+	};
 };
 
 

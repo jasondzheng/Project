@@ -19,12 +19,12 @@
 				",
 				"body": "
 					this.set = false;
-					InputRouter.setMode(InputRouter.Modes.DISABLED);
+					KeyInputRouter.setMode(KeyInputRouter.Modes.DISABLED);
 					var player = this.containingMap.player;
 					player.setIdle();
 					EventHelper.switchMap(this, '#mapId#', #targetX#, #targetY#, 
 							function() {
-						InputRouter.setMode(InputRouter.Modes.PLAYER_MAP_MOVEMENT);
+						KeyInputRouter.setMode(KeyInputRouter.Modes.PLAYER_MAP_MOVEMENT);
 					});
 				"
 			}, {
