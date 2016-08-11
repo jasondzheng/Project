@@ -33,6 +33,7 @@ KeyInputRouter.KeyMapping = {
 	ATTACK: 'z'.toUpperCase().charCodeAt(0),
  	ATTACK_ALT: 'x'.toUpperCase().charCodeAt(0),
  	DIALOG_ADV: 'c'.toUpperCase().charCodeAt(0),
+ 	PICKUP_ITEMS: 'a'.toUpperCase().charCodeAt(0),
  	TALK: 'c'.toUpperCase().charCodeAt(0),
  	ITEMS: 'i'.toUpperCase().charCodeAt(0),
  	EQUIPMENT: 'e'.toUpperCase().charCodeAt(0),
@@ -67,6 +68,10 @@ KeyInputRouter._helperHandlePlayerMovement = function() {
 	if (!player) {
 		return;
 	}
+	// Pickup toggle is highest priority
+	player.pickupMode = KeyTracker.getValue(
+			KeyInputRouter.KeyMapping.PICKUP_ITEMS) <= KeyTracker.KeyStatus.HELD;
+	
 	if ((KeyTracker.getValue(KeyInputRouter.KeyMapping.ATTACK) <= 
 					KeyTracker.KeyStatus.HELD || 
 			KeyTracker.getValue(KeyInputRouter.KeyMapping.ATTACK_ALT) <= 

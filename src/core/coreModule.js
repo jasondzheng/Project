@@ -8,6 +8,9 @@ var CoreModule = {};
 // The context variable obtained during loading.
 CoreModule.ctx;
 
+// The current scene being processed.
+CoreModule.currentScene;
+
 
 CoreModule.load = function(callback) {
 	// First handle grabbing screen and inputs, disabling them
@@ -26,17 +29,16 @@ CoreModule.load = function(callback) {
 
 	var deferrer = new CallbackDeferrer();
 	var parameterlessInitFns = [
-		EventTemplate.init,
+		GameEventTemplate.init,
 		GlyphDrawer.loadGlyphs,
 		DialogDrawer.loadAssets,
 		ScrollBar.load,
 		InventoryTabDrawer.init,
-		Item.loadItems
+		Item.loadItems,
+		ItemDrop.init
 	];
 	for (var i = 0; i < parameterlessInitFns.length; i++) {
-		deferrer.add(parameterlessInitFns[i], function(accumulatedArgs) {
-			return [];
-		}, []);
+		deferrer.addUnparametered(parameterlessInitFns[i]);
 	}
 	deferrer.after(function(accumulatedArgs) {
 		callback();
@@ -59,4 +61,15 @@ CoreModule.tick = function() {
 CoreModule.draw = function(ctx) {
 	// Draw screen effects right above all maps and unit UI
 	ScreenEffectDrawer.drawEffect(ctx);
+};
+
+
+CoreModule.switchScene = function(scene) {
+	if (CoreModule.currentScene) {
+		CoreModule.currentScene.pause();
+	}
+ 	CoreModule.currentScene = scene;
+ 	if (CoreModule.currentScene) {
+ 		CoreModule.currentScene.resume();
+ 	}
 };

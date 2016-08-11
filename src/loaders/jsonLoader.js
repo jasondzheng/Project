@@ -8,6 +8,7 @@ var JSONLoader = {};
 
 // Static function to load JSON
 JSONLoader.load = function(url, opt_callback, opt_failCallback) {
+	url += "?nocache=" + Date.now();
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState != 4 || xhr.status != 200) {
@@ -26,6 +27,7 @@ JSONLoader.load = function(url, opt_callback, opt_failCallback) {
 // Static function to load JSON without whitespace
 JSONLoader.loadWithoutWhitespace = function(url, opt_callback, 
 		opt_failCallback) {
+	url += "?nocache=" + Date.now();
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState != 4 || xhr.status != 200) {

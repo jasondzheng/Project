@@ -27,7 +27,7 @@ def main():
 	print('Done generating game vars.')
 	
 
-JSON_REGEX = r"[\n\r\t]+(?=((\\[\\']|[^\\'])*'(\\[\\']|[^\\'])*')*(\\[\\']|[^\\'])*$)"
+JSON_REGEX = r"[\n\r\t]+"
 
 
 # Processes a path and recursively processes any nested files, applying the

@@ -187,7 +187,8 @@ DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR = '../assets/img/';
 DynamicMapEntityLoader.Types = {
 	NPC: 'npcs',
 	UNIT: 'units',
-	PLAYER: 'players'
+	PLAYER: 'players',
+	ITEM_DROP_ANIMS: 'items'
 };
 
 

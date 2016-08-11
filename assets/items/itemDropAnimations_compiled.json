@@ -1,0 +1,1066 @@
+{
+  "animations": {
+    "armor": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "armor_0"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_1"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_2"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_3"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_4"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_5"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_6"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_7"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_8"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_7"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_6"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_5"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_4"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_3"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_2"
+        },
+        {
+          "duration": 4,
+          "frame": "armor_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "boat": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "boat_0"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_1"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_2"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_3"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_4"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_5"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_6"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_7"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_8"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_7"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_6"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_5"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_4"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_3"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_2"
+        },
+        {
+          "duration": 4,
+          "frame": "boat_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "brick": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "brick_0"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_1"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_2"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_3"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_4"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_5"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_6"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_7"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_8"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_7"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_6"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_5"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_4"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_3"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_2"
+        },
+        {
+          "duration": 4,
+          "frame": "brick_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "garbage": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "garbage_0"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_1"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_2"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_3"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_4"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_5"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_6"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_7"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_8"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_7"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_6"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_5"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_4"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_3"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_2"
+        },
+        {
+          "duration": 4,
+          "frame": "garbage_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "glue": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "glue_0"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_1"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_2"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_3"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_4"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_5"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_6"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_7"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_8"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_7"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_6"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_5"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_4"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_3"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_2"
+        },
+        {
+          "duration": 4,
+          "frame": "glue_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "house": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "house_0"
+        },
+        {
+          "duration": 4,
+          "frame": "house_1"
+        },
+        {
+          "duration": 4,
+          "frame": "house_2"
+        },
+        {
+          "duration": 4,
+          "frame": "house_3"
+        },
+        {
+          "duration": 4,
+          "frame": "house_4"
+        },
+        {
+          "duration": 4,
+          "frame": "house_5"
+        },
+        {
+          "duration": 4,
+          "frame": "house_6"
+        },
+        {
+          "duration": 4,
+          "frame": "house_7"
+        },
+        {
+          "duration": 4,
+          "frame": "house_8"
+        },
+        {
+          "duration": 4,
+          "frame": "house_7"
+        },
+        {
+          "duration": 4,
+          "frame": "house_6"
+        },
+        {
+          "duration": 4,
+          "frame": "house_5"
+        },
+        {
+          "duration": 4,
+          "frame": "house_4"
+        },
+        {
+          "duration": 4,
+          "frame": "house_3"
+        },
+        {
+          "duration": 4,
+          "frame": "house_2"
+        },
+        {
+          "duration": 4,
+          "frame": "house_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "potion": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "potion_0"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_1"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_2"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_3"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_4"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_5"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_6"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_7"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_8"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_7"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_6"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_5"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_4"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_3"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_2"
+        },
+        {
+          "duration": 4,
+          "frame": "potion_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "wood": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "wood_0"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_1"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_2"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_3"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_4"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_5"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_6"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_7"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_8"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_7"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_6"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_5"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_4"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_3"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_2"
+        },
+        {
+          "duration": 4,
+          "frame": "wood_1"
+        }
+      ],
+      "isLooped": true
+    }
+  },
+  "collisionHeight": 0,
+  "collisionWidth": 0,
+  "defaultUiTop": 0,
+  "frames": {
+    "armor_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../armor"
+    },
+    "armor_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../armor"
+    },
+    "boat_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../boat"
+    },
+    "boat_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../boat"
+    },
+    "brick_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../brick"
+    },
+    "brick_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../brick"
+    },
+    "garbage_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../garbage"
+    },
+    "garbage_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../garbage"
+    },
+    "glue_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../glue"
+    },
+    "glue_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../glue"
+    },
+    "house_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../house"
+    },
+    "house_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../house"
+    },
+    "house_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../house"
+    },
+    "house_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../house"
+    },
+    "house_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../house"
+    },
+    "house_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../house"
+    },
+    "house_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../house"
+    },
+    "house_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../house"
+    },
+    "house_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../house"
+    },
+    "potion_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../potion"
+    },
+    "potion_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../potion"
+    },
+    "wood_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../wood"
+    },
+    "wood_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../wood"
+    }
+  },
+  "isRounded": false
+}

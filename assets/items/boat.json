@@ -1,0 +1,7 @@
+{
+	"name": "Boat",
+	"description": "This is a boat",
+	"isUseable": false,
+	"price": 64,
+	"isKeyItem": false
+}

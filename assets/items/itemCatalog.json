@@ -2,6 +2,11 @@
 	"items" : [
 		"garbage",
 		"potion",
-		"armor"
+		"armor",
+		"boat",
+		"brick",
+		"wood",
+		"glue",
+		"house"
 	]
 }

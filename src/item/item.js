@@ -19,7 +19,7 @@ var Item = function(id, name, sprite, description, isUseable, consumeCount,
 
 
 Item.SPRITE_PATH = '../assets/img/items/';
-Item.CATALOG_PATH = '../assets/items/itemCatalogCompiled.json';
+Item.CATALOG_PATH = '../assets/items/itemCatalog_compiled.json';
 // A catalog of items by their IDs.
 Item._catalog;
 

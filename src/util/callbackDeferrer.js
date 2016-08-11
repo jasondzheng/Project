@@ -9,6 +9,14 @@ var CallbackDeferrer = function() {
 };
 
 
+// Helper constants for unparameterized, non-result yielding functions.
+CallbackDeferrer._DEFAULT_UNPARAM_ARGS_CALLBACK = function(accumulatedArgs) {
+	return [];
+};
+
+CallbackDeferrer._DEFAULT_RETURN_ARG_NAMES = [];
+
+
 // Adds a function to the queue of functions to be called.
 CallbackDeferrer.prototype.add = function(invokedFunction, argsCallback, 
 		returnArgNames) {
@@ -17,6 +25,14 @@ CallbackDeferrer.prototype.add = function(invokedFunction, argsCallback,
 		argsCallback: argsCallback,
 		returnArgNames: returnArgNames
 	});
+};
+
+
+// Adds an unparametered, non-result yielding function to the queue of functions
+// to be called.
+CallbackDeferrer.prototype.addUnparametered = function(invokedFunction) {
+	this.add(invokedFunction, CallbackDeferrer._DEFAULT_UNPARAM_ARGS_CALLBACK,
+			CallbackDeferrer._DEFAULT_RETURN_ARG_NAMES);
 };
 
 

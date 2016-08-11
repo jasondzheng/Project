@@ -73,6 +73,10 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 	for (var i = 0; i < map.unitInstances.length; i++) {
 		entitiesToDraw.push(map.unitInstances[i]);
 	}
+	// Add item drops
+	for (var i = 0; i < map.itemDrops.length; i++) {
+		entitiesToDraw.push(map.itemDrops[i]);
+	}
 	// Add player
 	if (map.player) {
 		entitiesToDraw.push(map.player);

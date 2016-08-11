@@ -99,6 +99,7 @@ InventoryTabDrawer._draggedItemIndex;
 
 InventoryTabDrawer._draggedItemX;
 InventoryTabDrawer._draggedItemY;
+InventoryTabDrawer._draggedItemFixedPos;
 
 // Loads all images required for the tab window.
 InventoryTabDrawer.init = function(callback) {
@@ -212,8 +213,10 @@ InventoryTabDrawer.onStartClick = function(x, y) {
 					normalizedX, normalizedY)) != -1) {
 		InventoryTabDrawer._dragMode = InventoryTabDrawer.DragModes.ITEM;
 		InventoryTabDrawer._draggedItemIndex = possibleCellIndex;
-		InventoryTabDrawer._draggedItemX = x - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
-		InventoryTabDrawer._draggedItemY = y - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+		var itemCoords = InventoryTabDrawer._helperGetCellCoords(possibleCellIndex);
+		InventoryTabDrawer._draggedItemX = itemCoords.x + InventoryTabDrawer._x;
+		InventoryTabDrawer._draggedItemY = itemCoords.y + InventoryTabDrawer._y;
+		InventoryTabDrawer._draggedItemFixedPos = true;
 	} else {
 		// Nulling ought to be last thing done, if no drags are found
 		InventoryTabDrawer._dragMode = null;
@@ -240,8 +243,20 @@ InventoryTabDrawer.onDrag = function(x, y) {
 		InventoryTabDrawer._y = y - InventoryTabDrawer._dragTabDeltaY;
 	} else if (
 			InventoryTabDrawer._dragMode == InventoryTabDrawer.DragModes.ITEM) {
-		InventoryTabDrawer._draggedItemX = x - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
-		InventoryTabDrawer._draggedItemY = y - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+		var startAndEndSameLoc = 
+				Math.abs(InventoryTabDrawer._lastStartClickX - x) < 
+						MouseTracker.SAME_LOC_TOLERANCE && 
+				Math.abs(InventoryTabDrawer._lastStartClickY - y) < 
+						MouseTracker.SAME_LOC_TOLERANCE;
+		if (InventoryTabDrawer._draggedItemFixedPos && !startAndEndSameLoc) {
+			InventoryTabDrawer._draggedItemFixedPos = false;
+		}
+		if (!InventoryTabDrawer._draggedItemFixedPos) {
+			InventoryTabDrawer._draggedItemX = 
+					x - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+			InventoryTabDrawer._draggedItemY = 
+					y - InventoryTabDrawer.CELL_IMG_WIDTH_HALF;
+		}
 	}
 };
 
@@ -407,9 +422,8 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 			nextYPos = yPos + cellHeight + InventoryTabDrawer.CELL_SPACING; 
 			yPos < windowY; (yPos = nextYPos) && 
 					(nextYPos += cellHeight + InventoryTabDrawer.CELL_SPACING)) {
-		if (yPos < 0) {
-			for (var i = 0; i < InventoryTabDrawer.CELLS_PER_ROW; i++) {
-				var cellWidth = InventoryTabDrawer.CELL_IMG.width;
+		for (var i = 0; i < InventoryTabDrawer.CELLS_PER_ROW; i++) {
+			if (yPos < 0) {var cellWidth = InventoryTabDrawer.CELL_IMG.width;
 				var cellPartialHeight = InventoryTabDrawer.CELL_IMG.height + yPos;
 				ctx.drawImage(InventoryTabDrawer.CELL_IMG, 0, -yPos, cellWidth, 
 							cellPartialHeight, x + InventoryTabDrawer.CELL_EDGE_OFFSET + 
@@ -418,7 +432,8 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 							y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 									InventoryTabDrawer.CELL_EDGE_OFFSET, 
 							cellWidth, cellPartialHeight);
-				if (itemIndex == InventoryTabDrawer._draggedItemIndex) {
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex && 
+						!InventoryTabDrawer._draggedItemFixedPos) {
 					itemIndex++;
 					continue;
 				}
@@ -446,9 +461,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 										InventoryTabDrawer.QUANTITY_OFFSET_X, cellPartialHeight);
 					}
 				}
-			}
-		} else if (nextYPos >= windowY) {
-			for (var i = 0; i < InventoryTabDrawer.CELLS_PER_ROW; i++) {
+			} else if (nextYPos >= windowY) {
 				var cellWidth = InventoryTabDrawer.CELL_IMG.width;
 				var cellPartialHeight = Math.min(windowY - yPos, 
 						InventoryTabDrawer.CELL_IMG.height);
@@ -459,7 +472,8 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 						y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 								InventoryTabDrawer.CELL_EDGE_OFFSET + yPos, 
 						cellWidth, cellPartialHeight);
-				if (itemIndex == InventoryTabDrawer._draggedItemIndex){
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex && 
+						!InventoryTabDrawer._draggedItemFixedPos) {
 					itemIndex++;
 					continue;
 				}
@@ -486,16 +500,15 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 								cellPartialHeight - InventoryTabDrawer.QUANTITY_OFFSET_Y);
 					}
 				}
-			}
-		} else {
-			for (var i = 0; i < InventoryTabDrawer.CELLS_PER_ROW; i++) {
+			} else {
 				ctx.drawImage(InventoryTabDrawer.CELL_IMG, 
 						x + InventoryTabDrawer.CELL_EDGE_OFFSET + 
 								i * (InventoryTabDrawer.CELL_IMG.width + 
 										InventoryTabDrawer.CELL_SPACING), 
 						y + InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
 								InventoryTabDrawer.CELL_EDGE_OFFSET + yPos);
-				if (itemIndex == InventoryTabDrawer._draggedItemIndex){
+				if (itemIndex == InventoryTabDrawer._draggedItemIndex && 
+						!InventoryTabDrawer._draggedItemFixedPos) {
 					itemIndex++;
 					continue;
 				}
@@ -521,16 +534,17 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 										InventoryTabDrawer.QUANTITY_OFFSET_Y);
 					}
 				}
-			}			
-		}
-	}
+			}
+		}	
+	} 
 };
 
 
 // Draw the current dragge item (if exists) with its center at the current mouse
 // position.
 InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
-	if (InventoryTabDrawer._draggedItemIndex == null) {
+	if (InventoryTabDrawer._draggedItemIndex == null || 
+			InventoryTabDrawer._draggedItemFixedPos) {
 		return;
 	}
 	var itemsArray = isEquips ? InventoryTabDrawer._inventory.equipEntries : 
@@ -613,7 +627,26 @@ InventoryTabDrawer._helperGetInventorySlotFromClickCoords = function(
 };
 
 
-// Antcipates the mouse posiiton to be inside the rectangular window bounds
+// Helper to return coordinates of a cell's topleft corner  wrt current scroll;
+// these coordinates are normalized.
+InventoryTabDrawer._helperGetCellCoords = function(index) {
+	var pixOffset = InventoryTabDrawer._scrollBars[
+			InventoryTabDrawer.ITEMS_TAB].getScrollFraction() * 
+			InventoryTabDrawer.SCROLLABLE_PIXELS;
+	var cellXDelta = 
+			InventoryTabDrawer.CELL_IMG.width + InventoryTabDrawer.CELL_SPACING;
+	return {
+		x: (index % 4) * cellXDelta + 
+				InventoryTabDrawer.CELL_EDGE_OFFSET,
+		y: Math.floor(index / 4) * cellXDelta - pixOffset + 
+				InventoryTabDrawer.TAB_BACK_IMGS[0].height + 
+						InventoryTabDrawer.CELL_EDGE_OFFSET
+	};
+};
+
+
+
+// Anticipates the mouse posiiton to be inside the rectangular window bounds
 InventoryTabDrawer._helperGetCellRelativeCoords = function(normalizedX, 
 		normalizedY) {
 	var inventoryTop = InventoryTabDrawer.TAB_BACK_IMGS[0].height + 

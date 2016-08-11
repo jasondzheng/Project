@@ -22,7 +22,7 @@
 					KeyInputRouter.setMode(KeyInputRouter.Modes.DISABLED);
 					var player = this.containingMap.player;
 					player.setIdle();
-					EventHelper.switchMap(this, '#mapId#', #targetX#, #targetY#, 
+					GameEventHelper.switchMap(this, '#mapId#', #targetX#, #targetY#, 
 							function() {
 						KeyInputRouter.setMode(KeyInputRouter.Modes.PLAYER_MAP_MOVEMENT);
 					});

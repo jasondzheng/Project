@@ -156,3 +156,34 @@ Inventory.prototype.remove = function(slotNumber, quantity, isFromEquip) {
 		throw 'Tried to remove inexistent items';
 	}
 };
+
+
+// Finds the slot number for a given item, or -1 if not found.
+Inventory.prototype.findSlotIndex = function(itemId, isFromEquip) {
+	var entries = isFromEquip ? this.equipEntries : this.itemEntries;
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i];
+		if (entry != null && entry.item.id == itemId) {
+			return i;
+		}
+	}
+	return -1;
+};
+
+
+// Gets the quantity of a given item in the inventory by its id.
+Inventory.prototype.getCount = function(itemId) {
+	for (var i = 0; i < this.itemEntries.length; i++) {
+		var entry = this.itemEntries[i];
+		if (entry != null && entry.item.id == itemId) {
+			return entry.quantity;
+		}
+	}
+	for (var i = 0; i < this.equipEntries.length; i++) {
+		var entry = this.equipEntries[i];
+		if (entry != null && entry.item.id == itemId) {
+			return entry.quantity;
+		}
+	}
+	return 0;
+};

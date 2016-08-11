@@ -4,7 +4,7 @@
  * information like events, connectors, npcs, mob data, etc in the future.
  */
 
-var Map = function(name, data, width, tileset, dummyTile, staticMapEntities, 
+var GameMap = function(name, data, width, tileset, dummyTile, staticMapEntities, 
 		staticMapInstances, npcInstances, events, tracks, spawnBehavior) {
 	// The name of the map
 	this.name = name;
@@ -32,6 +32,9 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 	// Unit instances
 	this.unitInstances = [];
+
+	// Drops on the map
+	this.itemDrops = [];
 
 	// The player on this map, if any
 	this.player;
@@ -61,7 +64,7 @@ var Map = function(name, data, width, tileset, dummyTile, staticMapEntities,
 
 
 // Registers a newly created NPC instance to this map.
-Map.prototype.registerNpcInstance = function(npcInstance) {
+GameMap.prototype.registerNpcInstance = function(npcInstance) {
 	this.npcInstances[npcInstance.id] = npcInstance;
 	this.npcInstanceArray.push(npcInstance);
 	npcInstance.containingMap = this;
@@ -69,36 +72,50 @@ Map.prototype.registerNpcInstance = function(npcInstance) {
 
 
 // Registers a newly created unit instance to the map
-Map.prototype.registerUnitInstance = function(unitInstance) {
+GameMap.prototype.registerUnitInstance = function(unitInstance) {
 	this.unitInstances.push(unitInstance);
 	unitInstance.containingMap = this;
 };
 
 
+// Registers a newly created item drop instance to the map
+GameMap.prototype.registerItemDrop = function(dropInstance) {
+	this.itemDrops.push(dropInstance);
+	dropInstance.containingMap = this;
+};
+
+
 // Deregisters an existing UnitInstance from the map
-Map.prototype.deregisterUnitInstance = function(unitInstance) {
+GameMap.prototype.deregisterUnitInstance = function(unitInstance) {
 	this.unitInstances.splice(this.unitInstances.indexOf(unitInstance), 1);
 	unitInstance.containingMap = null;
 };
 
 
 // Deregisters an NPC from this map.
-Map.prototype.deregisterNpcInstance = function(npcInstance) {
+GameMap.prototype.deregisterNpcInstance = function(npcInstance) {
 	this.npcInstanceArray.splice(this.npcInstanceArray.indexOf(npcInstance), 1);
 	npcInstance.containingMap = null;
 	delete this.npcInstances[npcInstance.id];
 };
 
 
+// Deregisters an existing ItemDrop from the map
+GameMap.prototype.deregisterItemDrop = function(dropInstance) {
+	this.itemDrops.splice(this.itemDrops.indexOf(dropInstance), 1);
+	dropInstance.containingMap = null;
+};
+
+
 // Registers player objects when they enter the map
-Map.prototype.registerPlayer = function(player) {
+GameMap.prototype.registerPlayer = function(player) {
 	this.player = player;
 	player.containingMap = this;
 };
 
 
 // Tick all tickables contained in the map
-Map.prototype.tickAll = function() {
+GameMap.prototype.tickAll = function() {
 	this.unitSpawner.tick();
 	for (var i = 0; i < this.events.length; i++) {
 		this.events[i].tick();
@@ -109,6 +126,9 @@ Map.prototype.tickAll = function() {
 	for (var i = 0; i < this.unitInstances.length; i++) {
 		this.unitInstances[i].tick();
 	}
+	for (var i = 0; i < this.itemDrops.length; i++) {
+		this.itemDrops[i].tick();
+	}
 	if (this.player) {
 		this.player.tick();
 	}
@@ -117,7 +137,7 @@ Map.prototype.tickAll = function() {
 
 // Utility function to find all collisions of all entity instances on the map
 // with the specified bounds.
-Map.prototype.findCollisions = function(centerX, centerY, width, height, 
+GameMap.prototype.findCollisions = function(centerX, centerY, width, height, 
 		isRounded) {
 	var collisions = [];
 	// First compare to static map entities
@@ -168,7 +188,7 @@ Map.prototype.findCollisions = function(centerX, centerY, width, height,
 
 
 // Finds all colliding units with the specified shape.
-Map.prototype.findUnitCollisions = function(centerX, centerY, width, height, 
+GameMap.prototype.findUnitCollisions = function(centerX, centerY, width, height, 
 		isRounded, opt_ignoreList) {
 	var collisions = [];
 	for (var i = 0; i < this.unitInstances.length; i++) {
@@ -188,7 +208,7 @@ Map.prototype.findUnitCollisions = function(centerX, centerY, width, height,
 
 
 // Finds all colliding NPCs within the specified shape.
-Map.prototype.findNpcCollisions = function(centerX, centerY, width, height, 
+GameMap.prototype.findNpcCollisions = function(centerX, centerY, width, height, 
 		isRounded, opt_ignoreList) {
 	var collisions = [];
 	for (var i = 0; i < this.npcInstanceArray.length; i++) {
@@ -209,7 +229,7 @@ Map.prototype.findNpcCollisions = function(centerX, centerY, width, height,
 
 // Helper function to detect whether a collision has happened or not. Keep in
 // sync with findCollisions.
-Map.prototype.isColliding = function(centerX, centerY, width, height, 
+GameMap.prototype.isColliding = function(centerX, centerY, width, height, 
 		isRounded, opt_ignoreList) {
 	// First compare to static map entities
 	for (var i = 0; i < this.staticMapInstances.length; i++) {
@@ -265,7 +285,7 @@ Map.prototype.isColliding = function(centerX, centerY, width, height,
 
 
 // Checks if an element, including width and height, are out of map bounds.
-Map.prototype.isOutOfBounds = function(centerX, centerY, width, height) {
+GameMap.prototype.isOutOfBounds = function(centerX, centerY, width, height) {
 	width /= 2;
 	height /= 2;
 	return centerX - width < 0 || centerX + width > this.width || 

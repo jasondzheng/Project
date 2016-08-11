@@ -1,6 +1,11 @@
 var MouseInputRouter = {};
 
 MouseInputRouter.Modes = {
+	START_MENU_INPUT: {
+		tick: function() {
+			MouseInputRouter._helperHandleStartMenuInput();
+		}
+	},
 	PLAYER_MAP_MOVEMENT: {
 		tick: function() {
 			MouseInputRouter._helperHandlePlayerMovement();
@@ -40,6 +45,25 @@ MouseInputRouter.setMode = function(mode) {
 MouseInputRouter.getMode = function() {
 	return MouseInputRouter._currentMode;
 };
+
+
+MouseInputRouter._helperHandleStartMenuInput = function() {
+	if (MouseTracker.isHover()) {
+		StartMenuDrawer.onHover(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	} else if (MouseTracker.isStartClick()) {
+		StartMenuDrawer.onStartClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	} else if (MouseTracker.isEndClick()) {
+		StartMenuDrawer.onEndClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY(), MouseTracker.isDoubleClick());
+	} else if (MouseTracker.isDrag()) {
+		StartMenuDrawer.onDrag(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	}
+	StartMenuDrawer.updateCurrentScroll(MouseTracker.consumeMouseWheel());
+}
+
 
 MouseInputRouter._helperHandleDialogInput = 
 MouseInputRouter._helperHandlePlayerMovement = function() {

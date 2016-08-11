@@ -1,27 +1,15 @@
 var DISABLE_CORRECTIVE_TICKING = true;
 
 
-var currentScene;
-
 window.onload = function() {
-	CoreModule.load(function () {
-		OverworldScene.init(function () {
-			initDrawLoop();
-			setupTickCycle();
-			switchScene(OverworldScene);
-		});
+	var deferrer = new CallbackDeferrer();
+	deferrer.addUnparametered(CoreModule.load);
+	deferrer.addUnparametered(StartMenuScene.init);
+	deferrer.after(function() {
+		initDrawLoop();
+		setupTickCycle();
+		CoreModule.switchScene(StartMenuScene);
 	});
-};
-
-
-var switchScene = function(scene) {
-	if (currentScene) {
-		currentScene.pause();
-	}
- 	currentScene = scene;
- 	if (currentScene) {
- 		currentScene.resume();
- 	}
 };
 
 
@@ -29,8 +17,8 @@ var initDrawLoop = function() {
 	var startTimes = [];
 	var drawLoop = function() {
 		var ctx = CoreModule.ctx;
-		if (currentScene) {
-			currentScene.draw(ctx);
+		if (CoreModule.currentScene) {
+			CoreModule.currentScene.draw(ctx);
 		}
 		CoreModule.draw(ctx);
 		// Draws FPS
@@ -63,8 +51,8 @@ var setupTickCycle = function() {
 		}
 		while (delta >= tickWindow) {
 			CoreModule.tick();
-			if (currentScene) {
-				currentScene.tick();
+			if (CoreModule.currentScene) {
+				CoreModule.currentScene.tick();
 			}
 			delta -= tickWindow;
 			if (DISABLE_CORRECTIVE_TICKING) {

@@ -1,0 +1,64 @@
+{
+	"garbage": {
+		"name": "Garbage",
+		"description": "This is garbage",
+		"isUseable": false,
+		"price": 10,
+		"isKeyItem": false
+	},
+	"potion": {
+		"name": "Potion",
+		"description": "Heals 10 HP",
+		"isUseable": true,
+		"consumeCount": 1,
+		"usageProperties": {
+			"heal": 10
+		},
+		"price": 100,
+		"isKeyItem": false
+	},
+	"armor": {
+		"name": "Armor",
+		"description": "This is armor",
+		"isUseable": false,
+		"price": 10,
+		"isKeyItem": false,
+		"equipData": {
+		}
+	},
+	"boat": {
+		"name": "Boat",
+		"description": "This is a boat",
+		"isUseable": false,
+		"price": 64,
+		"isKeyItem": false
+	},
+	"brick": {
+		"name": "Brick",
+		"description": "This is a brick",
+		"isUseable": false,
+		"price": 50,
+		"isKeyItem": false
+	},
+	"wood": {
+		"name": "Wood",
+		"description": "This is wood",
+		"isUseable": false,
+		"price": 15,
+		"isKeyItem": false
+	},
+	"glue": {
+		"name": "Glue",
+		"description": "This is glue",
+		"isUseable": false,
+		"price": 32,
+		"isKeyItem": false
+	},
+	"house": {
+		"name": "House",
+		"description": "This is house",
+		"isUseable": false,
+		"price": 100,
+		"isKeyItem": false
+	}
+}

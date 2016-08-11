@@ -4,7 +4,7 @@
  * a state, will then execute its body.
  */
 
-var Event = function(id, states, variableData) {
+var GameEvent = function(id, states, variableData) {
  	this.id = id;
  	this._states = states;
  	this._initVarData = variableData;
@@ -20,7 +20,7 @@ var Event = function(id, states, variableData) {
 };
 
 
-Event.prototype.tick = function() {
+GameEvent.prototype.tick = function() {
 	for (var i = 0; i < this._states.length; i++) {
 		var currState = this._states[i];
 		if (this._helperEval(currState.condition)) {
@@ -32,7 +32,7 @@ Event.prototype.tick = function() {
 
 
 // Helper to evaluate stringed code in the current context.
-Event.prototype._helperEval = function(code) {
+GameEvent.prototype._helperEval = function(code) {
 	return function(code) {
 		return eval(code);
 	}.call(this, code);
@@ -43,14 +43,14 @@ Event.prototype._helperEval = function(code) {
  * Loader for events.
  */
 
-var EventLoader = {};
+var GameEventLoader = {};
 
-EventLoader.load = function(json) {
+GameEventLoader.load = function(json) {
 	// Checks if templating is required, otherwise processes normally.
 	if (json.eventTemplate) {
-		var template = EventTemplate.getTemplate(json.eventTemplate);
-		return new Event(json.id, template.states, template.variableData);
+		var template = GameEventTemplate.getTemplate(json.eventTemplate);
+		return new GameEvent(json.id, template.states, template.variableData);
 	} else {
-		return new Event(json.id, json.states, json.variableData);
+		return new GameEvent(json.id, json.states, json.variableData);
 	}
 };

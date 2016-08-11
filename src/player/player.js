@@ -11,6 +11,7 @@ var Player = function(id, visualInstance, x, y, saveData) {
 	this._direction = Direction.DOWN;
 	this._collisionIgnoreList = [this];
 	this.attackCombo = 0;
+	this.pickupMode = false;
 	// TODO: remove the debug object and this default value for save data
 	this.applySaveData(saveData || Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG);
 };
@@ -22,6 +23,9 @@ Player.prototype.applySaveData = function(saveData) {
 	this.id = saveData.id;
 	this.hp = saveData.hp;
 	this.maxHp = saveData.maxHp;
+	// CHECK
+	// Player's money
+	this.money = saveData.money;
 	// Player's inventory
 	this.inventory = Inventory.load(saveData.inventory);
 };
@@ -32,6 +36,8 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	id: 'domino',
 	hp: 9,
 	maxHp: 100,
+	// CHECK
+	money: 0,
 	inventory: null
 };
 
@@ -42,6 +48,8 @@ Player.prototype.createSaveData = function() {
 		id: this.id,
 		hp: this.hp,
 		maxHp: this.maxHp,
+		// CHECK
+		money: this.money,
 		inventory: this.inventory.write()
 	};
 };

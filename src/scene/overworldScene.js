@@ -13,7 +13,7 @@ OverworldScene._lastMouseMode;
 OverworldScene.init = function(callback) {
 	var deferrer = new CallbackDeferrer();
 	// TODO: read in actual map and player data
-	deferrer.add(MapLoader.load, function(accumulatedArgs) {
+	deferrer.add(GameMapLoader.load, function(accumulatedArgs) {
 		return ['palletTown'];
 	}, ['map']);
 	deferrer.add(PlayerLoader.load, function(accumulatedArgs) {
@@ -99,4 +99,20 @@ OverworldScene.tick = function() {
 	UnitHpDrawer.tick();
 	PlayerHpDrawer.tick();
 	DialogDrawer.tick();
+};
+
+
+// Helper to temporarily disable and shelf input handling.
+OverworldScene.disableInput = function() {
+	OverworldScene._lastKeyMode = KeyInputRouter.getMode();
+	OverworldScene._lastMouseMode = MouseInputRouter.getMode();
+	KeyInputRouter.setMode(KeyInputRouter.Modes.DISABLED);
+	MouseInputRouter.setMode(MouseInputRouter.Modes.DISABLED);
+};
+
+
+// Helper to re-enable input after a temporary disable.
+OverworldScene.reenableInput = function() {
+	KeyInputRouter.setMode(OverworldScene._lastKeyMode);
+	MouseInputRouter.setMode(OverworldScene._lastMouseMode);
 };

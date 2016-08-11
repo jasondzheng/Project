@@ -42,6 +42,38 @@ SaveData.prototype.newGameInit = function(profileSlot, callback) {
 };
 
 
+// Updates save by appending all new vars.
+SaveData.prototype._reinitVarsDebugDebug = function() {
+	var that = this;
+	JSONLoader.load(SaveData.GAME_VARS_PATH, function(data) {
+		for (var varName in data) {
+			if (that.saveProfiles[that._currProfileIndex].variables[varName] == 
+					undefined) {
+				that.saveProfiles[that._currProfileIndex].variables[varName] = 
+					data[varName];
+			}
+		}
+	});
+};
+
+
+// CHECK
+// Updates the save data with any new player vars that were added in code.
+SaveData.prototype._reinitPlayerFieldsDebugDebug = function() {
+	for (var i = 0; i < this.saveProfiles.length; i++) {
+		if (this.saveProfiles[i]) {
+			for (var playerSaveDataField in Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG) {
+				if (this.saveProfiles[i].playerInfo[playerSaveDataField] == undefined) {
+					this.saveProfiles[i].playerInfo[playerSaveDataField] = 
+							Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG[playerSaveDataField];
+				}
+			}
+		}
+	}
+};
+
+
+// Deletes the save profile ar the given index
 SaveData.prototype.deleteProfile = function(profileSlot) {
 	this.saveProfiles[profileSlot] = null;
 };
@@ -71,7 +103,6 @@ SaveData.prototype.save = function() {
 				GameState.player.createSaveData();
 	}
 	// TODO: get settings info
-
 	localStorage.setItem('saveData', JSON.stringify(this));
 };
 

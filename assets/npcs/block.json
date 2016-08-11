@@ -6,7 +6,8 @@
 		"portraitRight": "../assets/img/portraits/domino/dominoRight.png"
 	},
 	"gameVars": {
-		"blockIsAnnoyed": false
+		"blockIsAnnoyed": false,
+		"allowGatedTrade": false
 	},
 	"stateMachine": {
 		"init": "
@@ -506,6 +507,58 @@
 		"isRounded": false,
 		"defaultUiTop": 0
 	},
-	"trades": {},
-	"shops": {}
+	"trades": [
+		{
+			"id": "myFirstTrade",
+			"ingredients": [
+				{
+					"itemId": "wood",
+					"quantity": 5
+				}, {
+					"itemId": "glue",
+					"quantity": 1
+				}
+			],
+			"results": [
+				{
+					"itemId": "boat",
+					"quantity": 1
+				}
+			]
+		}, {
+			"id": "gatedTrade",
+			"gameVarEnableFlag": "allowGatedTrade",
+			"ingredients": [
+				{
+					"itemId": "brick",
+					"quantity": 5
+				}, {
+					"itemId": "glue",
+					"quantity": 1
+				}
+			],
+			"results": [
+				{
+					"itemId": "house",
+					"quantity": 1
+				}
+			]
+		}
+	],
+	"shops": {
+		"defaultShop": {
+			"shopContents": [
+				"potion",
+				"wood",
+				"brick",
+				"glue"
+			]
+		},
+		"annoyedShop": {
+			"shopContents": [
+				"potion"
+			]
+		}
+	}
+
 }

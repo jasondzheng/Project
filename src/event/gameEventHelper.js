@@ -4,20 +4,20 @@
  * is extremely difficult). Contains actions that event gamescripts may use.
  */
 
-var EventHelper = {};
+var GameEventHelper = {};
 
 
 // Switches maps, loading in the next map and moving the player to the
 // designated location.
-EventHelper.switchMap = function(event, mapId, x, y, opt_callback) {
+GameEventHelper.switchMap = function(event, mapId, x, y, opt_callback) {
 	var player = event.containingMap.player;
 	ScreenEffectDrawer.fadeOut(function() {
 		ScreenEffectDrawer.stayBlack();
 		// Detach player from the map, then load new map
 		player.containingMap = GameState.map = null;
 		event.containingMap.player = null;
-		MapLoader.unload(event.containingMap);
-		MapLoader.load(mapId, function(newMap) {
+		GameMapLoader.unload(event.containingMap);
+		GameMapLoader.load(mapId, function(newMap) {
 			GameState.map = newMap;
 			// Reattach player to the given coordinates
 			newMap.registerPlayer(player);

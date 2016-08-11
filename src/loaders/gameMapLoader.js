@@ -3,37 +3,38 @@
  */
 
 
-var MapLoader = {};
+var GameMapLoader = {};
 
 // Expected map directory
-MapLoader.DIR = '../assets/maps/';
+GameMapLoader.DIR = '../assets/maps/';
 
 // Expected tileset directory
-MapLoader.TILESET_DIR = '../assets/img/tilesets/';
+GameMapLoader.TILESET_DIR = '../assets/img/tilesets/';
 
 
 // Static function to load a map.
-MapLoader.load = function(mapName, opt_callback) {
+GameMapLoader.load = function(mapName, opt_callback) {
 	var deferrer = new CallbackDeferrer();
 	deferrer.add(JSONLoader.loadWithoutWhitespace, function(accumulatedArgs) {
-		return [MapLoader.DIR + mapName + '.json'];
+		return [GameMapLoader.DIR + mapName + '.json'];
 	}, ['mapData']);
 	deferrer.add(TileLoader.load, function(accumulatedArgs) {
-		return [MapLoader.TILESET_DIR + accumulatedArgs[0].mapData.tileset];
+		return [GameMapLoader.TILESET_DIR + accumulatedArgs[0].mapData.tileset];
 	}, ['tileset']);
 	deferrer.add(StaticMapEntityLoader.loadAll, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData.staticMapEntities, mapName];
 	}, ['staticMapEntities']);
-	deferrer.add(MapLoader._helperLoadAllNPCInstances, function(accumulatedArgs) {
+	deferrer.add(GameMapLoader._helperLoadAllNPCInstances, 
+			function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['npcInstances']);
 	deferrer.add(UnitLoader.preloadEntities, function(accumulatedArgs) {
 		return [Object.keys(accumulatedArgs[0].mapData.spawnBehavior.monsterData)];
 	}, []);
-	deferrer.add(MapLoader._helperLoadAllTracks, function(accumulatedArgs) {
+	deferrer.add(GameMapLoader._helperLoadAllTracks, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['tracks']);
-	deferrer.add(MapLoader._helperLoadAllEvents, function(accumulatedArgs) {
+	deferrer.add(GameMapLoader._helperLoadAllEvents, function(accumulatedArgs) {
 		return [accumulatedArgs[0].mapData];
 	}, ['events']);
 	deferrer.after(function(accumulatedArgs) {
@@ -51,7 +52,7 @@ MapLoader.load = function(mapName, opt_callback) {
 					mapData.staticMapInstances[i].x, mapData.staticMapInstances[i].y);
 		}
 		if (opt_callback) {
-			opt_callback(new Map(mapData.name, mapData.data, mapData.width, 
+			opt_callback(new GameMap(mapData.name, mapData.data, mapData.width, 
 					tileset, mapData.dummyTile, mapData.staticMapEntities, 
 					mapData.staticMapInstances, npcInstances, 
 					events, tracks, mapData.spawnBehavior));
@@ -61,7 +62,7 @@ MapLoader.load = function(mapName, opt_callback) {
 
 
 // Function to unload map.
-MapLoader.unload = function(map) {
+GameMapLoader.unload = function(map) {
 	TileLoader.unload(map.tileset);
 	for (var i = 0; i < map.staticMapEntities.length; i++) {
 		StaticMapEntityLoader.unload(map.staticMapEntities[i]);
@@ -78,7 +79,7 @@ MapLoader.unload = function(map) {
 
 
 // Helper to load NPC instances
-MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
+GameMapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
 	var resultingInstances = {};
 	if (mapData.npcs.length == 0) {
 		callback(resultingInstances);
@@ -101,7 +102,7 @@ MapLoader._helperLoadAllNPCInstances = function(mapData, callback) {
 
 
 // Helper to load all tracks
-MapLoader._helperLoadAllTracks = function(mapData, callback) {
+GameMapLoader._helperLoadAllTracks = function(mapData, callback) {
 	var tracksToLoad = {};
 	for (var i = 0; i < mapData.tracks.length; i++) {
 		tracksToLoad[mapData.tracks[i]] = mapData.tracks[i];
@@ -111,10 +112,10 @@ MapLoader._helperLoadAllTracks = function(mapData, callback) {
 
 
 // Helper to load all events
-MapLoader._helperLoadAllEvents = function(mapData, callback) {
+GameMapLoader._helperLoadAllEvents = function(mapData, callback) {
 	var events = [];
 	for (var i = 0; i < mapData.events.length; i++) {
-		events.push(EventLoader.load(mapData.events[i]));
+		events.push(GameEventLoader.load(mapData.events[i]));
 	}
 	callback(events);
 };

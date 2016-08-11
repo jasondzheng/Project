@@ -12,10 +12,37 @@ var NPCEntity = function(id, name, movement, stateMachine, trades, shops,
 	this.name = name;
 	this.movement = movement;
 	this.stateMachine = stateMachine;
-	this.trades = trades;
-	this.shops = shops;
+	this.trades = [];
+	for (var i = 0; i < trades.length; i++) {
+		var trade = trades[i];
+		this.trades.push(new Trade(trade.id, trade.ingredients, trade.results, 
+				trade.gameVarEnableFlag));
+	}
+	this.shops = {};
+	for (var shopId in shops) {
+		if (!shops.hasOwnProperty(shopId)) {
+			continue;
+		}
+		this.shops[shopId] = new Shop(shops[shopId].shopContents);
+	}
 	this.visualEntity = visualEntity;
 	this.resourceManager = resourceManager;
+};
+
+
+// Gets the currently visible trades this NPC supports. 
+// TODO: remove this comment; don't call this on tick or draw; call only once
+// if possible (when you are guaranteed that visible trades won't change).
+NPCEntity.prototype.getVisibleTrades = function() {
+	var visibleTrades = [];
+	for (var i = 0; i < this.trades.length; i++) {
+		var trade = this.trades[i];
+		if (trade.gameVarEnableFlag == undefined || 
+				GameState.getVar(trade.gameVarEnableFlag)) {
+			visibleTrades.push(trade);
+		}
+	}
+	return visibleTrades;
 };
 
 
@@ -87,6 +114,12 @@ NPCInstance.prototype.getPositionX = function() {
 
 NPCInstance.prototype.getPositionY = function() {
 	return this.visualInstance.y;
+};
+
+
+// Gets visible trades from the NPC entity. 
+NPCInstance.prototype.getVisibleTrades = function() {
+	return this.npcEntity.getVisibleTrades();
 };
 
 

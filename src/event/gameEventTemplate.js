@@ -4,23 +4,23 @@
  * event JSON, but allows for string-replacement parameterization.
  */
 
-var EventTemplate = {};
+var GameEventTemplate = {};
 
 
 // Loads all the event templates from the event templates json file. Must be 
 // called before templates are referred to.
-EventTemplate.init = function(callback) {
-	JSONLoader.loadWithoutWhitespace('../assets/events/EventTemplates.json', 
+GameEventTemplate.init = function(callback) {
+	JSONLoader.loadWithoutWhitespace('../assets/events/gameEventTemplates.json', 
 			function(json) {
-		EventTemplate._templates = json;
+		GameEventTemplate._templates = json;
 		callback(); 
 	});
 };
 
 
 // Fills in templates and creates clones with the given parameters.
-EventTemplate.getTemplate = function(params) {
-	var currTemplate = EventTemplate._templates[params._template];
+GameEventTemplate.getTemplate = function(params) {
+	var currTemplate = GameEventTemplate._templates[params._template];
 	for (var paramName in currTemplate.transformFns) {
 		if (!currTemplate.transformFns.hasOwnProperty(paramName)) {
 			continue;

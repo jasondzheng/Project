@@ -1,0 +1,7 @@
+{
+	"name": "Glue",
+	"description": "This is glue",
+	"isUseable": false,
+	"price": 32,
+	"isKeyItem": false
+}
