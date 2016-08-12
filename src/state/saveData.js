@@ -9,6 +9,7 @@ var SaveData = function() {
 	this.settingsInfo;
 };
 
+
 // Path to the listing of game vars and default values.
 SaveData.GAME_VARS_PATH = '../assets/state/gameVars_compiled.json';
 
@@ -22,13 +23,14 @@ SaveData.prototype.setProfileIndex = function(index) {
 // Erases all save data and initializes new save info.
 SaveData.prototype.cleanSlateInit = function(callback) {
 	this.saveProfiles = [];
-	this.settingsInfo = {
-		// TODO: set these later
-	};
+	//CHECK
+	this.settingsInfo = new Settings();
+	//CHECK
 	this.newGameInit(0 /* profileSlot */, callback);
 };
 
 
+// Initializes an save profile slot to desired game start save state.
 SaveData.prototype.newGameInit = function(profileSlot, callback) {
 	// TODO: initialize proper new game states and variables.
 	var saveProfile = this.saveProfiles[profileSlot] = {
@@ -57,7 +59,6 @@ SaveData.prototype._reinitVarsDebugDebug = function() {
 };
 
 
-// CHECK
 // Updates the save data with any new player vars that were added in code.
 SaveData.prototype._reinitPlayerFieldsDebugDebug = function() {
 	for (var i = 0; i < this.saveProfiles.length; i++) {
@@ -73,7 +74,7 @@ SaveData.prototype._reinitPlayerFieldsDebugDebug = function() {
 };
 
 
-// Deletes the save profile ar the given index
+// Deletes the save profile at the given index
 SaveData.prototype.deleteProfile = function(profileSlot) {
 	this.saveProfiles[profileSlot] = null;
 };
@@ -97,8 +98,8 @@ SaveData.prototype._assimilate = function(saveJson) {
 
 
 // Commits save data into locally stored memory.
-SaveData.prototype.save = function() {
-	if (GameState.player) {
+SaveData.prototype.save = function(shouldSavePlayer) {
+	if (shouldSavePlayer && GameState.player) {
 		this.saveProfiles[this._currProfileIndex].playerInfo = 
 				GameState.player.createSaveData();
 	}

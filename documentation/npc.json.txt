@@ -1,0 +1,18 @@
+NPC: {
+	required string name: The name of the NPC.
+	required string movement: The name of the movement pattern for this NPC.
+	required object<string:string> resources: The resources this NPC needs to 
+			preload (for example, portraits). Mapping of reference names to paths.
+	required object<string:any> gameVars: The global game variables contained to
+			this NPC.
+	required StateMachine stateMachine: The state machine used to determine NPC
+			behavior.
+}
+
+
+StateMachine: {
+	
+}
+
+
+// TODO: fill in the rest of this description file

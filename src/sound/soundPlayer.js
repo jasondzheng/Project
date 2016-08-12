@@ -25,11 +25,20 @@ SoundPlayer.setTrack = function(track) {
 };
 
 
+// Sets the global volume for the loaded track.
+SoundPlayer.setVolume = function(volume) {
+	SoundPlayer.currTrack.audio[0].volume = 
+			SoundPlayer.currTrack.audio[1].volume = volume;
+};
+
+
+// Pauses the current track. Does not affect the reserve track.
 SoundPlayer.pauseCurrentTrack = function() {
 	SoundPlayer.currTrack.audio[SoundPlayer.currParity].pause();
 };
 
 
+// Resumes the current track. Does not affect the reserve track.
 SoundPlayer.resumeCurrentTrack = function() {
 	SoundPlayer.currTrack.audio[SoundPlayer.currParity].play();
 };
