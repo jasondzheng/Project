@@ -33,6 +33,8 @@ OverworldScene.init = function(callback) {
 		map.unitSpawner.fillUnitQuotas();
 
 		InventoryTabDrawer.setInventory(player.inventory);
+		//CHECK;
+		InventoryTabDrawer.setSettings(GameState.saveData.settingsInfo);
 
 		// TODO: make this legit
 		SoundPlayer.setTrack(map.tracks.marioLuigiBattle);
