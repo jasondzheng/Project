@@ -9,7 +9,7 @@ var MouseTracker = {};
 MouseTracker.SAME_LOC_TOLERANCE = 8;
 
 // Time tolerance of a double click in ms.
-MouseTracker.DOUBLE_CLICK_TIME_DELTA = 500;
+MouseTracker.DOUBLE_CLICK_TIME_DELTA = 350;
 
 // Variables used to track the current state of the mouse.
 MouseTracker._mousePosX = 0;

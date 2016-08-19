@@ -131,3 +131,10 @@ SaveData.prototype.getVar = function(name) {
 	}
 	return value;
 };
+
+
+// Applies the settings info.
+SaveData.prototype.applySettings = function() {
+	// Set BGM.
+	SoundPlayer.setVolume(this.settingsInfo.bgmVolume);
+};
