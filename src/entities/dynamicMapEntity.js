@@ -220,7 +220,7 @@ DynamicMapEntityLoader.load = function(name, json, type, callback) {
 
 // Unloads entity, freeing up all images required
 DynamicMapEntityLoader.unload = function(entity) {
-	for (var frameName in entity) {
+	for (var frameName in entity.frames) {
 		if (!entity.hasOwnProperty(frameName)) {
 			continue;
 		}

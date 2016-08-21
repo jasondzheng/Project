@@ -81,6 +81,12 @@ PlayerHpDrawer.tick = function() {
 };
 
 
+// Rests the player hp. Used when resetting the overworld scene.
+PlayerHpDrawer.reset = function() {
+	PlayerHpDrawer.shownHp = undefined;
+};
+
+
 
 
 

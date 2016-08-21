@@ -71,7 +71,13 @@ OverworldScene.pause = function() {
 
 // Resets the scene to a state that it would be at loadtime. Call sparingly.
 OverworldScene.reset = function() {
-	throw 'Unsupported operation';
+	PlayerHpDrawer.reset();
+	UnitHpDrawer.clearHpBars();
+	GameMapLoader.unload(GameState.map);
+	PlayerLoader.unload(GameState.player);
+	if (InventoryTabDrawer.isOpen) {
+		InventoryTabDrawer.isOpen = false;
+	}
 };
 
 

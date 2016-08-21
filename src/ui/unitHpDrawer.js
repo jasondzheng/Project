@@ -174,3 +174,8 @@ UnitHpDrawer.getHpColor = function(hpFraction) {
 						UnitHpDrawer.HP_COLOR_INFO.botBlueDelta * hpFraction)  + ')';
 	}
 };
+
+UnitHpDrawer.clearHpBars = function() {
+	UnitHpDrawer.hpBars = {};
+	UnitHpDrawer.hpBarsArray = [];
+};

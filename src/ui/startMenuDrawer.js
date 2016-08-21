@@ -85,9 +85,9 @@ StartMenuDrawer.onEndClick = function(x, y, isDoubleClick) {
 			if ((possibleSavedStateIndex = 
 					StartMenuDrawer._helperGetSavedStateButtonFromCoords(x, y)) != -1) {
 				StartMenuScene.disableInput();
-				StartMenuDrawer._currentPage == StartMenuDrawer.Pages.START_PAGE;
 				GameState.saveData.setProfileIndex(possibleSavedStateIndex);
 				ScreenEffectDrawer.fadeOut(function() {
+					StartMenuDrawer._currentPage = StartMenuDrawer.Pages.START_PAGE;
 					ScreenEffectDrawer.stayBlack();
 					OverworldScene.init(function() {
 						CoreModule.switchScene(OverworldScene);

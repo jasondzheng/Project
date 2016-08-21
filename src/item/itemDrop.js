@@ -2,12 +2,15 @@
  * Class representing dropped items in the overworld. Has behaviors to animate
  * and to move to player if picked up.
  */
-var ItemDrop = function(itemId, x, y) {
+
+// TODO RECONSIDER QUANTITY
+
+var ItemDrop = function(itemId, quantity, x, y) {
 	this.itemId = itemId;
+	this.quantity = quantity;
 	this.visualInstance = new DynamicMapInstance(ItemDrop.ENTITY, x, y);
 	this.containingMap;
 	this.visualInstance.setAnimation(itemId);
-
 	// Whether or not this item is being attracted to the player
 	this._attracted = false;
 };
@@ -50,8 +53,8 @@ ItemDrop.prototype.tick = function() {
 			this.visualInstance.y += yDiff / distance * ItemDrop.ATTRACT_AMOUNT;
 		} else if (this._attracted) {
 			// Absorb the item if possible
-			if (player.inventory.canAdd(this.itemId, 1)) {
-				player.inventory.add(this.itemId, 1);
+			if (player.inventory.canAdd(this.itemId, this.quantity)) {
+				player.inventory.add(this.itemId, this.quantity);
 				this.containingMap.deregisterItemDrop(this);
 				this.containingMap = null;
 				this.visualInstance = null;

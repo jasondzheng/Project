@@ -12,6 +12,8 @@ InventoryTabDrawer.CELL_IMG;
 InventoryTabDrawer.DESCRIPTION_BACK;
 InventoryTabDrawer.TAB_ICON_IMGS;
 InventoryTabDrawer.TAB_BACK_IMGS;
+InventoryTabDrawer.SAVE_BUTTON_IMG;
+InventoryTabDrawer.EXIT_BUTTON_IMG;
 
 // Possible tab indices.
 InventoryTabDrawer.ITEMS_TAB = 0;
@@ -75,7 +77,12 @@ InventoryTabDrawer._settings;
 // Array of scrollbars with indices matching tab indices.
 InventoryTabDrawer._scrollBars;
 
+// Array of sideways scrollbars.
 InventoryTabDrawer._settingsScrollBars;
+
+// Buttons in the settings tab.
+InventoryTabDrawer._saveButton;
+InventoryTabDrawer._exitButton;
 
 // Position of inventory tab interface (top left corner of tabs)
 InventoryTabDrawer._x = InventoryTabDrawer.DEFAULT_X;
@@ -127,7 +134,9 @@ InventoryTabDrawer.init = function(callback) {
 		settingsIcon: InventoryTabDrawer.PATH + 'settingsIcon.png',
 		tabDark: InventoryTabDrawer.PATH + 'tabDark.png',
 		tabGrey: InventoryTabDrawer.PATH + 'tabGrey.png',
-		tabWhite: InventoryTabDrawer.PATH + 'tabWhite.png'
+		tabWhite: InventoryTabDrawer.PATH + 'tabWhite.png',
+		saveButton: InventoryTabDrawer.PATH + 'saveButton.png',
+		exitButton: InventoryTabDrawer.PATH + 'exitButton.png'
 	}, function(imgs) {
 		InventoryTabDrawer.BODY_IMG = imgs.body;
 		InventoryTabDrawer.CELL_IMG = imgs.cell;
@@ -142,6 +151,37 @@ InventoryTabDrawer.init = function(callback) {
 			imgs.tabGrey,
 			imgs.tabDark
 		];
+		InventoryTabDrawer.SAVE_BUTTON_IMG = imgs.saveButton;
+		InventoryTabDrawer.EXIT_BUTTON_IMG = imgs.exitButton;
+		
+		// Initialize settings buttons.
+		InventoryTabDrawer._saveButton = 
+				new Button(InventoryTabDrawer.SAVE_BUTTON_IMG, false, function() {
+					GameState.saveData.save();
+				});
+		InventoryTabDrawer._exitButton = 
+				new Button(InventoryTabDrawer.EXIT_BUTTON_IMG, true, function() {
+					// TODO: FIX SO THAT IT RESETS OVERWORLD SCENE
+					// Currently not working properly.
+					OverworldScene.disableInput();
+					ScreenEffectDrawer.fadeOut(function() {
+						ScreenEffectDrawer.stayBlack();
+						CoreModule.switchScene(StartMenuScene);
+						OverworldScene.reset();
+						StartMenuScene.disableInput();
+						ScreenEffectDrawer.fadeIn(function() {
+							StartMenuScene.reenableInput();
+						});
+					});
+				});
+		// Settings buttons positions.
+		InventoryTabDrawer.SAVE_BUTTON_Y = 2 /* REPLACE WITH MEANIGFUL CONSTANT*/ * 
+				InventoryTabDrawer.SETTINGS_HEADINGS_SPACING + 
+				InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET;
+		InventoryTabDrawer.EXIT_BUTTON_Y = InventoryTabDrawer.SAVE_BUTTON_Y + 
+				InventoryTabDrawer.SAVE_BUTTON_IMG.height + 
+				InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET;
+
 		InventoryTabDrawer.TAB_ICON_OFFSET_X = 
 				(InventoryTabDrawer.TAB_BACK_IMGS[0].width - 
 						InventoryTabDrawer.TAB_ICON_IMGS[0].width) / 2;
@@ -207,7 +247,10 @@ InventoryTabDrawer.init = function(callback) {
 				InventoryTabDrawer.BODY_IMG.height -
 				InventoryTabDrawer.CELL_EDGE_OFFSET;
 		InventoryTabDrawer.WINDOW_BODY_LEFT = InventoryTabDrawer.CELL_EDGE_OFFSET;
-		InventoryTabDrawer.WINDOW_BODY_RIGHT = InventoryTabDrawer.BODY_IMG.width - 
+		InventoryTabDrawer.WINDOW_BODY_RIGHT = 
+				(InventoryTabDrawer.CELLS_PER_ROW - 1) * 
+				(InventoryTabDrawer.CELL_IMG.width + InventoryTabDrawer.CELL_SPACING) + 
+				InventoryTabDrawer.CELL_IMG.width + 
 				InventoryTabDrawer.CELL_EDGE_OFFSET;
 		InventoryTabDrawer.WINDOW_BODY_WIDTH =
 				InventoryTabDrawer.WINDOW_BODY_RIGHT - 
@@ -379,6 +422,32 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 					normalizedX, normalizedY)) != -1) {
 		// Check for tab change
 		InventoryTabDrawer.currentTab = possibleTabIndex;
+	} else if (InventoryTabDrawer._dragMode == 
+			InventoryTabDrawer.DragModes.ITEM) {
+		var entries =
+				InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB ?
+						InventoryTabDrawer._inventory.itemEntries :
+						InventoryTabDrawer._inventory.equipEntries;
+		if (normalizedX < 0 || 
+				normalizedX >= InventoryTabDrawer.BODY_IMG.width || 
+				normalizedY < 0 || 
+				normalizedY >= InventoryTabDrawer.BODY_IMG.height + 
+						InventoryTabDrawer.TAB_BACK_IMGS[0].height) {
+			GameState.map.registerItemDrop(new ItemDrop(
+					entries[InventoryTabDrawer._draggedItemIndex].item.id, 
+					entries[InventoryTabDrawer._draggedItemIndex].quantity,
+					GameState.player.visualInstance.x, GameState.player.visualInstance.y
+					// TODO, make drops appear in front of character
+				));
+			entries[InventoryTabDrawer._draggedItemIndex] = null;		
+		} else if ((possibleItemIndex = 
+				InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
+						normalizedX, normalizedY)) != -1) {
+			var tempEntry = entries[InventoryTabDrawer._draggedItemIndex];
+			entries[InventoryTabDrawer._draggedItemIndex] = 
+					entries[possibleItemIndex];
+			entries[possibleItemIndex] = tempEntry;
+		}
 	} else if (isDoubleClick && startAndEndSameLoc && 
 			(possibleItemIndex = 
 					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
@@ -396,29 +465,52 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 		}
 		// TODO: handle equipment items
 	} else if (InventoryTabDrawer.currentTab == InventoryTabDrawer.SETTINGS_TAB && 
-				startAndEndSameLoc && InventoryTabDrawer._dragMode == null &&
-				(possibleSettingsScroll = 
+				startAndEndSameLoc && InventoryTabDrawer._dragMode == null) {
+		// Handle Settings Contents
+		if ((possibleSettingsScroll = 
 						InventoryTabDrawer._helperGetSettingsScrollBarIndex(
 								normalizedX, normalizedY)) != -1) {
-		var pixOffset = InventoryTabDrawer._scrollBars[
-				InventoryTabDrawer.SETTINGS_TAB].getScrollFraction() * 
-				InventoryTabDrawer.SCROLLABLE_PIXELS;
-		InventoryTabDrawer._settingsScrollBars[
-				possibleSettingsScroll].updateScrollFromDrag(
-						normalizedX - InventoryTabDrawer.SETTINGS_SCROLL_X, 
-						normalizedY - (InventoryTabDrawer.possibleSettingsScroll * 
-								InventoryTabDrawer.SETTINGS_HEADINGS_SPACING + 
-								InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET + 
-								InventoryTabDrawer.WINDOW_BODY_TOP) - 
-								pixOffset
-				);
-		var currentSettingsKey = possibleSettingsScroll == 
-						InventoryTabDrawer.SettingsScrollBarIndexes.BGM ? 
-				'bgmVolume' : 'sfxVolume';
-		GameState.saveData.settingsInfo[currentSettingsKey] = 
-				InventoryTabDrawer._settingsScrollBars[
-						possibleSettingsScroll].getScrollFraction();
-		GameState.saveData.applySettings();
+			// Handle sideways scrollbars.
+			var pixOffset = InventoryTabDrawer._scrollBars[
+					InventoryTabDrawer.SETTINGS_TAB].getScrollFraction() * 
+					InventoryTabDrawer.SCROLLABLE_PIXELS;
+			InventoryTabDrawer._settingsScrollBars[
+					possibleSettingsScroll].updateScrollFromDrag(
+							normalizedX - InventoryTabDrawer.SETTINGS_SCROLL_X, 
+							normalizedY - (InventoryTabDrawer.possibleSettingsScroll * 
+									InventoryTabDrawer.SETTINGS_HEADINGS_SPACING + 
+									InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET + 
+									InventoryTabDrawer.WINDOW_BODY_TOP) - 
+									pixOffset
+					);
+			var currentSettingsKey = possibleSettingsScroll == 
+							InventoryTabDrawer.SettingsScrollBarIndexes.BGM ? 
+					'bgmVolume' : 'sfxVolume';
+			GameState.saveData.settingsInfo[currentSettingsKey] = 
+					InventoryTabDrawer._settingsScrollBars[
+							possibleSettingsScroll].getScrollFraction();
+			GameState.saveData.applySettings();
+		} else if (InventoryTabDrawer._saveButton.isInButton(
+					normalizedX - InventoryTabDrawer.WINDOW_BODY_LEFT,
+					normalizedY - (InventoryTabDrawer.SAVE_BUTTON_Y + 
+									InventoryTabDrawer.WINDOW_BODY_TOP - 
+							InventoryTabDrawer._scrollBars[
+									InventoryTabDrawer.SETTINGS_TAB].getScrollFraction() * 
+									InventoryTabDrawer.SCROLLABLE_PIXELS)
+			)) {
+			// Handle save button.
+			InventoryTabDrawer._saveButton.onClick();
+		} else if (InventoryTabDrawer._exitButton.isInButton(
+					normalizedX - InventoryTabDrawer.WINDOW_BODY_LEFT,
+					normalizedY - (InventoryTabDrawer.EXIT_BUTTON_Y + 
+									InventoryTabDrawer.WINDOW_BODY_TOP - 
+							InventoryTabDrawer._scrollBars[
+									InventoryTabDrawer.SETTINGS_TAB].getScrollFraction() * 
+									InventoryTabDrawer.SCROLLABLE_PIXELS)
+			)) {
+			// Handle exit button.
+			InventoryTabDrawer._exitButton.onClick();
+		}
 	}
 	// Nullify drag at the end of endclick since drag must now be over
 	InventoryTabDrawer._dragMode = null;
@@ -546,22 +638,29 @@ InventoryTabDrawer._drawSettingsContents = function(ctx, x, y, pixelOffset) {
 	ctx.clip();
 	// Draw clipped contents.
   ctx.beginPath();
-	// Draw BGM contents
+	// Draw BGM contents.
 	GlyphDrawer.drawText(ctx, 'test', 'BGM', drawX, drawY, 
 			InventoryTabDrawer.WINDOW_BODY_WIDTH, 
 			InventoryTabDrawer.SETTINGS_HEADINGS_SPACING);
 	InventoryTabDrawer._settingsScrollBars[
 			InventoryTabDrawer.SettingsScrollBarIndexes.BGM].draw(
 			ctx, scrollBarX, drawY + InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET);
-	// Draw SFX contents
-	drawY += InventoryTabDrawer.SettingsScrollBarIndexes.SFX * 
-			InventoryTabDrawer.SETTINGS_HEADINGS_SPACING;
-	GlyphDrawer.drawText(ctx, 'test', 'SFX', drawX, drawY, 
+	// Draw SFX contents.
+	GlyphDrawer.drawText(ctx, 'test', 'SFX', drawX, 
+			drawY + InventoryTabDrawer.SETTINGS_HEADINGS_SPACING, 
 			InventoryTabDrawer.WINDOW_BODY_WIDTH, 
 			InventoryTabDrawer.SETTINGS_HEADINGS_SPACING);
 	InventoryTabDrawer._settingsScrollBars[
 			InventoryTabDrawer.SettingsScrollBarIndexes.SFX].draw(
-			ctx, scrollBarX, drawY + InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET);
+			ctx, scrollBarX, drawY + InventoryTabDrawer.SETTINGS_HEADINGS_SPACING + 
+					InventoryTabDrawer.SETTINGS_CONTENTS_OFFSET);
+	// Draw Save Button contents.
+	InventoryTabDrawer._saveButton.draw(ctx, drawX, 
+			drawY + InventoryTabDrawer.SAVE_BUTTON_Y);
+	// Draw Exit Button contents.
+	InventoryTabDrawer._exitButton.draw(ctx, drawX, 
+			drawY + InventoryTabDrawer.EXIT_BUTTON_Y);
+
 	// Restore context to previous state. 
 	ctx.restore();
 };
@@ -752,8 +851,6 @@ InventoryTabDrawer._helperGetInventorySlotFromClickCoords = function(
 	var cellPositionGap = 
 			InventoryTabDrawer.CELL_IMG.height + InventoryTabDrawer.CELL_SPACING;
 	var offset = pixOffset % cellPositionGap;
-	var index = Math.floor(pixOffset / cellPositionGap) * 
-			InventoryTabDrawer.CELLS_PER_ROW;
 	normalizedX -= InventoryTabDrawer.WINDOW_BODY_LEFT;
 	normalizedY += offset - InventoryTabDrawer.WINDOW_BODY_TOP;
 	return (normalizedX % cellXDelta >= InventoryTabDrawer.CELL_IMG.width || 
