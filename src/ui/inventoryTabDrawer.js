@@ -161,8 +161,6 @@ InventoryTabDrawer.init = function(callback) {
 				});
 		InventoryTabDrawer._exitButton = 
 				new Button(InventoryTabDrawer.EXIT_BUTTON_IMG, true, function() {
-					// TODO: FIX SO THAT IT RESETS OVERWORLD SCENE
-					// Currently not working properly.
 					OverworldScene.disableInput();
 					ScreenEffectDrawer.fadeOut(function() {
 						ScreenEffectDrawer.stayBlack();
@@ -212,13 +210,7 @@ InventoryTabDrawer.init = function(callback) {
 				InventoryTabDrawer.CELLS_PER_ROW;
 		InventoryTabDrawer.NUM_EQUIP_ROWS = Inventory.NUM_EQUIP_SLOTS / 
 				InventoryTabDrawer.CELLS_PER_ROW;
-		
-		InventoryTabDrawer.SCROLLABLE_PIXELS = InventoryTabDrawer.NUM_ITEM_ROWS * 
-					InventoryTabDrawer.CELL_IMG.height + 
-					(InventoryTabDrawer.NUM_ITEM_ROWS - 1) * 
-							InventoryTabDrawer.CELL_SPACING -
-					(InventoryTabDrawer.BODY_IMG.height - 
-							2 * InventoryTabDrawer.CELL_EDGE_OFFSET);
+
 		InventoryTabDrawer.CELL_IMG_WIDTH_HALF = 
 				InventoryTabDrawer.CELL_IMG.width / 2;
 		InventoryTabDrawer.CELL_POSITION_GAP =
@@ -259,6 +251,12 @@ InventoryTabDrawer.init = function(callback) {
 				InventoryTabDrawer.WINDOW_BODY_BOT - 
 				InventoryTabDrawer.WINDOW_BODY_TOP;
 
+		InventoryTabDrawer.SCROLLABLE_PIXELS = 
+					/* TODO: Generalize to both items and equips*/InventoryTabDrawer.NUM_ITEM_ROWS * 
+					InventoryTabDrawer.CELL_IMG.height + 
+					(InventoryTabDrawer.NUM_ITEM_ROWS - 1) * 
+							InventoryTabDrawer.CELL_SPACING -
+					InventoryTabDrawer.WINDOW_BODY_HEIGHT;
 
 		InventoryTabDrawer.SETTINGS_SCROLL_X = InventoryTabDrawer.WINDOW_BODY_LEFT +
 				ScrollBar.BUBBLE.width / 2;
@@ -679,7 +677,8 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 			yPos < windowY; (yPos = nextYPos) && 
 					(nextYPos += cellHeight + InventoryTabDrawer.CELL_SPACING)) {
 		for (var i = 0; i < InventoryTabDrawer.CELLS_PER_ROW; i++) {
-			if (yPos < 0) {var cellWidth = InventoryTabDrawer.CELL_IMG.width;
+			if (yPos < 0) {
+				var cellWidth = InventoryTabDrawer.CELL_IMG.width;
 				var cellPartialHeight = InventoryTabDrawer.CELL_IMG.height + yPos;
 				ctx.drawImage(InventoryTabDrawer.CELL_IMG, 0, -yPos, cellWidth, 
 							cellPartialHeight, x + InventoryTabDrawer.CELL_EDGE_OFFSET + 

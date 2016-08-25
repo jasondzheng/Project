@@ -6,7 +6,8 @@
 var ScreenProps = {};
 
 // The expected width and height of the screen.
-ScreenProps.EXP_WIDTH = 1280; ScreenProps.EXP_HEIGHT = 720;
+ScreenProps.EXP_WIDTH = 1280; 
+ScreenProps.EXP_HEIGHT = 720;
 
 // The half width and half heights for convenience;
 ScreenProps.EXP_WIDTH_HALF = ScreenProps.EXP_WIDTH / 2; 

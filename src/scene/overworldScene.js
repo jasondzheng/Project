@@ -95,6 +95,8 @@ OverworldScene.draw = function(ctx) {
 	InventoryTabDrawer.draw(ctx);
 	// Draw dialog over all map content
 	DialogDrawer.drawDialogOverlay(ctx);
+	// Draw trade interface over all map content
+	TradeDrawer.drawTradeOverlay(ctx);
 };
 
 
