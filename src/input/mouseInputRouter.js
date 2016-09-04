@@ -16,6 +16,11 @@ MouseInputRouter.Modes = {
 			MouseInputRouter._helperHandleInventoryTabInput();
 		}
 	},
+	TRADE_INPUT: {
+		tick: function() {
+			MouseInputRouter._helperHandleTradeInput();
+		}
+	},
 	DIALOG_INPUT: {
 		tick: function() {
 			MouseInputRouter._helperHandleDialogInput();
@@ -86,4 +91,22 @@ MouseInputRouter._helperHandleInventoryTabInput = function() {
 				MouseTracker.getMouseY());
 	}
 	InventoryTabDrawer.updateCurrentScroll(MouseTracker.consumeMouseWheel());
+};
+
+
+MouseInputRouter._helperHandleTradeInput = function() {
+	if (MouseTracker.isHover()) {
+		TradeDrawer.onHover(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	} else if (MouseTracker.isStartClick()) {
+		TradeDrawer.onStartClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	} else if (MouseTracker.isEndClick()) {
+		TradeDrawer.onEndClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY(), MouseTracker.isDoubleClick());
+	} else if (MouseTracker.isDrag()) {
+		TradeDrawer.onDrag(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	}
+	TradeDrawer.updateCurrentScroll(MouseTracker.consumeMouseWheel());
 };

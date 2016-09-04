@@ -3,16 +3,18 @@
  */
 
 var ScrollBar = function(maxScroll, length, isHorizontal, opt_startPos) {
-	this.maxScroll = maxScroll;
+	this._maxScroll = maxScroll;
 	// Height in blocks of BAR_MIDDLEs
-	this.length = Math.floor(
+	this._length = Math.floor(
 			(length - ScrollBar.BAR_TOP.height - ScrollBar.BAR_BOTTOM.height) / 
 					ScrollBar.BAR_MIDDLE.height);
-	this.lengthInPixels = this.length * ScrollBar.BAR_MIDDLE.height;
-	this.isHorizontal = isHorizontal;
-	this.currScroll = opt_startPos || 0;
+	this._lengthInPixels = this._length * ScrollBar.BAR_MIDDLE.height;
+	this._isHorizontal = isHorizontal;
+	this._currScroll = opt_startPos || 0;
+	this._isEnabled = true;
 };
 
+ScrollBar.DISABLED_OPACITY = 0.5;
 
 // Resources for the scroll bar draw
 ScrollBar.BAR_TOP;
@@ -67,32 +69,46 @@ ScrollBar._helperConstructSidewaysAssets = function(img) {
 };
 
 
+// Enables the scrollbar functionality and appearance
+ScrollBar.prototype.enable = function() {
+	this._isEnabled = true;
+}
+
+// Disables the scrollbar functionality and fades the appearance
+ScrollBar.prototype.disable = function() {
+	this._isEnabled = false;
+}
+
+
 // Updates the scrollbar based on a provided delta.
 ScrollBar.prototype.updateScroll = function(delta) {
-	this.currScroll = Math.min(Math.max(this.currScroll + delta, 0), 
-			this.maxScroll);
+	this._currScroll = Math.min(Math.max(this._currScroll + delta, 0), 
+			this._maxScroll);
 };
 
 
 // Gets the current scroll fraction.
 ScrollBar.prototype.getScrollFraction = function() {
-	return this.currScroll / this.maxScroll;
+	return this._currScroll / this._maxScroll;
 };
 
 
 // Sets the scroll fraction to the provided fraction.
 ScrollBar.prototype.setScrollFraction = function(fraction) {
-	this.currScroll = this.maxScroll * fraction;
+	this._currScroll = this._maxScroll * fraction;
 };
 
 
 // Draws the scroll bar to the given place with current scroll configuration.
 ScrollBar.prototype.draw = function(ctx, x, y) {
-	if (this.isHorizontal) {
+	if (!this._isEnabled) {
+		ctx.globalAlpha = ScrollBar.DISABLED_OPACITY;
+	}
+	if (this._isHorizontal) {
 		var drawX = x;
 		ctx.drawImage(ScrollBar.BAR_LEFT, drawX, y);
 		drawX += ScrollBar.BAR_LEFT.width;
-		for (var i = 0; i < this.length; i++) {
+		for (var i = 0; i < this._length; i++) {
 			ctx.drawImage(ScrollBar.BAR_MIDDLE_SIDE, drawX, y);
 			drawX += ScrollBar.BAR_MIDDLE_SIDE.width;
 		}
@@ -100,14 +116,14 @@ ScrollBar.prototype.draw = function(ctx, x, y) {
 		var bubbleOffset = 
 				(ScrollBar.BAR_MIDDLE_SIDE.height - ScrollBar.BUBBLE.height) / 2;
 		ctx.drawImage(ScrollBar.BUBBLE, x + ScrollBar.BAR_LEFT.width + 
-						(this.length * ScrollBar.BAR_MIDDLE_SIDE.width) * 
+						(this._length * ScrollBar.BAR_MIDDLE_SIDE.width) * 
 						this.getScrollFraction() - ScrollBar.BUBBLE.width / 2, 
 				y + bubbleOffset);
 	} else {
 		var drawHeight = y;
 		ctx.drawImage(ScrollBar.BAR_TOP, x, drawHeight);
 		drawHeight += ScrollBar.BAR_TOP.height;
-		for (var i = 0; i < this.length; i++) {
+		for (var i = 0; i < this._length; i++) {
 			ctx.drawImage(ScrollBar.BAR_MIDDLE, x, drawHeight);
 			drawHeight += ScrollBar.BAR_MIDDLE.height;
 		}
@@ -116,22 +132,26 @@ ScrollBar.prototype.draw = function(ctx, x, y) {
 				(ScrollBar.BAR_MIDDLE.width - ScrollBar.BUBBLE.width) / 2;
 		ctx.drawImage(ScrollBar.BUBBLE, x + bubbleOffset, 
 				y + ScrollBar.BAR_TOP.height + 
-						(this.length * ScrollBar.BAR_MIDDLE.height) * 
+						(this._length * ScrollBar.BAR_MIDDLE.height) * 
 						this.getScrollFraction() - ScrollBar.BUBBLE.height / 2);
 	}
+	ctx.globalAlpha = 1;
 };
 
 
 // Checks if the relative coordinate is in the bubble part of the scrollbar.
 ScrollBar.prototype.isInBubble = function(relX, relY) {
-	var bubbleX = this.isHorizontal ? 
+	if (!this._isEnabled) {
+		return false;
+	}
+	var bubbleX = this._isHorizontal ? 
 			ScrollBar.BAR_LEFT.width + 
-					(this.length * ScrollBar.BAR_MIDDLE_SIDE.width) * 
+					(this._length * ScrollBar.BAR_MIDDLE_SIDE.width) * 
 					this.getScrollFraction() - ScrollBar.BUBBLE.width / 2 :
 			(ScrollBar.BAR_MIDDLE.width - ScrollBar.BUBBLE.width) / 2;
-	var bubbleY = this.isHorizontal ? 
+	var bubbleY = this._isHorizontal ? 
 			(ScrollBar.BAR_MIDDLE_SIDE.height - ScrollBar.BUBBLE.height) / 2 :
-			ScrollBar.BAR_TOP.height + (this.length * ScrollBar.BAR_MIDDLE.height) * 
+			ScrollBar.BAR_TOP.height + (this._length * ScrollBar.BAR_MIDDLE.height) * 
 					this.getScrollFraction() - ScrollBar.BUBBLE.height / 2;
 	return relX >= bubbleX && relX < bubbleX + ScrollBar.BUBBLE.width && 
 			relY >= bubbleY && relY < bubbleY + ScrollBar.BUBBLE.height;
@@ -140,18 +160,21 @@ ScrollBar.prototype.isInBubble = function(relX, relY) {
 
 // Checks if the relative coordinate is in the bar part of the scrollbar.
 ScrollBar.prototype.isInLine = function(relX, relY) {
-	return relX >= 0 && relX < (this.isHorizontal ? 
-					this.lengthInPixels : ScrollBar.BAR_MIDDLE.width) && relY >= 0 && 
-			relY < (this.isHorizontal ? ScrollBar.BAR_MIDDLE_SIDE.height : 
-					this.lengthInPixels);
+	if (!this._isEnabled) {
+		return false;
+	}
+	return relX >= 0 && relX < (this._isHorizontal ? 
+					this._lengthInPixels : ScrollBar.BAR_MIDDLE.width) && relY >= 0 && 
+			relY < (this._isHorizontal ? ScrollBar.BAR_MIDDLE_SIDE.height : 
+					this._lengthInPixels);
 };
 
 
 // Updates the scroll position during drag (or click even).
 ScrollBar.prototype.updateScrollFromDrag = function(relX, relY) {
-	this.currScroll = this.isHorizontal ? this.maxScroll * 
+	this._currScroll = this._isHorizontal ? this._maxScroll * 
 			Math.min(1, Math.max(0, (relX - ScrollBar.BUBBLE.width / 2) / 
-				this.lengthInPixels)) : 
-			this.maxScroll * Math.min(1, Math.max(0, (relY - ScrollBar.BUBBLE.height / 
-					2) / this.lengthInPixels));
+				this._lengthInPixels)) : 
+			this._maxScroll * Math.min(1, Math.max(0, (relY - ScrollBar.BUBBLE.height / 
+					2) / this._lengthInPixels));
 };

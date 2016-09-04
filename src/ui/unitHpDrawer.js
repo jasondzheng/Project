@@ -175,6 +175,8 @@ UnitHpDrawer.getHpColor = function(hpFraction) {
 	}
 };
 
+
+// Clears all Hp Bar entries.
 UnitHpDrawer.clearHpBars = function() {
 	UnitHpDrawer.hpBars = {};
 	UnitHpDrawer.hpBarsArray = [];

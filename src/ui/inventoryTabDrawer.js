@@ -696,7 +696,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 					var drawY = y + windowBodyTop;
 					ctx.drawImage(itemEntry.item.sprite, 0, -yPos, cellWidth, 
 							cellPartialHeight, cellX, drawY, cellWidth, cellPartialHeight);
-					if (!isEquips) {
+					if (!isEquips && itemEntry.quantity > 1) {
 						var cellY = drawY + yPos;
 						var clipY = InventoryTabDrawer.CELL_IMG.height - 
 								InventoryTabDrawer.QUANTITY_OFFSET_Y - cellPartialHeight;
@@ -731,7 +731,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 					var cellY = y + windowBodyTop + yPos;
 					ctx.drawImage(itemEntry.item.sprite, 0, 0, cellWidth, 
 							cellPartialHeight, cellX, cellY, cellWidth, cellPartialHeight);
-					if (!isEquips && cellPartialHeight > 
+					if (!isEquips && itemEntry.quantity > 1 && cellPartialHeight > 
 							InventoryTabDrawer.QUANTITY_OFFSET_Y) {
 						var quantityStr = itemEntry.quantity.toString();
 						GlyphDrawer.drawCutText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
@@ -761,7 +761,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 							i * (InventoryTabDrawer.CELL_POSITION_GAP);
 					var cellY = y + windowBodyTop + yPos;
 					ctx.drawImage(itemEntry.item.sprite, cellX, cellY);
-					if (!isEquips) {
+					if (!isEquips && itemEntry.quantity > 1) {
 						var quantityStr = itemEntry.quantity.toString();
 						GlyphDrawer.drawText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
 								quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 

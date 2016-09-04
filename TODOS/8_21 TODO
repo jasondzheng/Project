@@ -1,0 +1,12 @@
+Trade UI
+Sprites
+		Refactor images to single sprite sheets and include data to 
+				interpret/separate images
+		Add support for custom text character images
+Player
+		Death event handled
+			exit or return to last saved state
+Exit Button
+			"Are you sure?" dialog
+Delete Saved States Button
+			"Are you sure?" dialog
