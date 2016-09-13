@@ -97,6 +97,8 @@ OverworldScene.draw = function(ctx) {
 	DialogDrawer.drawDialogOverlay(ctx);
 	// Draw trade interface over all map content
 	TradeDrawer.drawTradeOverlay(ctx);
+	// Draw possible confirm dialog
+	ConfirmDialog.draw(ctx);
 };
 
 

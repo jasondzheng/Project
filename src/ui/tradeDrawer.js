@@ -19,6 +19,8 @@ TradeDrawer.BACKSHADE_COLOR = 'rgba(0, 0, 0, 0.25)';
 
 TradeDrawer.INGREDIENTS_FONT = 'test';
 
+TradeDrawer.DESCRIPTION_FONT = 'test';
+
 TradeDrawer.QUANTITY_FONT = 'test';
 
 TradeDrawer.CANNOT_TRADE_OPACITY = 0.5;
@@ -102,6 +104,7 @@ TradeDrawer.load = function (callback){
 		body: TradeDrawer.PATH + 'body.png',
 		cell: TradeDrawer.PATH + 'cell.png',
 		exitButton: TradeDrawer.PATH + 'exitButton.png',
+		descriptionBack: TradeDrawer.PATH + 'descriptionBack.png',
 		confirmBody: TradeDrawer.PATH + 'confirmBody.png',
 		confirmYesButton: TradeDrawer.PATH + 'confirmYesButton.png',
 		confirmNoButton: TradeDrawer.PATH + 'confirmNoButton.png',
@@ -111,6 +114,7 @@ TradeDrawer.load = function (callback){
 		TradeDrawer.BODY_IMG = imgs.body;
 		TradeDrawer.CELL_IMG = imgs.cell;
 		TradeDrawer.EXIT_BUTTON_IMG = imgs.exitButton;
+		TradeDrawer.DESCRIPTION_BACK = imgs.descriptionBack;
 		TradeDrawer.CONFIRM_BODY_IMG = imgs.confirmBody;
 		TradeDrawer.CONFIRM_YES_BUTTON_IMG = imgs.confirmYesButton;
 		TradeDrawer.CONFIRM_NO_BUTTON_IMG = imgs.confirmNoButton;
@@ -157,6 +161,9 @@ TradeDrawer.load = function (callback){
 		TradeDrawer.EXIT_BUTTON_X = 
 				(ScreenProps.EXP_WIDTH - TradeDrawer.EXIT_BUTTON_IMG.width) / 2;
 		TradeDrawer.EXIT_BUTTON_Y = ScreenProps.EXP_HEIGHT - 100;
+
+		TradeDrawer.DESCRIPTION_X = TradeDrawer.BODY_X - imgs.descriptionBack.width;
+		TradeDrawer.DESCRIPTION_Y = TradeDrawer.BODY_Y;
 
 		// Confirmation dialog-specific preparations.
 		TradeDrawer.CONFIRM_BODY_X = 
@@ -236,6 +243,10 @@ TradeDrawer.displayTrade = function(trades, leftPortrait1, leftPortrait2,
 			TradeDrawer.CELL_IMG.height + (TradeDrawer._numRows - 1) * 
 			TradeDrawer.CELL_SPACING - TradeDrawer.WINDOW_BODY_HEIGHT;
 
+	// Reset the scroll.
+	TradeDrawer._scrollBar.setScrollFraction = 0;
+
+	// Disable/enable the scroll bar based on if its needed.
 	if (TradeDrawer._scrollablePixels == 0) {
 		TradeDrawer._scrollBar.disable();
 	} else {
@@ -359,6 +370,15 @@ TradeDrawer.onEndClick = function(x, y, isDoubleClick) {
 TradeDrawer.onHover = function(x, y) {
 	var normalizedX = x - TradeDrawer.BODY_X;
 	var normalizedY = y - TradeDrawer.BODY_Y;
+	var possibleCellIndex;
+	if (!TradeDrawer._isInConfirmationMode &&
+			(possibleCellIndex = 
+					TradeDrawer._helperGetTradeSlotFromClickCoords(normalizedX, 
+					normalizedY)) != -1) {
+		TradeDrawer._currentHoveredCellIndex = possibleCellIndex;
+	} else {
+		TradeDrawer._currentHoveredCellIndex = null;
+	}
 };
 
 
@@ -380,6 +400,7 @@ TradeDrawer.drawTradeOverlay = function(ctx) {
 					TradeDrawer.BODY_Y);
 			// Draw possible overlay with ingredients list
 			TradeDrawer._maybeDrawIngredients(ctx);
+			TradeDrawer._maybeDrawDescription(ctx);
 			TradeDrawer._exitButton.draw(ctx, TradeDrawer.EXIT_BUTTON_X, 
 				TradeDrawer.EXIT_BUTTON_Y);
 		}
@@ -605,9 +626,28 @@ TradeDrawer._drawConfirmationInterface = function(ctx) {
 };
 
 
-// Maybe draws the igredients list
-TradeDrawer._maybeDrawIngredients = function(ctx) {
+TradeDrawer._drawSpeechBubble = function(ctx) {
+};
 
+
+// Maybe draws the igredients list.
+TradeDrawer._maybeDrawIngredients = function(ctx) {
+// Has the trader show ingredients with speech bubble.
+};
+
+// Maybe draws the description.
+TradeDrawer._maybeDrawDescription = function(ctx) {
+	var trade;
+	if (TradeDrawer._currentHoveredCellIndex != null && 
+			(trade = TradeDrawer._trades[TradeDrawer._currentHoveredCellIndex])) {
+		ctx.drawImage(TradeDrawer.DESCRIPTION_BACK, TradeDrawer.DESCRIPTION_X, 
+				TradeDrawer.DESCRIPTION_Y);
+		var description = Item.getItem(trade.results[0].itemId).description;
+		GlyphDrawer.drawText(ctx, TradeDrawer.DESCRIPTION_FONT, description, 
+				TradeDrawer.DESCRIPTION_X, TradeDrawer.DESCRIPTION_Y, 
+				TradeDrawer.DESCRIPTION_BACK.width, 
+				TradeDrawer.DESCRIPTION_BACK.height);
+	}
 };
 
 

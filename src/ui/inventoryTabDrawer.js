@@ -524,7 +524,6 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 InventoryTabDrawer.onHover = function(x, y) {
 	var normalizedX = x - InventoryTabDrawer._x;
 	var normalizedY = y - InventoryTabDrawer._y;
-	var possibleItemIndex;
 	if (InventoryTabDrawer._dragMode == null && 
 			(InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB || 
 			InventoryTabDrawer.currentTab == InventoryTabDrawer.EQUIPMENT_TAB)) {
@@ -821,6 +820,7 @@ InventoryTabDrawer._helperMaybeDrawDescription = function(ctx, x, y) {
 			InventoryTabDrawer._inventory.itemEntries : 
 			InventoryTabDrawer._inventory.equipEntries;
 	if (entries[itemIndex] != null) {
+		// TODO: make constants.
 		var descriptionX = x - InventoryTabDrawer.DESCRIPTION_BACK.width;
 		var descriptionY = y + InventoryTabDrawer.TAB_BACK_IMGS[0].height;
 		ctx.drawImage(InventoryTabDrawer.DESCRIPTION_BACK, descriptionX, 

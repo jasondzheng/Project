@@ -21,6 +21,11 @@ MouseInputRouter.Modes = {
 			MouseInputRouter._helperHandleTradeInput();
 		}
 	},
+	CONFIRM_DIALOG_INPUT: {
+		tick: function() {
+			MouseInputRouter._helperHandleConfirmDialogInput();
+		}
+	},
 	DIALOG_INPUT: {
 		tick: function() {
 			MouseInputRouter._helperHandleDialogInput();
@@ -109,4 +114,15 @@ MouseInputRouter._helperHandleTradeInput = function() {
 				MouseTracker.getMouseY());
 	}
 	TradeDrawer.updateCurrentScroll(MouseTracker.consumeMouseWheel());
+};
+
+
+MouseInputRouter._helperHandleConfirmDialogInput = function() {
+	if (MouseTracker.isStartClick()) {
+		ConfirmDialog.onStartClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY());
+	} else if (MouseTracker.isEndClick()) {
+		ConfirmDialog.onEndClick(MouseTracker.getMouseX(), 
+				MouseTracker.getMouseY(), MouseTracker.isDoubleClick());
+	}
 };

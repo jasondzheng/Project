@@ -32,6 +32,7 @@ StartMenuScene.reset = function() {
 
 StartMenuScene.draw = function(ctx) {
 	StartMenuDrawer.draw(ctx);
+	ConfirmDialog.draw(ctx);
 };
 
 StartMenuScene.tick = function() {

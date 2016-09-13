@@ -40,7 +40,11 @@
 							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
 									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
 									false /* bubbleIsFromLeft */, 'agl agl agl agl');
+							var that = this;
 							DialogDrawer.endDialog(function() {
+								TradeDrawer.displayTrade(that.getVisibleTrades(), 
+										that._rsrc('portraitRight'), null, 
+										that._rsrc('portraitLeft'), null);
 								GS.setVar('blockIsAnnoyed', true);
 								callback();
 							});
