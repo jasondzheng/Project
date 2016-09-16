@@ -11,7 +11,7 @@ BeatDrawer.BEAT_STYLE = 'beat';
 BeatDrawer.HOLD_START_STYLE = 'holdStart';
 BeatDrawer.HOLD_END_STYLE = 'holdEnd';
 
-// Collors and thickness of each beat
+// Colors and thickness of each beat
 BeatDrawer.COLOR_OUTER = '#000000';
 BeatDrawer.STROKE_OUTER = 6;
 BeatDrawer.COLOR_INNER = 'rgb(145, 155, 255)';

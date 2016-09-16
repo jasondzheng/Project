@@ -1,6 +1,6 @@
 /**
- * A class for a modular confirmation dialog window; each window has a message 
- * and yes and no options.
+ * A class for a modular confirmation dialog window; the window is customized 
+ * through a message and yes and no options.
  */
 
 var ConfirmDialog = {};
@@ -84,6 +84,9 @@ ConfirmDialog.load = function(callback) {
 };
 
 
+// Displays a confirm dialog with the given message. The green button will 
+// trigger onYes and onNo is an optional parameter that can be set to do work 
+// upon exit.
 ConfirmDialog.display = function(message, onYes, opt_onNo) {
 	ConfirmDialog._message = message;
 	ConfirmDialog._yesButton = 

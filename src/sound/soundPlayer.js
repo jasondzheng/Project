@@ -18,6 +18,8 @@ SoundPlayer.setTrack = function(track) {
 	}
 	var audio = track.audio[SoundPlayer.currParity];
 	BeatDrawer.setQueue(track.beatmap.notes, audio.duration);
+	//TESTESTESTESTE::CHANGE TO SEPARATE UNIT BEATMAP
+	UnitBeatManager.setQueue(track.beatmap.notes, audio.duration);
 	SoundPlayer.currTrack = track;
 	audio.play();
 	track.audio[1 - SoundPlayer.currParity].currentTime = 0;

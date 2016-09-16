@@ -11,6 +11,7 @@ var UnitActionManager = function(unit) {
 	this._animationState;
 	this._collisionIgnoreList = [unit];
 	this._oldQueueLength = 0;
+	this._attackParity = true;
 };
 
 // Minimum distance to move within a tick

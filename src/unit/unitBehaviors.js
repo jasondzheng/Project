@@ -35,10 +35,16 @@ UnitBehaviors.PassiveBehavior.getNextAction = function(uam) {
 	unitAttackDistance += 0.5;
 	if (distance < unitAttackDistance) {
 		// conditions for attacking
-		return new UnitActionManager.BasicAttackAction(uam, 
-				Direction.getDirectionFromCoords(
-						playerVisualInstance.x - unitVisualInstance.x, 
-						playerVisualInstance.y - unitVisualInstance.y));
+		if (UnitBeatManager.isInBeat() && 
+					(UnitBeatManager._parity == uam._attackParity)) {
+			uam._attackParity = !uam._attackParity;
+			return new UnitActionManager.BasicAttackAction(uam, 
+					Direction.getDirectionFromCoords(
+							playerVisualInstance.x - unitVisualInstance.x, 
+							playerVisualInstance.y - unitVisualInstance.y));
+		} else {
+			return new UnitActionManager.StayIdleAction(1, uam);
+		}
 	} else if (Math.random() < UnitBehaviors.PassiveBehavior.MOVE_CHANCE) {
 		var direction = Direction.getRandom();
 		var angle = Direction.getAngle(direction);
@@ -73,10 +79,16 @@ UnitBehaviors._createAggressiveBehavior = function(minChaseDistance,
 		var unitSpeed = 3 /* TODO: get actual speed */;
 		if (distance < minChaseDistance) {
 			// conditions for attacking
-			return new UnitActionManager.BasicAttackAction(uam, 
-					Direction.getDirectionFromCoords(
-							playerVisualInstance.x - unitVisualInstance.x, 
-							playerVisualInstance.y - unitVisualInstance.y));
+			if (UnitBeatManager.isInBeat() && 
+					(UnitBeatManager._parity == uam._attackParity)) {
+				uam._attackParity = !uam._attackParity;
+				return new UnitActionManager.BasicAttackAction(uam, 
+						Direction.getDirectionFromCoords(
+								playerVisualInstance.x - unitVisualInstance.x, 
+								playerVisualInstance.y - unitVisualInstance.y));
+			} else {
+				return new UnitActionManager.StayIdleAction(1, uam);
+			}
 		} else if (distance < maxChaseDistance) {
 			// conditions for chasing
 			return new UnitActionManager.ChaseAction(uam, minChaseDistance, 

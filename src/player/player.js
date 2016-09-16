@@ -119,8 +119,10 @@ Player.prototype.increaseCurrentHp = function(amount) {
 // Checks if player is able to issue a move command
 Player.prototype.canMove = function() {
 	return this._animationState == Player.AnimationStates.IDLE || 
-			this._animationState == Player.AnimationStates.WALKING || (
-					this._animationState == Player.AnimationStates.BASIC_ATTACKING &&
+			this._animationState == Player.AnimationStates.WALKING || 
+			(this._animationState == Player.AnimationStates.BASIC_ATTACKING &&
+					this.visualInstance.isAtLastFrameOfAnimation()) ||
+			(this._animationState == Player.AnimationStates.DAMAGE_RECEIVING &&
 					this.visualInstance.isAtLastFrameOfAnimation());
 };
 

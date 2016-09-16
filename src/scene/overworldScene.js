@@ -107,6 +107,7 @@ OverworldScene.tick = function() {
 		GameState.map.tickAll();
 	}
 	BeatDrawer.tick();
+	UnitBeatManager.tick();
 	Camera.tick();
 	UnitHpDrawer.tick();
 	PlayerHpDrawer.tick();
