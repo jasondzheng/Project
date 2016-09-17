@@ -36,7 +36,7 @@ StartMenuScene.draw = function(ctx) {
 };
 
 StartMenuScene.tick = function() {
-
+	StartMenuDrawer.tick();
 };
 
 

@@ -48,17 +48,17 @@ Long(long)term Wishlist:
 		Start Button
 		Exit Button
 			"Are you sure?" dialog
-		Settings Button
+		//Settings Button
 			BGM bar (clickable arrows or click&drag)
 			SFX bar (clickable arrows or click&drag)
 	Load Menu
 		Back Button
 		Saved States Button
-			Character Images, stats, progress
-			Difficulty Options Buttons when clicked
+			//Character Images, stats, progress
+			//Difficulty Options Buttons when clicked
 		Delete Saved States Button
 			"Are you sure?" dialog
-		Settings Button
+		//Settings Button
 			BGM bar (clickable arrows or click&drag)
 			SFX bar (clickable arrows or click&drag)
 	Cut Scenes
