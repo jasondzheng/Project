@@ -24,11 +24,14 @@ BeatDrawer.BOUND_COLOR_INNER = 'rgba(255, 255, 255, 0.5)';
 BeatDrawer.FILL_INDICATOR_COLOR = '#000000';
 
 // Maximimum physical size of a beat
-BeatDrawer.OUTER_RAD_1 = 275;
-BeatDrawer.OUTER_RAD_2 = 220;
+BeatDrawer.OUTER_RAD_1 = 288;
+BeatDrawer.OUTER_RAD_2 = 186;
 // Mininum physical size of a beat
-BeatDrawer.INNER_RAD_1 = 46;
-BeatDrawer.INNER_RAD_2 = 36;
+BeatDrawer.INNER_RAD_1 = 48;
+BeatDrawer.INNER_RAD_2 = 31;
+
+// Offset of the largest-sized beat from the original center
+BeatDrawer.MAX_SIZE_OFFSET = 3;
 
 // Opcaity of a Hold note
 BeatDrawer.HOLD_ALPHA = 0.275;
@@ -210,7 +213,7 @@ BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor,
 			BeatDrawer.INNER_RAD_1;
 	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
 			BeatDrawer.INNER_RAD_2;
-	var yVal = -14 * fraction;
+	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 
 	ctx.globalAlpha = .5 - (0.45 * fraction);
 
@@ -238,7 +241,7 @@ BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 			BeatDrawer.INNER_RAD_1;
 	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
 			BeatDrawer.INNER_RAD_2;
-	var yVal = -14 * fraction;
+	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 
 	// Draw Mark
 	ctx.globalAlpha = .5 - (0.45 * fraction);
@@ -272,7 +275,7 @@ BeatDrawer._helperDrawHoldBeatEnd = function(ctx, centerX, centerY, color,
 			BeatDrawer.INNER_RAD_1;
 	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
 			BeatDrawer.INNER_RAD_2;
-	var yVal = -14 * fraction;
+	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 
 	if (isCutShort) {
 		ctx.fillStyle = ctx.strokeStyle = color;
@@ -319,7 +322,7 @@ BeatDrawer._helperDrawMarkerBeat = function(ctx, centerX, centerY, innerColor,
 			BeatDrawer.INNER_RAD_1;
 	var axisB = (BeatDrawer.OUTER_RAD_2 - BeatDrawer.INNER_RAD_2) * fraction + 
 			BeatDrawer.INNER_RAD_2;
-	var yVal = -14 * fraction;
+	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 	ctx.lineWidth = BeatDrawer.STROKE_OUTER;
 	ctx.strokeStyle = outerColor;
 	ctx.beginPath();

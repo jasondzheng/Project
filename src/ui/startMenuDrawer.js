@@ -10,8 +10,6 @@ StartMenuDrawer.SAVED_STATE_BUTTON_IMGS;
 
 StartMenuDrawer.PATH = '../assets/img/ui/startMenu/';
 
-StartMenuDrawer.START_BUTTON_POS_Y = 480;
-
 // The last recorded start click position.
 StartMenuDrawer._lastStartClickX;
 StartMenuDrawer._lastStartClickY;
@@ -38,9 +36,10 @@ StartMenuDrawer.load = function(callback) {
 		savedStatesBackground: StartMenuDrawer.PATH + 'savedStatesBackground.png',
 		savedState1Button: StartMenuDrawer.PATH + 'savedState1Button.png',
 		savedState2Button: StartMenuDrawer.PATH + 'savedState2Button.png',
-		savedState3Button: StartMenuDrawer.PATH + 'savedState3Button.png'
+		savedState3Button: StartMenuDrawer.PATH + 'savedState3Button.png',
+		backButton: StartMenuDrawer.PATH + 'backButton.png'
 	}, function(imgs) {
-		// Remove unnecesary references.
+		// TODO: Remove unnecesary references.
 		StartMenuDrawer.START_BACKGROUND_IMG = imgs.startBackground;
 		StartMenuDrawer.START_BUTTON_IMG = imgs.startButton;
 		StartMenuDrawer.SAVED_STATES_BACKGROUND_IMG = imgs.savedStatesBackground;
@@ -49,9 +48,7 @@ StartMenuDrawer.load = function(callback) {
 			imgs.savedState2Button,
 			imgs.savedState3Button
 		];
-		StartMenuDrawer.START_BUTTON_POS_X = 
-				(StartMenuDrawer.START_BACKGROUND_IMG.width - 
-				StartMenuDrawer.START_BUTTON_IMG.width) / 2;
+		StartMenuDrawer.BACK_BUTTON_IMG = imgs.backButton;
 
 		StartMenuDrawer._startButton = new Button(imgs.startButton, false, 
 				function() {
@@ -59,11 +56,16 @@ StartMenuDrawer.load = function(callback) {
 							StartMenuDrawer.Pages.SAVED_STATES_PAGE;
 				});
 
+		StartMenuDrawer.START_BUTTON_X = 
+				(StartMenuDrawer.START_BACKGROUND_IMG.width - 
+				StartMenuDrawer.START_BUTTON_IMG.width) / 2;
+		StartMenuDrawer.START_BUTTON_Y = 480;
+
 		StartMenuDrawer._savedStateButtons = []
 		for (var i = 0; i < StartMenuDrawer.SAVED_STATE_BUTTON_IMGS.length; i++) {
 			StartMenuDrawer._savedStateButtons.push(new Button(
 					StartMenuDrawer.SAVED_STATE_BUTTON_IMGS[i], false, 
-					StartMenuDrawer.onSavedStateButtonPress(0)));
+					StartMenuDrawer.onSavedStateButtonPress(i)));
 		}
 
 		StartMenuDrawer._savedStateButtonPositions = [];
@@ -76,6 +78,15 @@ StartMenuDrawer.load = function(callback) {
 						StartMenuDrawer.SAVED_STATE_BUTTON_IMGS[i].height) / 2
 			})
 		}
+
+		StartMenuDrawer._backButton = new Button(imgs.backButton, true, function() {
+			StartMenuDrawer._currentPage = StartMenuDrawer.Pages.START_PAGE;
+		});
+
+		StartMenuDrawer.BACK_BUTTON_X = 
+				(StartMenuDrawer.SAVED_STATES_BACKGROUND_IMG.width - 
+				StartMenuDrawer.BACK_BUTTON_IMG.width) / 2;
+		StartMenuDrawer.BACK_BUTTON_Y = 480;
 
 		callback();
 	});
@@ -115,8 +126,8 @@ StartMenuDrawer.onStartClick = function(x, y) {
 			StartMenuDrawer._startButton.isClicked = 
 			StartMenuDrawer._startButton.isHovered =
 					StartMenuDrawer._startButton.isInButton(
-							x - StartMenuDrawer.START_BUTTON_POS_X, 
-							y - StartMenuDrawer.START_BUTTON_POS_Y);
+							x - StartMenuDrawer.START_BUTTON_X, 
+							y - StartMenuDrawer.START_BUTTON_Y);
 			break;
 		case StartMenuDrawer.Pages.SAVED_STATES_PAGE:
 			var possibleSavedStateIndex;
@@ -130,22 +141,18 @@ StartMenuDrawer.onStartClick = function(x, y) {
 						possibleSavedStateIndex].isClicked = true;
 				StartMenuDrawer._savedStateButtons[
 						possibleSavedStateIndex].isHovered = true;
+			} else if (StartMenuDrawer._backButton.isInButton(
+					x - StartMenuDrawer.BACK_BUTTON_X, 
+					y - StartMenuDrawer.BACK_BUTTON_Y)) {
+				StartMenuDrawer._backButton.isClicked = true;
+				StartMenuDrawer._backButton.isHovered = true;
 			}
 			break;
 	}
 };
 
 StartMenuDrawer.onDrag = function(x, y) {
-	switch (StartMenuDrawer._currentPage) {
-		case StartMenuDrawer.Pages.START_PAGE:
-			StartMenuDrawer._startButton.isClicked = 
-					StartMenuDrawer._startButton.isInButton(
-							x - StartMenuDrawer.START_BUTTON_POS_X, 
-							y - StartMenuDrawer.START_BUTTON_POS_Y);
-			break;
-		case StartMenuDrawer.Pages.SAVED_STATES_PAGE:
-			break;
-	}
+		// Not supported.
 };
 
 StartMenuDrawer.onEndClick = function(x, y, isDoubleClick) {
@@ -157,8 +164,8 @@ StartMenuDrawer.onEndClick = function(x, y, isDoubleClick) {
 	switch(StartMenuDrawer._currentPage) {
 		case StartMenuDrawer.Pages.START_PAGE:
 			if (StartMenuDrawer._startButton.isInButton(
-					x - StartMenuDrawer.START_BUTTON_POS_X, 
-					y - StartMenuDrawer.START_BUTTON_POS_Y) && startAndEndSameLoc) {
+					x - StartMenuDrawer.START_BUTTON_X, 
+					y - StartMenuDrawer.START_BUTTON_Y) && startAndEndSameLoc) {
 				StartMenuDrawer._startButton.onClick();
 				StartMenuDrawer._startButton.isClicked = false;
 				StartMenuDrawer._startButton.isHovered = false;
@@ -168,15 +175,21 @@ StartMenuDrawer.onEndClick = function(x, y, isDoubleClick) {
 			var possibleSavedStateIndex;
 			if ((possibleSavedStateIndex = 
 					StartMenuDrawer._helperGetSavedStateButtonFromCoords(x, y)) != -1 && 
-					startAndEndSameLoc) {
+							startAndEndSameLoc) {
 				StartMenuDrawer._savedStateButtons[possibleSavedStateIndex].onClick();
-			} 
+			} else if (StartMenuDrawer._backButton.isInButton(
+					x - StartMenuDrawer.BACK_BUTTON_X, 
+					y - StartMenuDrawer.BACK_BUTTON_Y) && startAndEndSameLoc) {
+				StartMenuDrawer._backButton.onClick();
+			}
 			if (StartMenuDrawer._currentSelectedSavedStateIndex != null){
 				StartMenuDrawer._savedStateButtons[
 						StartMenuDrawer._currentSelectedSavedStateIndex].isClicked = false;
 				StartMenuDrawer._savedStateButtons[
 						StartMenuDrawer._currentSelectedSavedStateIndex].isHovered = false;
 			}
+			StartMenuDrawer._backButton.isClicked = false;
+			StartMenuDrawer._backButton.isHovered = false;
 			break;
 	}
 };
@@ -186,8 +199,8 @@ StartMenuDrawer.onHover = function(x, y) {
 		case StartMenuDrawer.Pages.START_PAGE:
 				StartMenuDrawer._startButton.isHovered = 
 						StartMenuDrawer._startButton.isInButton(
-								x - StartMenuDrawer.START_BUTTON_POS_X, 
-								y - StartMenuDrawer.START_BUTTON_POS_Y);
+								x - StartMenuDrawer.START_BUTTON_X, 
+								y - StartMenuDrawer.START_BUTTON_Y);
 			break;
 		case StartMenuDrawer.Pages.SAVED_STATES_PAGE:
 			var possibleSavedStateIndex;
@@ -204,6 +217,10 @@ StartMenuDrawer.onHover = function(x, y) {
 									false;
 				}
 				StartMenuDrawer._currentSelectedSavedStateIndex = null;
+				StartMenuDrawer._backButton.isHovered = 
+						StartMenuDrawer._backButton.isInButton(
+								x - StartMenuDrawer.BACK_BUTTON_X, 
+								y - StartMenuDrawer.BACK_BUTTON_Y);
 			}
 			break;
 	}
@@ -227,31 +244,26 @@ StartMenuDrawer.tick = function() {
 	for (var i = 0; i < StartMenuDrawer._savedStateButtons.length; i++) {
 		StartMenuDrawer._savedStateButtons[i].tick();
 	}
+	StartMenuDrawer._backButton.tick();
 };
 
 
 StartMenuDrawer._helperDrawStartPage = function(ctx) {
 	ctx.drawImage(StartMenuDrawer.START_BACKGROUND_IMG, 0, 0);
 	StartMenuDrawer._startButton.draw(ctx,
-			StartMenuDrawer.START_BUTTON_POS_X, StartMenuDrawer.START_BUTTON_POS_Y);
+			StartMenuDrawer.START_BUTTON_X, StartMenuDrawer.START_BUTTON_Y);
 };
 
 
 StartMenuDrawer._helperDrawSavedStatesPage = function(ctx) {
 	ctx.drawImage(StartMenuDrawer.SAVED_STATES_BACKGROUND_IMG, 0, 0);
 	for (var i = 0; i < StartMenuDrawer.SAVED_STATE_BUTTON_IMGS.length; i++) {
-		// TODO: when finalized, calculate positions as constants when images are 
-		// loaded
-		// ctx.drawImage(StartMenuDrawer.SAVED_STATE_BUTTON_IMGS[i], 
-		// 		(2 * i + 1) * (StartMenuDrawer.START_BACKGROUND_IMG.width / 
-		// 				(StartMenuDrawer.SAVED_STATE_BUTTON_IMGS.length * 2)) - 
-		// 		(StartMenuDrawer.SAVED_STATE_BUTTON_IMGS[i].width / 2), 
-		// 		(StartMenuDrawer.SAVED_STATES_BACKGROUND_IMG.height - 
-		// 				StartMenuDrawer.SAVED_STATE_BUTTON_IMGS[i].height) / 2);
 		StartMenuDrawer._savedStateButtons[i].draw(ctx, 
 				StartMenuDrawer._savedStateButtonPositions[i].x,
 				StartMenuDrawer._savedStateButtonPositions[i].y);
 	}
+	StartMenuDrawer._backButton.draw(ctx, StartMenuDrawer.BACK_BUTTON_X,
+			StartMenuDrawer.BACK_BUTTON_Y);
 };
 
 
@@ -259,8 +271,6 @@ StartMenuDrawer._helperDrawSavedStatesPage = function(ctx) {
 // Returns -1 if the mouse is not in a saved state button.
 StartMenuDrawer._helperGetSavedStateButtonFromCoords = function(x, y) {
 	for (var i = 0; i < StartMenuDrawer.SAVED_STATE_BUTTON_IMGS.length; i++) {
-		// TODO: when finalized, calculate positions as constants when images are 
-		// loaded
 		if (StartMenuDrawer._savedStateButtons[i].isInButton(
 				x - StartMenuDrawer._savedStateButtonPositions[i].x, 
 				y - StartMenuDrawer._savedStateButtonPositions[i].y)) {
