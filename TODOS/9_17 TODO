@@ -1,10 +1,18 @@
 Shop interface
 	Dynamic speech bubbles for shop owners
 	Scrollabe window for items for sale
+Trade Interface
+	make window smaller
+	Dynamic speech bubbles for traders
+Equipment should be stored in player
+	Headphones
+	Shoes
+	Weapon
+	Battery Pack
 Implement button animation/sprite change with scroll bars
 Implement button animations for settings buttons
 Maybe implement cell animations for cell windows
 
-Handle Unit knockback(improve animation/extend diable time or actuallly knock back units)
-fix ellipse drawing for beat drawer
+Probably no potions, only battery packs
+Handle Unit knockback(improve animation/extend disable time or actuallly knock back units)
 fix item drop pickup to be smoother; maybe draw shadow

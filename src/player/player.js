@@ -28,6 +28,7 @@ Player.prototype.applySaveData = function(saveData) {
 	this.money = saveData.money;
 	// Player's inventory
 	this.inventory = Inventory.load(saveData.inventory);
+	// TODO deal with player equipment.
 };
 
 

@@ -5,5 +5,7 @@
 	"price": 10,
 	"isKeyItem": false,
 	"equipData": {
+		"type": "BATTERY",
+		"capacity": 100 
 	}
 }
