@@ -257,8 +257,9 @@ BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 	ctx.beginPath();
 	ctx.ellipse(centerX, centerY - yVal, axisA, axisB, 0, 0, 2 * Math.PI);
 	if (isCutShort) {
-		ctx.ellipse(centerX, centerY + 14, BeatDrawer.OUTER_RAD_1, 
-				BeatDrawer.OUTER_RAD_2, 0, 0, 2 * Math.PI, true);
+		ctx.ellipse(centerX, centerY + BeatDrawer.MAX_SIZE_OFFSET, 
+				BeatDrawer.OUTER_RAD_1, BeatDrawer.OUTER_RAD_2, 0, 0, 2 * Math.PI, 
+				true);
 		ctx.globalAlpha = BeatDrawer.HOLD_ALPHA;
 		ctx.fill();
 		ctx.globalAlpha = 1;

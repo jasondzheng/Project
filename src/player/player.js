@@ -28,7 +28,8 @@ Player.prototype.applySaveData = function(saveData) {
 	this.money = saveData.money;
 	// Player's inventory
 	this.inventory = Inventory.load(saveData.inventory);
-	// TODO deal with player equipment.
+	// Player equipment
+	this.equipment = Equipment.load(saveData.equipment);
 };
 
 
@@ -39,7 +40,8 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	maxHp: 100,
 	// CHECK
 	money: 0,
-	inventory: null
+	inventory: null,
+	equipment: null
 };
 
 
@@ -51,7 +53,8 @@ Player.prototype.createSaveData = function() {
 		maxHp: this.maxHp,
 		// CHECK
 		money: this.money,
-		inventory: this.inventory.write()
+		inventory: this.inventory.write(),
+		equipment: this.equipment.write()
 	};
 };
 

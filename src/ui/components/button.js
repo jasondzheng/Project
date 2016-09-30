@@ -28,8 +28,7 @@ Button.CLICKED_ALPHA = 0.75;
 // Returns if the mouse in within the bounds of the button.
 Button.prototype.isInButton = function(relX, relY) {
 	if (this.isRounded) {
-		return (relX - this.halfWidth) * (relX - this.halfWidth) < 
-						(this.halfWidth) * (this.halfWidth) && 
+		return (relX - this.halfWidth) * (relX - this.halfWidth) +
 				(relY - this.halfHeight) * (relY - this.halfHeight) < 
 						(this.halfHeight) * (this.halfHeight);
 	} else {

@@ -157,7 +157,7 @@ InventoryTabDrawer.init = function(callback) {
 		// Initialize settings buttons.
 		InventoryTabDrawer._saveButton = 
 				new Button(InventoryTabDrawer.SAVE_BUTTON_IMG, false, function() {
-					GameState.saveData.save();
+					GameState.saveData.save(true);
 				});
 		InventoryTabDrawer._exitButton = 
 				new Button(InventoryTabDrawer.EXIT_BUTTON_IMG, true, function() {
@@ -780,7 +780,7 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 };
 
 
-// Draw the current dragge item (if exists) with its center at the current mouse
+// Draw the current dragged item (if exists) with its center at the current mouse
 // position.
 InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
 	if (InventoryTabDrawer._draggedItemIndex == null || 
@@ -794,7 +794,7 @@ InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
 		var cellX = InventoryTabDrawer._draggedItemX;
 		var cellY = InventoryTabDrawer._draggedItemY;
 		ctx.drawImage(itemEntry.item.sprite, cellX, cellY);
-		if (!isEquips) {
+		if (!isEquips && itemEntry.quantity > 1) {
 			var quantityStr = itemEntry.quantity.toString();
 			GlyphDrawer.drawText(ctx, InventoryTabDrawer.QUANTITY_FONT, 
 					quantityStr, cellX + InventoryTabDrawer.QUANTITY_OFFSET_X + 

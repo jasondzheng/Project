@@ -71,7 +71,7 @@ Equipment.prototype.equip = function(itemId) {
 
 // Checks a gamestate map property; returns true if in non-combat map, otherwise
 // checks if the possible existing equipment can be added to the inventory.
-Equipment.prototype.canEquip = fucntion(itemId) {
+Equipment.prototype.canEquip = function(itemId) {
 	var item = Item.getItem(itemId);
 	var index = Equipment.SlotIndices[item.equipData.type];
 	// TODO: implement map type.
@@ -81,6 +81,9 @@ Equipment.prototype.canEquip = fucntion(itemId) {
 		return true;
 	}
 };
+
+
+Equipment.prototype.dequip = function() {};
 
 
 // Applies the stat boost of the item at the given index.
