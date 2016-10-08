@@ -10,6 +10,7 @@ var Player = function(id, visualInstance, x, y, saveData) {
 	this._animationState = Player.AnimationStates.IDLE;
 	this._direction = Direction.DOWN;
 	this._collisionIgnoreList = [this];
+	this.attack = 0;
 	this.attackCombo = 0;
 	this.pickupMode = false;
 	// TODO: remove the debug object and this default value for save data
@@ -23,6 +24,8 @@ Player.prototype.applySaveData = function(saveData) {
 	this.id = saveData.id;
 	this.hp = saveData.hp;
 	this.maxHp = saveData.maxHp;
+	this.batteryLevel;
+	this.batteryCapacity;
 	// CHECK
 	// Player's money
 	this.money = saveData.money;

@@ -28,6 +28,28 @@
 			"capacity": 100 
 		}
 	},
+	"testHeadphones": {
+		"name": "Test Headphones",
+		"description": "Test pair of headphones",
+		"isUseable": false,
+		"price": 100,
+		"isKeyItem": false,
+		"equipData": {
+			"type": "HEADGEAR",
+			"clarity": 1 
+		}
+	},
+	"testShoes": {
+		"name": "Test Shoes",
+		"description": "Test pair of shoes",
+		"isUseable": false,
+		"price": 100,
+		"isKeyItem": false,
+		"equipData": {
+			"type": "SHOES",
+			"range": 1
+		}
+	},
 	"boat": {
 		"name": "Boat",
 		"description": "This is a boat",

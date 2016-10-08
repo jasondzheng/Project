@@ -169,6 +169,9 @@ StartMenuDrawer.onEndClick = function(x, y, isDoubleClick) {
 				StartMenuDrawer._startButton.onClick();
 				StartMenuDrawer._startButton.isClicked = false;
 				StartMenuDrawer._startButton.isHovered = false;
+			} else {
+				StartMenuDrawer._startButton.isClicked = false;
+				StartMenuDrawer._startButton.isHovered = false;
 			}
 			break;
 		case StartMenuDrawer.Pages.SAVED_STATES_PAGE:

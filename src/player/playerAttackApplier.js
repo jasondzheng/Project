@@ -36,7 +36,8 @@ PlayerAttackApplier.BasicCloseRangedAttack = {
 						console.log(player.attackCombo);	
 					} 
 				}
-				unit.hp -= 1;
+				// TODO: integrate multiplier into damage.
+				unit.hp -= player.attack;
 				unit.actionManager.forceEnqueue(unit.hp == 0 ? 
 						new UnitActionManager.DespawnAction(unit.actionManager) : 
 						new UnitActionManager.DamageTakenAction(unit.actionManager));

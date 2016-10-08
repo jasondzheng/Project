@@ -33,6 +33,9 @@ BeatDrawer.INNER_RAD_2 = 31;
 // Offset of the largest-sized beat from the original center
 BeatDrawer.MAX_SIZE_OFFSET = 3;
 
+BeatDrawer.BEAT_MAX_ALPHA = 0.5;
+BeatDrawer.BEAT_MIN_ALPHA = 0.05;
+
 // Opcaity of a Hold note
 BeatDrawer.HOLD_ALPHA = 0.275;
 
@@ -52,6 +55,8 @@ BeatDrawer._windowEnd;
 BeatDrawer._hitWindowStart;
 BeatDrawer._hitWindowEnd;
 BeatDrawer._hitHoldEnd;
+
+BeatDrawer.isEnabled = true;
 
 BeatDrawer.setWindowInterval = function(seconds) {
 	BeatDrawer._showInterval = seconds;
@@ -177,6 +182,9 @@ BeatDrawer.consumeHitNote = function(/* TODO: explain what type of press */) {
 
 // Draws all beats between windowStart and windowEnd.
 BeatDrawer.drawBeats = function(ctx, centerX, centerY) {
+	if (!BeatDrawer.isEnabled) {
+		return;
+	}
 	for (var i = BeatDrawer._windowStart; i < BeatDrawer._windowEnd; i++) {
 		var beat = BeatDrawer._queue[i % BeatDrawer._queue.length];
 		var time = (i < BeatDrawer._queue.length ? 0 : BeatDrawer._songPlayTime) + 
@@ -215,7 +223,8 @@ BeatDrawer._helperDrawBeat = function(ctx, centerX, centerY, innerColor,
 			BeatDrawer.INNER_RAD_2;
 	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 
-	ctx.globalAlpha = .5 - (0.45 * fraction);
+	ctx.globalAlpha = BeatDrawer.BEAT_MAX_ALPHA - ((BeatDrawer.BEAT_MAX_ALPHA - 
+			BeatDrawer.BEAT_MIN_ALPHA) * fraction);
 
 	ctx.lineWidth = BeatDrawer.STROKE_OUTER;
 	ctx.strokeStyle = outerColor;
@@ -244,7 +253,8 @@ BeatDrawer._helperDrawHoldBeatStart = function(ctx, centerX, centerY, color,
 	var yVal = -BeatDrawer.MAX_SIZE_OFFSET * fraction;
 
 	// Draw Mark
-	ctx.globalAlpha = .5 - (0.45 * fraction);
+	ctx.globalAlpha = BeatDrawer.BEAT_MAX_ALPHA - ((BeatDrawer.BEAT_MAX_ALPHA - 
+			BeatDrawer.BEAT_MIN_ALPHA) * fraction);
 	ctx.lineWidth = 3;
 	ctx.strokeStyle = outerColor;
 	ctx.beginPath();
@@ -290,7 +300,8 @@ BeatDrawer._helperDrawHoldBeatEnd = function(ctx, centerX, centerY, color,
 	ctx.fill();
 
 	// Draw Mark
-	ctx.globalAlpha = .5 - (0.45 * fraction);
+	ctx.globalAlpha = BeatDrawer.BEAT_MAX_ALPHA - ((BeatDrawer.BEAT_MAX_ALPHA - 
+			BeatDrawer.BEAT_MIN_ALPHA) * fraction);
 	ctx.lineWidth = 3;
 	ctx.strokeStyle = outerColor;
 	ctx.beginPath();

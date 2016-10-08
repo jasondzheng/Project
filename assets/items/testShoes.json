@@ -1,0 +1,11 @@
+{
+	"name": "Test Shoes",
+	"description": "Test pair of shoes",
+	"isUseable": false,
+	"price": 100,
+	"isKeyItem": false,
+	"equipData": {
+		"type": "SHOES",
+		"range": 1
+	}
+}

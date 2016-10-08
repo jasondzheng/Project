@@ -28,6 +28,9 @@ OverworldScene.init = function(callback) {
 		// TODO: make this legit
 		player.setPositionX(4);
 		player.setPositionY(4);
+
+		player.equipment.applyStatBoosts();
+
 		map.registerPlayer(player);
 
 		map.unitSpawner.fillUnitQuotas();

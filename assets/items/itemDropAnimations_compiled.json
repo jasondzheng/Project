@@ -483,6 +483,144 @@
       ],
       "isLooped": true
     },
+    "testHeadphones": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "testHeadphones_0"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_1"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_8"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testHeadphones_1"
+        }
+      ],
+      "isLooped": true
+    },
+    "testShoes": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "testShoes_0"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_1"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_8"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testShoes_1"
+        }
+      ],
+      "isLooped": true
+    },
     "wood": {
       "frameRefs": [
         {
@@ -997,6 +1135,132 @@
         "y": 80.0
       },
       "sprite": "../potion"
+    },
+    "testHeadphones_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testHeadphones_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../testHeadphones"
+    },
+    "testShoes_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../testShoes"
+    },
+    "testShoes_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../testShoes"
     },
     "wood_0": {
       "edge": {

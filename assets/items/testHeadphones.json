@@ -1,0 +1,11 @@
+{
+	"name": "Test Headphones",
+	"description": "Test pair of headphones",
+	"isUseable": false,
+	"price": 100,
+	"isKeyItem": false,
+	"equipData": {
+		"type": "HEADGEAR",
+		"clarity": 1 
+	}
+}
