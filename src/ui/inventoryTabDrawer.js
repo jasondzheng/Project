@@ -67,8 +67,11 @@ InventoryTabDrawer.QUANTITY_MAX_GLYPHS = 3;
 // The currently vidible tab index.
 InventoryTabDrawer.currentTab = InventoryTabDrawer.ITEMS_TAB; 
 
-// The inventory to be drawn in the the tab window.
+// The inventory to be drawn in the tab window.
 InventoryTabDrawer._inventory;
+
+// The equipment to be drawn in the tab window.
+InventoryTabDrawer._equipment;
 
 // The current settings to be shown in the tab window.
 InventoryTabDrawer._settings;
@@ -269,6 +272,10 @@ InventoryTabDrawer.setInventory = function(inventory) {
 	InventoryTabDrawer._inventory = inventory;
 };
 
+InventoryTabDrawer.setEquipment = function(equipment) {
+	InventoryTabDrawer._equipment = equipment;
+};
+
 // Initializes the volume scrollbars to match the current settings in the save 
 // data.
 InventoryTabDrawer.setSettings = function(settings) {
@@ -420,6 +427,34 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 					normalizedX, normalizedY)) != -1) {
 		// Check for tab change
 		InventoryTabDrawer.currentTab = possibleTabIndex;
+	} else if (isDoubleClick && startAndEndSameLoc && 
+			(possibleItemIndex = 
+					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
+							normalizedX, normalizedY)) != -1) {
+		// Check for click on item
+		// Only handle use items for now
+		if (InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB) {
+			var itemEntry = 
+					InventoryTabDrawer._inventory.itemEntries[possibleItemIndex];
+			if (itemEntry && ItemHelper.canUseItem(itemEntry.item)) {
+				ItemHelper.useItem(itemEntry.item);
+				// TODO: reconsider cleanup
+				InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
+						false /* isFromEquip */);
+			}
+		} else if (InventoryTabDrawer.currentTab == 
+				InventoryTabDrawer.EQUIPMENT_TAB) {
+			var equipEntry = 
+					InventoryTabDrawer._inventory.equipEntries[possibleItemIndex];
+			if (equipEntry && 
+					InventoryTabDrawer._equipment.canEquip(equipEntry.item)) {
+				InventoryTabDrawer._equipment.equip(equipEntry.item);
+			// TODO: reconsider cleanup; existing equip is added in other method.
+				InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
+						true /* isFromEquip */);
+			}
+		}
+		// TODO: handle equipment items
 	} else if (InventoryTabDrawer._dragMode == 
 			InventoryTabDrawer.DragModes.ITEM) {
 		var entries =
@@ -446,22 +481,6 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 					entries[possibleItemIndex];
 			entries[possibleItemIndex] = tempEntry;
 		}
-	} else if (isDoubleClick && startAndEndSameLoc && 
-			(possibleItemIndex = 
-					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
-							normalizedX, normalizedY)) != -1) {
-		// Check for click on item
-		// Only handle use items for now
-		if (InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB) {
-			var itemEntry = 
-					InventoryTabDrawer._inventory.itemEntries[possibleItemIndex];
-			if (itemEntry && ItemHelper.canUseItem(itemEntry.item)) {
-				ItemHelper.useItem(itemEntry.item);
-				InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
-						false /* isFromEquip */);
-			}
-		}
-		// TODO: handle equipment items
 	} else if (InventoryTabDrawer.currentTab == InventoryTabDrawer.SETTINGS_TAB && 
 				startAndEndSameLoc && InventoryTabDrawer._dragMode == null) {
 		// Handle Settings Contents
@@ -821,7 +840,7 @@ InventoryTabDrawer._helperMaybeDrawDescription = function(ctx, x, y) {
 			InventoryTabDrawer._inventory.equipEntries;
 	if (entries[itemIndex] != null) {
 		// TODO: make constants.
-		var descriptionX = x - InventoryTabDrawer.DESCRIPTION_BACK.width;
+		var descriptionX = x + InventoryTabDrawer.BODY_IMG.width;
 		var descriptionY = y + InventoryTabDrawer.TAB_BACK_IMGS[0].height;
 		ctx.drawImage(InventoryTabDrawer.DESCRIPTION_BACK, descriptionX, 
 				descriptionY);

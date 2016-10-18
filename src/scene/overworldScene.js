@@ -36,6 +36,8 @@ OverworldScene.init = function(callback) {
 		map.unitSpawner.fillUnitQuotas();
 
 		InventoryTabDrawer.setInventory(player.inventory);
+		InventoryTabDrawer.setEquipment(player.equipment);
+
 		//CHECK;
 		InventoryTabDrawer.setSettings(GameState.saveData.settingsInfo);
 

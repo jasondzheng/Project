@@ -1,0 +1,11 @@
+{
+	"name": "Test Weapon",
+	"description": "Test weapon",
+	"isUseable": false,
+	"price": 100,
+	"isKeyItem": false,
+	"equipData": {
+		"type": "WEAPON",
+		"attack": 1
+	}
+}

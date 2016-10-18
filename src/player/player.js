@@ -187,7 +187,8 @@ Player.prototype.setIdle = function(opt_direction) {
 
 // Checks if the player can issue a basic attack command
 Player.prototype.canBasicAttack = function() {
-	return this._animationState != Player.AnimationStates.DAMAGE_RECEIVING && 
+	return this.attack != 0 && 
+			this._animationState != Player.AnimationStates.DAMAGE_RECEIVING && 
 			(this._animationState != Player.AnimationStates.BASIC_ATTACKING || 
 					this.visualInstance.isAtLastFrameOfAnimation());
 };

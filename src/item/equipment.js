@@ -27,7 +27,7 @@ Equipment.SlotIndices = {
 Equipment.defaultStats = {
 	beatMaxAlpha: 0,
 	beatMaxFactor: 5, 
-	beatMaxHeight: 31,
+	beatMaxHeight: 36,
 	beatMaxWidth: 48,
 	beatWindow: 1.75 / 6,
 	attack: 0,
@@ -62,8 +62,7 @@ Equipment.prototype.write = function() {
 
 // Equips an item with the given itemId. Expects only equipment itemIds to be 
 // passed. If another item is equiped, add it to the inventory.
-Equipment.prototype.equip = function(itemId) {
-	var item = Item.getItem(itemId);
+Equipment.prototype.equip = function(item) {
 	// TODO: implement type in equips
 	var index = Equipment.SlotIndices[item.equipData.type];
 	if (this.equipmentArray[index]) {
@@ -77,11 +76,11 @@ Equipment.prototype.equip = function(itemId) {
 // Checks a gamestate map property(TODO/maybe); returns true if in non-combat 
 // map, otherwise checks if the possible existing equipment can be added to the 
 // inventory.
-Equipment.prototype.canEquip = function(itemId) {
-	var item = Item.getItem(itemId);
+Equipment.prototype.canEquip = function(item) {
+	// TODO: check if is valid area to switch battery
 	var index = Equipment.SlotIndices[item.equipData.type];
 	if (this.equipmentArray[index]) {
-		return GameState.player.inventory.canAdd(equipmentArray[index].id, 1);
+		return GameState.player.inventory.canAdd(this.equipmentArray[index].id, 1);
 	} else {
 		return true;
 	}
@@ -100,6 +99,7 @@ Equipment.prototype.dequip = function(index) {
 // map, otherwise checks if the possible existing equipment can be added to the 
 // inventory.
 Equipment.prototype.canDequip = function(index) {
+	// TODO: check if is valid area to switch battery
 	return GameState.player.inventory.canAdd(equipmentArray[index].id, 1)
 };
 
@@ -183,8 +183,7 @@ Equipment.prototype.applyIndexDefaultStat = function(index) {
 			break;
 		case Equipment.SlotIndices.BATTERY:
 			GameState.player.batteryCapacity = Equipment.defaultStats.capacity;
-			GameState.player.batteryLevel = Math.min(GameState.player.batteryLevel, 
-					GameState.player.batteryCapacity);
+			GameState.player.batteryLevel = GameState.player.batteryCapacity;
 			break;
 	}
 };

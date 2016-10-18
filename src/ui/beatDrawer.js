@@ -23,12 +23,13 @@ BeatDrawer.BOUND_COLOR_INNER = 'rgba(255, 255, 255, 0.5)';
 
 BeatDrawer.FILL_INDICATOR_COLOR = '#000000';
 
-// Maximimum physical size of a beat
-BeatDrawer.OUTER_RAD_1 = 288;
-BeatDrawer.OUTER_RAD_2 = 186;
 // Mininum physical size of a beat
 BeatDrawer.INNER_RAD_1 = 48;
-BeatDrawer.INNER_RAD_2 = 31;
+BeatDrawer.INNER_RAD_2 = 36;
+
+// Maximimum physical size of a beat
+BeatDrawer.OUTER_RAD_1 = BeatDrawer.INNER_RAD_1 * 6;
+BeatDrawer.OUTER_RAD_2 = BeatDrawer.INNER_RAD_2 * 6;
 
 // Offset of the largest-sized beat from the original center
 BeatDrawer.MAX_SIZE_OFFSET = 3;

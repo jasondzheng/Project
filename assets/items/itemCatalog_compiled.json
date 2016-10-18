@@ -50,6 +50,17 @@
 			"range": 1
 		}
 	},
+	"testWeapon": {
+		"name": "Test Weapon",
+		"description": "Test weapon",
+		"isUseable": false,
+		"price": 100,
+		"isKeyItem": false,
+		"equipData": {
+			"type": "WEAPON",
+			"attack": 1
+		}
+	},
 	"boat": {
 		"name": "Boat",
 		"description": "This is a boat",

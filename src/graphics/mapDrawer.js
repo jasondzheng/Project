@@ -6,7 +6,7 @@
 var MapDrawer = {};
 
 // Default starting height for the grid's top row.
-MapDrawer.BASE_HEIGHT = 59;
+MapDrawer.BASE_HEIGHT = 72;
 
 // The number of rows to show.
 MapDrawer.TOTAL_ROWS = 10;
@@ -100,7 +100,7 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 				MapDrawer._helperCalcScreenY(centerYRealGridPos);
 		var centerLoc = MapDrawer._helperLocatePixel(instance.x, 
 				instance.y + instance.getCollisionHeight() / 2, 
-				viewerX, viewerY, MapDrawer.TILE_DIM);
+				viewerX, viewerY);
 		var boundingRect = {
 			x: centerLoc.x - instance.getEdge().x,
 			y: centerLoc.y - instance.getEdge().y,
@@ -123,10 +123,10 @@ MapDrawer.drawEntities = function(ctx, map, viewerX, viewerY) {
 
 
 // Helper function to calculate the on-screen position of a given grid
-// coordinate and an viewer x and y coordinate and yBlockWidth.
-MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
+// coordinate and a viewer x and y coordinate.
+MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY) {
 	var result = {};
-	result.x = ScreenProps.EXP_WIDTH / 2 + (x - viewerX) * yBlockWidth;
+	result.x = ScreenProps.EXP_WIDTH / 2 + (x - viewerX) * MapDrawer.TILE_DIM;
 	result.y = MapDrawer._helperCalcScreenY(
 			y - (viewerY - MapDrawer.HALF_ROWS));
 	return result;
@@ -137,7 +137,8 @@ MapDrawer._helperLocatePixel = function(x, y, viewerX, viewerY, yBlockWidth) {
 // coordinate.
 MapDrawer._helperCalcScreenY = function(y) {
 	return Math.floor(y * MapDrawer.BASE_HEIGHT * 
-			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT)) + 60;
+			(1 + (y - 1) / 2 * MapDrawer.SHRINKAGE.HEIGHT)) - 7 /*Arbitrary constant 
+					to align 0,0 with screen center*/;
 };
 
 

@@ -621,6 +621,75 @@
       ],
       "isLooped": true
     },
+    "testWeapon": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "testWeapon_0"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_1"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_8"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_7"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_6"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_5"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_4"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_3"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_2"
+        },
+        {
+          "duration": 4,
+          "frame": "testWeapon_1"
+        }
+      ],
+      "isLooped": true
+    },
     "wood": {
       "frameRefs": [
         {
@@ -1261,6 +1330,69 @@
         "y": 80.0
       },
       "sprite": "../testShoes"
+    },
+    "testWeapon_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../testWeapon"
+    },
+    "testWeapon_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../testWeapon"
     },
     "wood_0": {
       "edge": {
