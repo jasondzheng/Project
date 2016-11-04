@@ -52,10 +52,10 @@ GameMapLoader.load = function(mapName, opt_callback) {
 					mapData.staticMapInstances[i].x, mapData.staticMapInstances[i].y);
 		}
 		if (opt_callback) {
-			opt_callback(new GameMap(mapData.name, mapData.data, mapData.width, 
-					tileset, mapData.dummyTile, mapData.staticMapEntities, 
-					mapData.staticMapInstances, npcInstances, 
-					events, tracks, mapData.spawnBehavior));
+			opt_callback(new GameMap(mapData.name, mapData.type, mapData.data, 
+					mapData.width, tileset, mapData.dummyTile, mapData.staticMapEntities, 
+					mapData.staticMapInstances, npcInstances, events, tracks, 
+					mapData.spawnBehavior));
 		};
 	});
 };

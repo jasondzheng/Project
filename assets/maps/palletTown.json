@@ -1,5 +1,6 @@
 {
 	"name": "Pallet Town",
+	"type": 1,
 	"tileset": "palletTown",
 	"width": 31,
 	"data": [

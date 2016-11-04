@@ -29,14 +29,14 @@ OverworldScene.init = function(callback) {
 		player.setPositionX(4);
 		player.setPositionY(4);
 
-		player.equipment.applyStatBoosts();
+		player.equippedItems.applyStatBoosts();
 
 		map.registerPlayer(player);
 
 		map.unitSpawner.fillUnitQuotas();
 
 		InventoryTabDrawer.setInventory(player.inventory);
-		InventoryTabDrawer.setEquipment(player.equipment);
+		InventoryTabDrawer.setEquippedItems(player.equippedItems);
 
 		//CHECK;
 		InventoryTabDrawer.setSettings(GameState.saveData.settingsInfo);

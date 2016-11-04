@@ -71,7 +71,7 @@ InventoryTabDrawer.currentTab = InventoryTabDrawer.ITEMS_TAB;
 InventoryTabDrawer._inventory;
 
 // The equipment to be drawn in the tab window.
-InventoryTabDrawer._equipment;
+InventoryTabDrawer._equippedItems;
 
 // The current settings to be shown in the tab window.
 InventoryTabDrawer._settings;
@@ -263,6 +263,15 @@ InventoryTabDrawer.init = function(callback) {
 
 		InventoryTabDrawer.SETTINGS_SCROLL_X = InventoryTabDrawer.WINDOW_BODY_LEFT +
 				ScrollBar.BUBBLE.width / 2;
+
+		InventoryTabDrawer.EQUIPPED_ITEMS_X = -InventoryTabDrawer.CELL_POSITION_GAP;
+		InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS = [];
+		for (var i = 0; i < EquippedItems.NUM_SLOTS; i++) {
+			InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS.push(
+					InventoryTabDrawer.WINDOW_BODY_TOP + 
+					i * InventoryTabDrawer.CELL_POSITION_GAP);
+		}
+
 		callback();
 	});
 };
@@ -272,8 +281,8 @@ InventoryTabDrawer.setInventory = function(inventory) {
 	InventoryTabDrawer._inventory = inventory;
 };
 
-InventoryTabDrawer.setEquipment = function(equipment) {
-	InventoryTabDrawer._equipment = equipment;
+InventoryTabDrawer.setEquippedItems = function(equippedItems) {
+	InventoryTabDrawer._equippedItems = equippedItems;
 };
 
 // Initializes the volume scrollbars to match the current settings in the save 
@@ -427,34 +436,49 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 					normalizedX, normalizedY)) != -1) {
 		// Check for tab change
 		InventoryTabDrawer.currentTab = possibleTabIndex;
-	} else if (isDoubleClick && startAndEndSameLoc && 
-			(possibleItemIndex = 
-					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
-							normalizedX, normalizedY)) != -1) {
+	} else if (isDoubleClick && startAndEndSameLoc) {
 		// Check for click on item
 		// Only handle use items for now
 		if (InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB) {
-			var itemEntry = 
-					InventoryTabDrawer._inventory.itemEntries[possibleItemIndex];
-			if (itemEntry && ItemHelper.canUseItem(itemEntry.item)) {
-				ItemHelper.useItem(itemEntry.item);
-				// TODO: reconsider cleanup
-				InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
-						false /* isFromEquip */);
+			if ((possibleItemIndex = 
+					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
+							normalizedX, normalizedY)) != -1) {
+				var itemEntry = 
+						InventoryTabDrawer._inventory.itemEntries[possibleItemIndex];
+				if (itemEntry && ItemHelper.canUseItem(itemEntry.item)) {
+					ItemHelper.useItem(itemEntry.item);
+					// TODO: reconsider cleanup
+					InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
+							false /* isFromEquip */);
+				}
 			}
 		} else if (InventoryTabDrawer.currentTab == 
 				InventoryTabDrawer.EQUIPMENT_TAB) {
-			var equipEntry = 
-					InventoryTabDrawer._inventory.equipEntries[possibleItemIndex];
-			if (equipEntry && 
-					InventoryTabDrawer._equipment.canEquip(equipEntry.item)) {
-				InventoryTabDrawer._equipment.equip(equipEntry.item);
-			// TODO: reconsider cleanup; existing equip is added in other method.
-				InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
-						true /* isFromEquip */);
+			if ((possibleItemIndex = 
+					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(
+							normalizedX, normalizedY)) != -1) {
+				var equipEntry = 
+						InventoryTabDrawer._inventory.equipEntries[possibleItemIndex];
+				if (equipEntry && 
+						InventoryTabDrawer._equippedItems.canEquip(equipEntry.item)) {
+					InventoryTabDrawer._inventory.remove(possibleItemIndex, 1, 
+							true /* isFromEquip */);
+					InventoryTabDrawer._equippedItems.equip(equipEntry.item);
+				// TODO: reconsider cleanup; existing equip is added in other method.
+				}
+			} else if ((possibleItemIndex = 
+					InventoryTabDrawer._helperGetEquippedItemSlotFromClickCoords(
+							normalizedX, normalizedY)) != -1) {
+				var equippedItem = 
+						InventoryTabDrawer._equippedItems.items[possibleItemIndex];
+				if (equippedItem && 
+						InventoryTabDrawer._equippedItems.canDequip(
+								EquippedItems.SlotIndices[equippedItem.equipData.type])) {
+					InventoryTabDrawer._equippedItems.dequip(
+							EquippedItems.SlotIndices[equippedItem.equipData.type]);
+				}
 			}
 		}
-		// TODO: handle equipment items
 	} else if (InventoryTabDrawer._dragMode == 
 			InventoryTabDrawer.DragModes.ITEM) {
 		var entries =
@@ -617,6 +641,7 @@ InventoryTabDrawer._drawEquipment = function(ctx, x, y) {
 			InventoryTabDrawer.CELLS_PER_ROW;
 	InventoryTabDrawer._drawInventoryCells(ctx, x, y, index, offset, 
 			true /* isEquips */);
+	InventoryTabDrawer._helperDrawEquippedItems(ctx, x, y);
 	InventoryTabDrawer._scrollBars[InventoryTabDrawer.EQUIPMENT_TAB].draw(ctx, 
 			x + InventoryTabDrawer.SCROLLBAR_OFFSET_X, 
 			y + InventoryTabDrawer.SCROLLBAR_OFFSET_Y);
@@ -799,6 +824,20 @@ InventoryTabDrawer._drawInventoryCells = function(ctx, x, y, itemIndex, offset,
 };
 
 
+// Draws four equipment slots to the left of the window.
+InventoryTabDrawer._helperDrawEquippedItems = function(ctx, x, y) {
+	for (var i = 0; i < EquippedItems.NUM_SLOTS; i++) {
+		var cellX = x + InventoryTabDrawer.EQUIPPED_ITEMS_X;
+		var cellY = y + InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[i];
+		ctx.drawImage(InventoryTabDrawer.CELL_IMG, cellX, cellY);
+		var possibleItem;
+		if (possibleItem = InventoryTabDrawer._equippedItems.items[i]) {
+			ctx.drawImage(possibleItem.sprite, cellX, cellY);
+		}
+	}
+};
+
+
 // Draw the current dragged item (if exists) with its center at the current mouse
 // position.
 InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
@@ -806,6 +845,7 @@ InventoryTabDrawer._helperMaybeDrawDraggedItem = function(ctx, x, y, isEquips) {
 			InventoryTabDrawer._draggedItemFixedPos) {
 		return;
 	}
+	// Normal inventory cell
 	var itemsArray = isEquips ? InventoryTabDrawer._inventory.equipEntries : 
 			InventoryTabDrawer._inventory.itemEntries;
 	var itemEntry = itemsArray[InventoryTabDrawer._draggedItemIndex];
@@ -909,6 +949,40 @@ InventoryTabDrawer._helperGetCellRelativeCoords = function(normalizedX,
 	return {
 		x: offsetNormalizedX % InventoryTabDrawer.CELL_POSITION_GAP, 
 		y: offsetNormalizedY % InventoryTabDrawer.CELL_POSITION_GAP
+	};
+};
+
+
+// Returns an equipped item index; returns -1 if coordinates are not within an
+// euqipped item cell.
+InventoryTabDrawer._helperGetEquippedItemSlotFromClickCoords = function(
+		normalizedX, normalizedY) {
+	if (normalizedX < InventoryTabDrawer.EQUIPPED_ITEMS_X || 
+			normalizedY < InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[0] || 
+			normalizedX > InventoryTabDrawer.EQUIPPED_ITEMS_X + 
+					InventoryTabDrawer.CELL_IMG.width ||
+			normalizedY > 
+					InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[
+							EquippedItems.NUM_SLOTS - 1] 
+					+ InventoryTabDrawer.CELL_IMG.height) {
+		return -1;
+	}
+	for (var i = 0; i < EquippedItems.NUM_SLOTS; i++) {
+		if (normalizedY > InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[i] && 
+			normalizedY < InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[i] + 
+					InventoryTabDrawer.CELL_IMG.height) {
+			return i;
+		}
+	}
+};
+
+
+// NOT USED
+InventoryTabDrawer._helperGetEquippedItemSlotCoords = function(
+		index) {
+	return {
+		x: InventoryTabDrawer.EQUIPPED_ITEMS_X,
+		y: InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS[index]
 	};
 };
 

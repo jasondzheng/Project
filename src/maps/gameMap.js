@@ -4,8 +4,9 @@
  * information like events, connectors, npcs, mob data, etc in the future.
  */
 
-var GameMap = function(name, data, width, tileset, dummyTile, staticMapEntities, 
-		staticMapInstances, npcInstances, events, tracks, spawnBehavior) {
+var GameMap = function(name, type, data, width, tileset, dummyTile, 
+		staticMapEntities, staticMapInstances, npcInstances, events, tracks, 
+		spawnBehavior) {
 	// The name of the map
 	this.name = name;
 
@@ -60,6 +61,15 @@ var GameMap = function(name, data, width, tileset, dummyTile, staticMapEntities,
 	for (var i = 0; i < events.length; i++) {
 		events[i].containingMap = this;
 	}
+};
+
+
+// Possible game map types. Used to determine behavior for battery level, 
+// beatdrawer, and ability to equip/dequip.
+GameMap.Types = {
+	NON_BATTLE: 0, /* No units, no beatdrawer, no battery drain */
+	BATTLE: 1, /* Units, beatdrawer active, battery drain */
+	SHOP: 2 /* Non-battle, allows player to equip/dequip, battery refill */
 };
 
 

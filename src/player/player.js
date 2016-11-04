@@ -14,7 +14,7 @@ var Player = function(id, visualInstance, x, y, saveData) {
 	this.attackCombo = 0;
 	this.pickupMode = false;
 	// TODO: remove the debug object and this default value for save data
-	this.applySaveData(saveData || Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG);
+	//this.applySaveData(saveData || Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG);
 };
 
 
@@ -32,7 +32,7 @@ Player.prototype.applySaveData = function(saveData) {
 	// Player's inventory
 	this.inventory = Inventory.load(saveData.inventory);
 	// Player equipment
-	this.equipment = Equipment.load(saveData.equipment);
+	this.equippedItems = EquippedItems.load(saveData.equippedItems);
 };
 
 
@@ -44,7 +44,7 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	// CHECK
 	money: 0,
 	inventory: null,
-	equipment: null
+	equippedItems: null
 };
 
 
@@ -57,7 +57,7 @@ Player.prototype.createSaveData = function() {
 		// CHECK
 		money: this.money,
 		inventory: this.inventory.write(),
-		equipment: this.equipment.write()
+		equippedItems: this.equippedItems.write()
 	};
 };
 
