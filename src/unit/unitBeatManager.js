@@ -46,9 +46,11 @@ UnitBeatManager._advanceTime = function(newTime) {
 		UnitBeatManager._nextBeat++;
 		UnitBeatManager._parity = !UnitBeatManager._parity;
 		// Check
-		var units = GameState.map.unitInstances;
-		for (var i = 0; i < units.length; i++) {
-			units[i].actionManager._attackParity = UnitBeatManager._parity;
+		if (GameState.map != undefined) {
+			var units = GameState.map.unitInstances;
+			for (var i = 0; i < units.length; i++) {
+				units[i].actionManager._attackParity = UnitBeatManager._parity;
+			}
 		}
 	}
 };

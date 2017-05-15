@@ -27,7 +27,7 @@ EquippedItems.defaultStats = {
 	beatMaxWidth: 48,
 	beatWindow: 1.75 / 6,
 	attack: 0,
-	capacity: 100
+	capacity: 0
 };
 
 
@@ -77,9 +77,10 @@ EquippedItems.prototype.canEquip = function(item) {
 	// TODO: check if is valid area to switch battery
 	var index = EquippedItems.SlotIndices[item.equipData.type];
 	if (this.items[index]) {
-		return GameState.player.inventory.canAdd(this.items[index].id, 1);
+		return GameState.player.inventory.canAdd(this.items[index].id, 1) && 
+				GameState.map.type == GameMap.Types.SHOP;
 	} else {
-		return true;
+		return GameState.map.type == GameMap.Types.SHOP;
 	}
 };
 
@@ -97,7 +98,8 @@ EquippedItems.prototype.dequip = function(index) {
 // inventory.
 EquippedItems.prototype.canDequip = function(index) {
 	// TODO: check if is valid area to switch battery
-	return GameState.player.inventory.canAdd(this.items[index].id, 1)
+	return GameState.player.inventory.canAdd(this.items[index].id, 1) && 
+			GameState.map.type == GameMap.Types.SHOP;
 };
 
 
@@ -133,11 +135,12 @@ EquippedItems.prototype.applyStatBoosts = function() {
 			this.applyIndexDefaultStat(i);
 		}
 	}
+	GameState.player.batteryDrain = this.calculateBatteryDrain();
 };
 
 
 // Applies the stat boost of the item at the given index. Item at that index 
-// must be defined!
+// must be defined! Battery capacity is set to max when a battery is equipped.
 EquippedItems.prototype.applyIndexStatBoost = function(index) {
 	switch (index) {
 		case EquippedItems.SlotIndices.HEADGEAR:
@@ -157,8 +160,9 @@ EquippedItems.prototype.applyIndexStatBoost = function(index) {
 			GameState.player.attack = this.items[index].equipData.attack
 			break;
 		case EquippedItems.SlotIndices.BATTERY:
-			GameState.player.battery = EquippedItems.defaultStats.capacity + 
-					this.items[index].equipData.capacity
+			GameState.player.batteryCapacity = 
+					GameState.player.batteryLevel = EquippedItems.defaultStats.capacity + 
+					this.items[index].equipData.capacity;
 			break;
 	}
 };
@@ -179,8 +183,22 @@ EquippedItems.prototype.applyIndexDefaultStat = function(index) {
 			GameState.player.attack = EquippedItems.defaultStats.attack;
 			break;
 		case EquippedItems.SlotIndices.BATTERY:
-			GameState.player.batteryCapacity = EquippedItems.defaultStats.capacity;
-			GameState.player.batteryLevel = GameState.player.batteryCapacity;
+			GameState.player.batteryCapacity = 
+					GameState.player.batteryLevel = EquippedItems.defaultStats.capacity;
 			break;
 	}
 };
+
+
+// Calculates the battery drain (per sec/60). Currently not tested, and should 
+// be changed to match gameplay.
+EquippedItems.prototype.calculateBatteryDrain = function() {
+	// TODO: make legit function
+	var headgearDrain = this.items[EquippedItems.SlotIndices.HEADGEAR] ? 
+			this.items[EquippedItems.SlotIndices.HEADGEAR].equipData.clarity : 0;
+	var shoeDrain = this.items[EquippedItems.SlotIndices.SHOES] ? 
+			this.items[EquippedItems.SlotIndices.SHOES].equipData.range : 0; 
+	var weaponDrain = this.items[EquippedItems.SlotIndices.WEAPON] ? 
+			this.items[EquippedItems.SlotIndices.WEAPON].equipData.attack : 0;
+	return (headgearDrain + shoeDrain + weaponDrain) / 60;
+}

@@ -123,6 +123,12 @@ NPCInstance.prototype.getVisibleTrades = function() {
 };
 
 
+// Gets shop from the NPC entity. 
+NPCInstance.prototype.getShop = function(shopId) {
+	return this.npcEntity.shops[shopId];
+};
+
+
 // Getter for resources, used by gamescripts.
 NPCInstance.prototype._rsrc = function(alias) {
 	return this.npcEntity.resourceManager.get(alias);

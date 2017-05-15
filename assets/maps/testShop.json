@@ -1,0 +1,42 @@
+{
+	"name": "Test Shop",
+	"type": 2,
+	"tileset": "testShop",
+	"width": 5,
+	"data": [
+		  1, 1, 1, 1, 1,
+		  1, 1, 1, 1, 1,
+		  1, 1, 1, 1, 1,
+		  1, 1, 1, 1, 1,
+		  1, 1, 1, 1, 1],
+	"dummyTile": 0,
+	"staticMapEntities": {
+	},
+	"staticMapInstances": [
+	],
+	"npcs": [
+	],
+	"tracks": ["marioLuigiBattle"],
+	"spawnBehavior": {
+		"monsterData": {
+		},
+		"spawnPoints": [
+		]
+	},
+	"events": [
+		{
+			"id": "warpTile1",
+			"eventTemplate": {
+				"_template": "warpTile",
+				"tileX": "2",
+				"tileY": "4.4",
+				"width": "1",
+				"height": "0.6",
+				"mapId": "palletTown",
+				"targetX": "7.5",
+				"targetY": "12.2",
+				"opt_direction": "Direction.DOWN"
+			}
+		}
+	]
+}

@@ -263,7 +263,7 @@ TradeDrawer.displayTrade = function(trades, leftPortrait1, leftPortrait2,
 
 // Exits the current trade.
 TradeDrawer.exitTrade = function() {
-	TradeDrawer._trade = null;
+	TradeDrawer._trades = null;
 	TradeDrawer._leftPortrait1 = null;
 	TradeDrawer._leftPortrait2 = null;
 	TradeDrawer._rightPortrait1 = null;

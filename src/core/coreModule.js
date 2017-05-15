@@ -35,6 +35,7 @@ CoreModule.load = function(callback) {
 		ScrollBar.load,
 		// After scrollbar load; dependency.
 		TradeDrawer.load,
+		ShopDrawer.load,
 		ConfirmDialog.load,
 		InventoryTabDrawer.init,
 		Item.loadItems,

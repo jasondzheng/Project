@@ -1,0 +1,9 @@
+Make visualizations for:
+	Shop
+	Battery Level
+	Money
+
+Decide how to handle where players can save:
+	In machine shops
+	In non-combat maps
+Then integrate player position into save data

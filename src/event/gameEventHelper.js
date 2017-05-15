@@ -26,7 +26,13 @@ GameEventHelper.switchMap = function(event, mapId, x, y, opt_callback) {
 			// TODO: decide whether its appropriate to spawnfill map based on map
 			// settings
 			newMap.unitSpawner.fillUnitQuotas();
+			UnitHpDrawer.clearHpBars();
 			SoundPlayer.setTrack(newMap.tracks[Object.keys(newMap.tracks)[0]]);
+
+			if (newMap.type == GameMap.Types.SHOP) {
+				player.batteryLevel = player.batteryCapacity;
+			}
+			player.attackCombo = 0;
 			ScreenEffectDrawer.fadeIn(function() {
 				if (opt_callback) {
 					opt_callback();

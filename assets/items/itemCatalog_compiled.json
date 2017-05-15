@@ -17,6 +17,17 @@
 		"price": 100,
 		"isKeyItem": false
 	},
+	"powerCell": {
+		"name": "Power Cell",
+		"description": "Charges 10 battery level",
+		"isUseable": true,
+		"consumeCount": 1,
+		"usageProperties": {
+			"charge": 10
+		},
+		"price": 200,
+		"isKeyItem": false
+	},
 	"armor": {
 		"name": "Armor",
 		"description": "This is armor",

@@ -483,6 +483,75 @@
       ],
       "isLooped": true
     },
+    "powerCell": {
+      "frameRefs": [
+        {
+          "duration": 4,
+          "frame": "powerCell_0"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_1"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_2"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_3"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_4"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_5"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_6"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_7"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_8"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_7"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_6"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_5"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_4"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_3"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_2"
+        },
+        {
+          "duration": 4,
+          "frame": "powerCell_1"
+        }
+      ],
+      "isLooped": true
+    },
     "testHeadphones": {
       "frameRefs": [
         {
@@ -1204,6 +1273,69 @@
         "y": 80.0
       },
       "sprite": "../potion"
+    },
+    "powerCell_0": {
+      "edge": {
+        "x": 0,
+        "y": 64.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_1": {
+      "edge": {
+        "x": 0,
+        "y": 66.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_2": {
+      "edge": {
+        "x": 0,
+        "y": 68.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_3": {
+      "edge": {
+        "x": 0,
+        "y": 70.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_4": {
+      "edge": {
+        "x": 0,
+        "y": 72.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_5": {
+      "edge": {
+        "x": 0,
+        "y": 74.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_6": {
+      "edge": {
+        "x": 0,
+        "y": 76.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_7": {
+      "edge": {
+        "x": 0,
+        "y": 78.0
+      },
+      "sprite": "../powerCell"
+    },
+    "powerCell_8": {
+      "edge": {
+        "x": 0,
+        "y": 80.0
+      },
+      "sprite": "../powerCell"
     },
     "testHeadphones_0": {
       "edge": {

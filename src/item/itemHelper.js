@@ -11,15 +11,22 @@ ItemHelper.useItem = function(item) {
 	if (item.usageProperties.heal && 
 			ItemHelper._Heal.canApply(item.usageProperties)) {
 		ItemHelper._Heal.applyEffect(item.usageProperties);
+	} else if (item.usageProperties.charge && 
+			ItemHelper._Charge.canApply(item.usageProperties)) {
+		ItemHelper._Charge.applyEffect(item.usageProperties);
 	}
 };
 
 
 ItemHelper.canUseItem = function(item) {
-	return (
-		(item.isUseable && item.usageProperties.heal && 
-				ItemHelper._Heal.canApply(item.usageProperties))
-	);
+	if (item.isUseable) {
+		if (item.usageProperties.heal) {
+			return ItemHelper._Heal.canApply(item.usageProperties);
+		} else if (item.usageProperties.charge) {
+			return ItemHelper._Charge.canApply(item.usageProperties);
+		}
+	}
+	return false;
 };
 
 
@@ -30,5 +37,16 @@ ItemHelper._Heal = {
 	},
 	applyEffect: function(usageProperties) {
 		GameState.player.increaseCurrentHp(usageProperties.heal);
+	},
+};
+
+
+// Basic charging effect that increases current battery level.
+ItemHelper._Charge = {
+	canApply: function(usageProperties) {
+		return GameState.player.batteryLevel < GameState.player.batteryCapacity;
+	},
+	applyEffect: function(usageProperties) {
+		GameState.player.increaseBatteryLevel(usageProperties.charge);
 	},
 };

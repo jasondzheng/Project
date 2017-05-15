@@ -130,9 +130,9 @@
 				"tileY": "11.5",
 				"width": "1",
 				"height": "0.6",
-				"mapId": "palletTown",
-				"targetX": "18.5",
-				"targetY": "12.2",
+				"mapId": "testShop",
+				"targetX": "2.5",
+				"targetY": "2.5",
 				"opt_direction": "Direction.UP"
 			}
 		}, {

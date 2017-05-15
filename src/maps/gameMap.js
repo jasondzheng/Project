@@ -10,6 +10,9 @@ var GameMap = function(name, type, data, width, tileset, dummyTile,
 	// The name of the map
 	this.name = name;
 
+	// The type of the map
+	this.type = type;
+
 	// The tile data for the map.
 	this.data = data;
 

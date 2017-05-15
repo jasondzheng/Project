@@ -65,6 +65,7 @@ var setupTickCycle = function() {
 };
 
 
+// Not in use:
 // Ties camera movement to the player movement, ensuring that the player is the 
 // middle of the screen at all times.
 var trackCameraOnPlayerDebugDebug = function() {

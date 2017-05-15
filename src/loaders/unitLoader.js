@@ -29,6 +29,10 @@ UnitLoader.getPreloadedEntity = function (id) {
 // time, so the callback is not provided with the loaded entities.
 UnitLoader.preloadEntities = function (ids, callback) {
 	var counter = ids.length;
+	if (counter == 0) {
+		callback();
+		return;
+	}
 	for (var i = 0; i < ids.length; i++) {
 		UnitLoader._helperLoadEntity(ids[i], function() {
 			if (--counter == 0) {

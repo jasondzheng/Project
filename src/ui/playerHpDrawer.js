@@ -69,6 +69,7 @@ PlayerHpDrawer.drawHp = function(ctx) {
 			PlayerHpDrawer.BAR_INNER_HEIGHT);
 };
 
+
 // Changes the shown hp by a maximum value of 1 at every tick to smoothly 
 // transtition from shown hp to actual player hp.
 PlayerHpDrawer.tick = function() {

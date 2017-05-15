@@ -29,7 +29,7 @@ PlayerAttackApplier.BasicCloseRangedAttack = {
 						console.log(player.attackCombo);
 					} else {
 						if (BeatDrawer.consumeHitNote()) {
-							player.attackCombo += 10;
+							player.attackCombo += 1;
 						} else {
 							player.attackCombo = 0;
 						}

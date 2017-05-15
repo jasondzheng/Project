@@ -42,10 +42,13 @@
 									false /* bubbleIsFromLeft */, 'agl agl agl agl');
 							var that = this;
 							DialogDrawer.endDialog(function() {
-								TradeDrawer.displayTrade(that.getVisibleTrades(), 
+								/* TradeDrawer.displayTrade(that.getVisibleTrades(), 
+									that._rsrc('portraitRight'), null, 
+									that._rsrc('portraitLeft'), null); */
+								GS.setVar('blockIsAnnoyed', true);
+								ShopDrawer.displayShop(that.getShop('defaultShop'), 
 										that._rsrc('portraitRight'), null, 
 										that._rsrc('portraitLeft'), null);
-								GS.setVar('blockIsAnnoyed', true);
 								callback();
 							});
 						}

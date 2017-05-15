@@ -77,6 +77,7 @@ OverworldScene.pause = function() {
 // Resets the scene to a state that it would be at loadtime. Call sparingly.
 OverworldScene.reset = function() {
 	PlayerHpDrawer.reset();
+	PlayerBatteryDrawer.reset();
 	UnitHpDrawer.clearHpBars();
 	GameMapLoader.unload(GameState.map);
 	PlayerLoader.unload(GameState.player);
@@ -90,11 +91,17 @@ OverworldScene.reset = function() {
 OverworldScene.draw = function(ctx) {
 	if (GameState.map) {
 		MapDrawer.drawMap(ctx, GameState.map, Camera.x, Camera.y);
-		BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
-				ScreenProps.EXP_HEIGHT_HALF);
+		if (GameState.map.type != GameMap.Types.NON_BATTLE) {
+			BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
+					ScreenProps.EXP_HEIGHT_HALF);
+		}
 		MapDrawer.drawEntities(ctx, GameState.map, Camera.x, Camera.y);
 		UnitHpDrawer.drawHpBars(ctx);
 		PlayerHpDrawer.drawHp(ctx);
+		PlayerBatteryDrawer.drawBattery(ctx);
+		if (GameState.map.type == GameMap.Types.BATTLE) {
+			ComboDrawer.drawCombo(ctx);
+		}
 	}
 	// Inventory over all map UI
 	InventoryTabDrawer.draw(ctx);
@@ -102,6 +109,8 @@ OverworldScene.draw = function(ctx) {
 	DialogDrawer.drawDialogOverlay(ctx);
 	// Draw trade interface over all map content
 	TradeDrawer.drawTradeOverlay(ctx);
+	// Draw shop interface over all map content
+	ShopDrawer.drawShopOverlay(ctx);
 	// Draw possible confirm dialog
 	ConfirmDialog.draw(ctx);
 };
@@ -110,12 +119,16 @@ OverworldScene.draw = function(ctx) {
 OverworldScene.tick = function() {
 	if (GameState.map) {
 		GameState.map.tickAll();
+		if (GameState.map.type != GameMap.Types.NON_BATTLE) {
+			BeatDrawer.tick();
+		}
 	}
-	BeatDrawer.tick();
 	UnitBeatManager.tick();
 	Camera.tick();
 	UnitHpDrawer.tick();
 	PlayerHpDrawer.tick();
+	PlayerBatteryDrawer.tick();
+	ComboDrawer.tick();
 	DialogDrawer.tick();
 };
 

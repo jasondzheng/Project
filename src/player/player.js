@@ -26,6 +26,8 @@ Player.prototype.applySaveData = function(saveData) {
 	this.maxHp = saveData.maxHp;
 	this.batteryLevel;
 	this.batteryCapacity;
+	// eeh
+	this.batteryDrain;
 	// CHECK
 	// Player's money
 	this.money = saveData.money;
@@ -121,6 +123,13 @@ Player.prototype.receiveDamage = function(damage) {
 Player.prototype.increaseCurrentHp = function(amount) {
 	this.hp = Math.min(this.hp + amount, this.maxHp);
 };
+
+
+// Increases player's current battery level
+Player.prototype.increaseBatteryLevel = function(amount) {
+	this.batteryLevel = Math.min(this.batteryLevel + amount, 
+			this.batteryCapacity);
+}
 
 
 // Checks if player is able to issue a move command
@@ -243,4 +252,7 @@ Player.prototype.tryTalk = function() {
 // object.
 Player.prototype.tick = function() {
 	this.visualInstance.advanceFrame();
+  if (this.containingMap.type == GameMap.Types.BATTLE) {
+  	this.batteryLevel = Math.max(0, this.batteryLevel - this.batteryDrain);
+  }
 };
