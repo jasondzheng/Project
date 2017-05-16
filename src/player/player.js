@@ -46,7 +46,8 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	// CHECK
 	money: 0,
 	inventory: null,
-	equippedItems: null
+	equippedItems: null,
+	containingMap: 'testShop'
 };
 
 
@@ -59,7 +60,8 @@ Player.prototype.createSaveData = function() {
 		// CHECK
 		money: this.money,
 		inventory: this.inventory.write(),
-		equippedItems: this.equippedItems.write()
+		equippedItems: this.equippedItems.write(),
+		containingMap: this.containingMap.id
 	};
 };
 

@@ -4,9 +4,12 @@
  * information like events, connectors, npcs, mob data, etc in the future.
  */
 
-var GameMap = function(name, type, data, width, tileset, dummyTile, 
+var GameMap = function(id, name, type, data, width, tileset, dummyTile, 
 		staticMapEntities, staticMapInstances, npcInstances, events, tracks, 
 		spawnBehavior) {
+	// The ID of the map
+	this.id = id;
+
 	// The name of the map
 	this.name = name;
 

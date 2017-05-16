@@ -480,7 +480,7 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 				var itemId = ShopDrawer._shopContents[itemIndex];
 				if (itemId) {
 					// Grayed-out image if cannot shop.
-					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex)) {
+					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex, 1)) {
 						ctx.globalAlpha = ShopDrawer.CANNOT_BUY_OPACITY;
 					}
 					// Draw item
@@ -492,16 +492,11 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 							cellPartialHeight, cellX, drawY, cellWidth, cellPartialHeight);
 					// Draw price
 					var cellY = drawY + yPos;
-					var clipY = ShopDrawer.CELL_IMG.height - 
-							ShopDrawer.QUANTITY_OFFSET_Y - cellPartialHeight;
+					var clipY = -yPos;
 					var priceStr = (item.price).toString();
-					GlyphDrawer.drawCutText(ctx, ShopDrawer.QUANTITY_FONT, 
-							priceStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
-									(ShopDrawer.QUANTITY_MAX_GLYPHS - priceStr.length) * 
-									ShopDrawer.QUANTITY_DELTA_X, 
-							Math.max(cellY + ShopDrawer.QUANTITY_OFFSET_Y, drawY), 
-							0, clipY, ShopDrawer.CELL_IMG.width - 
-									ShopDrawer.QUANTITY_OFFSET_X, cellPartialHeight);
+					GlyphDrawer.drawCutText(ctx, ShopDrawer.QUANTITY_FONT, priceStr, 
+							cellX, drawY, 0, clipY, 
+							ShopDrawer.CELL_IMG.width, cellPartialHeight);
 					// Reset alpha
 					ctx.globalAlpha = 1;
 				}
@@ -516,7 +511,7 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 				var itemId = ShopDrawer._shopContents[itemIndex];
 				if (itemId) {
 					// Grayed-out image if cannot shop.
-					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex)) {
+					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex, 1)) {
 						ctx.globalAlpha = ShopDrawer.CANNOT_BUY_OPACITY;
 					}
 					// Draw item
@@ -526,17 +521,10 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 					var cellY = y + windowBodyTop + yPos;
 					ctx.drawImage(item.sprite, 0, 0, cellWidth, 
 							cellPartialHeight, cellX, cellY, cellWidth, cellPartialHeight);
-					if (cellPartialHeight > ShopDrawer.QUANTITY_OFFSET_Y) {
-						// Draw price
-						var priceStr = (item.price).toString();
-						GlyphDrawer.drawCutText(ctx, ShopDrawer.QUANTITY_FONT, 
-								priceStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
-										(ShopDrawer.QUANTITY_MAX_GLYPHS - priceStr.length) * 
-										ShopDrawer.QUANTITY_DELTA_X, 
-								cellY + ShopDrawer.QUANTITY_OFFSET_Y, 0, 0,
-								ShopDrawer.CELL_IMG.width - ShopDrawer.QUANTITY_OFFSET_X, 
-								cellPartialHeight - ShopDrawer.QUANTITY_OFFSET_Y);
-					}
+					// Draw price
+					var priceStr = (item.price).toString();
+					GlyphDrawer.drawCutText(ctx, ShopDrawer.QUANTITY_FONT, priceStr, 
+							cellX, cellY, 0, 0, ShopDrawer.CELL_IMG.width, cellPartialHeight);
 					// Reset alpha
 					ctx.globalAlpha = 1;
 				}
@@ -546,7 +534,7 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 				var itemId = ShopDrawer._shopContents[itemIndex];
 				if (itemId) {
 					// Grayed-out image if cannot shop.
-					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex)) {
+					if (!ShopDrawer._shop.canBuyItemAtIndex(itemIndex, 1)) {
 						ctx.globalAlpha = ShopDrawer.CANNOT_BUY_OPACITY;
 					}
 					// Draw item
@@ -557,13 +545,8 @@ ShopDrawer._drawItemsInterface = function(ctx, x, y) {
 					ctx.drawImage(item.sprite, cellX, cellY);
 					// Draw price
 					var priceStr = (item.price).toString();
-					GlyphDrawer.drawText(ctx, ShopDrawer.QUANTITY_FONT, 
-							priceStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
-									(ShopDrawer.QUANTITY_MAX_GLYPHS - priceStr.length) * 
-									ShopDrawer.QUANTITY_DELTA_X, 
-							cellY + ShopDrawer.QUANTITY_OFFSET_Y, 
-							ShopDrawer.CELL_IMG.width - ShopDrawer.QUANTITY_OFFSET_X, 
-							ShopDrawer.CELL_IMG.height - ShopDrawer.QUANTITY_OFFSET_Y);
+					GlyphDrawer.drawText(ctx, ShopDrawer.QUANTITY_FONT, priceStr, cellX, 
+							cellY, ShopDrawer.CELL_IMG.width, ShopDrawer.CELL_IMG.height);
 					// Reset alpha
 					ctx.globalAlpha = 1;
 				}

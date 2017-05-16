@@ -86,6 +86,12 @@ SaveData.prototype.updatePlayer = function(player) {
 };
 
 
+// Gets the save data at the current profile index.
+SaveData.prototype.getPlayerInfo = function() {
+	return this.saveProfiles[this._currProfileIndex].playerInfo;
+}
+
+
 // Assimilates a save JSON's data.
 SaveData.prototype._assimilate = function(saveJson) {
 	if (!saveJson) {

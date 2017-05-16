@@ -33,6 +33,7 @@ CoreModule.load = function(callback) {
 		GlyphDrawer.loadGlyphs,
 		DialogDrawer.loadAssets,
 		ScrollBar.load,
+		ValuePicker.load,
 		// After scrollbar load; dependency.
 		TradeDrawer.load,
 		ShopDrawer.load,

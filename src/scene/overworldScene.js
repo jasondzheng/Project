@@ -11,10 +11,12 @@ OverworldScene._lastMouseMode;
 
 
 OverworldScene.init = function(callback) {
+
+	var mapId = GameState.saveData.getPlayerInfo().containingMap;
 	var deferrer = new CallbackDeferrer();
 	// TODO: read in actual map and player data
 	deferrer.add(GameMapLoader.load, function(accumulatedArgs) {
-		return ['palletTown'];
+		return [mapId];
 	}, ['map']);
 	deferrer.add(PlayerLoader.load, function(accumulatedArgs) {
 		return ['domino'];
@@ -26,8 +28,8 @@ OverworldScene.init = function(callback) {
 		GameState.saveData.updatePlayer(player);
 
 		// TODO: make this legit
-		player.setPositionX(4);
-		player.setPositionY(4);
+		player.setPositionX(2.5);
+		player.setPositionY(2.5);
 
 		player.equippedItems.applyStatBoosts();
 

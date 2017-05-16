@@ -13,16 +13,16 @@ GameMapLoader.TILESET_DIR = '../assets/img/tilesets/';
 
 
 // Static function to load a map.
-GameMapLoader.load = function(mapName, opt_callback) {
+GameMapLoader.load = function(mapId, opt_callback) {
 	var deferrer = new CallbackDeferrer();
 	deferrer.add(JSONLoader.loadWithoutWhitespace, function(accumulatedArgs) {
-		return [GameMapLoader.DIR + mapName + '.json'];
+		return [GameMapLoader.DIR + mapId + '.json'];
 	}, ['mapData']);
 	deferrer.add(TileLoader.load, function(accumulatedArgs) {
 		return [GameMapLoader.TILESET_DIR + accumulatedArgs[0].mapData.tileset];
 	}, ['tileset']);
 	deferrer.add(StaticMapEntityLoader.loadAll, function(accumulatedArgs) {
-		return [accumulatedArgs[0].mapData.staticMapEntities, mapName];
+		return [accumulatedArgs[0].mapData.staticMapEntities, mapId];
 	}, ['staticMapEntities']);
 	deferrer.add(GameMapLoader._helperLoadAllNPCInstances, 
 			function(accumulatedArgs) {
@@ -52,7 +52,7 @@ GameMapLoader.load = function(mapName, opt_callback) {
 					mapData.staticMapInstances[i].x, mapData.staticMapInstances[i].y);
 		}
 		if (opt_callback) {
-			opt_callback(new GameMap(mapData.name, mapData.type, mapData.data, 
+			opt_callback(new GameMap(mapId, mapData.name, mapData.type, mapData.data, 
 					mapData.width, tileset, mapData.dummyTile, mapData.staticMapEntities, 
 					mapData.staticMapInstances, npcInstances, events, tracks, 
 					mapData.spawnBehavior));

@@ -11,7 +11,7 @@ var Shop = function(shopContents) {
 Shop.prototype.canBuyItemAtIndex = function(index, quantity) {
 	var item = Item.getItem(this.shopContents[index]);
 	return (GameState.player.money >= item.price * quantity) && 
-			(GameState.player.inventory.canAdd(item, quantity));
+			(GameState.player.inventory.canAdd(this.shopContents[index], quantity));
 };
 
 
