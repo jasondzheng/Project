@@ -94,6 +94,7 @@ GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 	if (!glyphset) {
 		throw 'Unavailable glyphset [' + setName + ']';
 	}
+
 	var currLine = 0;
 	var lineStart = 0;
 	var possibleLineEnd = 0;

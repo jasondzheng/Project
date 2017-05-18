@@ -32,12 +32,13 @@ CoreModule.load = function(callback) {
 		GameEventTemplate.init,
 		GlyphDrawer.loadGlyphs,
 		DialogDrawer.loadAssets,
+		// UI Components
+		ConfirmDialog.load,
 		ScrollBar.load,
 		ValuePicker.load,
 		// After scrollbar load; dependency.
 		TradeDrawer.load,
 		ShopDrawer.load,
-		ConfirmDialog.load,
 		InventoryTabDrawer.init,
 		Item.loadItems,
 		ItemDrop.init

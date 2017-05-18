@@ -101,7 +101,7 @@ ScrollBar.prototype.getScroll = function() {
 
 // Sets the scroll fraction to the provided fraction.
 ScrollBar.prototype.setScrollFraction = function(fraction) {
-	this._currScroll = this._maxScroll * fraction;
+	this._currScroll = this._maxScroll * Math.min(Math.max(fraction, 0), 1);
 };
 
 

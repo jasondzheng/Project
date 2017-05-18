@@ -132,6 +132,9 @@ OverworldScene.tick = function() {
 	PlayerBatteryDrawer.tick();
 	ComboDrawer.tick();
 	DialogDrawer.tick();
+	
+	ShopDrawer.tick();
+	InventoryTabDrawer.tick();
 };
 
 

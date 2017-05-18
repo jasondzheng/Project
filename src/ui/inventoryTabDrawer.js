@@ -1047,3 +1047,8 @@ InventoryTabDrawer._helperGetTabFromClickCoords = function(normalizedX,
 			normalizedY < 0 || tabIndex < 0 || 
 			tabIndex >= InventoryTabDrawer.TAB_BACK_IMGS.length) ? -1 : tabIndex;
 };
+
+
+InventoryTabDrawer.tick = function() {
+
+};

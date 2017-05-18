@@ -79,6 +79,9 @@ ShopDrawer._exitButton;
 ShopDrawer._confirmYesButton;
 ShopDrawer._confirmNoButton;
 
+// Value picker for the confirmation interface.
+ShopDrawer._valuePicker;
+
 ShopDrawer._scrollBar;
 
 // Indicates whether the user is dragging the scroll bubble.
@@ -173,28 +176,6 @@ ShopDrawer.load = function (callback){
 		ShopDrawer.CONFIRM_BODY_Y = 
 				(ScreenProps.EXP_HEIGHT - imgs.confirmBody.height) / 2;
 
-		ShopDrawer.CONFIRM_ARROWS_X = ShopDrawer.CONFIRM_BODY_X +
-				(ShopDrawer.CONFIRM_BODY_IMG.width - 
-						ShopDrawer.CONFIRM_ARROWS_IMG.width) / 2;
-
-		ShopDrawer.CONFIRM_ARROWS_Y = ShopDrawer.CONFIRM_BODY_Y +
-				(ShopDrawer.CONFIRM_BODY_IMG.height - 
-						ShopDrawer.CONFIRM_ARROWS_IMG.height) / 2;
-
-		// Starting coordinates for the shop results cell.
-		ShopDrawer.CONFIRM_CELLS_LEFT_X = ShopDrawer.CONFIRM_BODY_X + 
-				ShopDrawer.CELL_EDGE_OFFSET + ShopDrawer.CELL_POSITION_GAP;
-
-		ShopDrawer.CONFIRM_CELLS_LEFT_Y = ShopDrawer.CONFIRM_BODY_Y + 
-				ShopDrawer.CELL_EDGE_OFFSET + ShopDrawer.CELL_POSITION_GAP;
-
-		// Starting coordinates for the ingredients results cells.
-		ShopDrawer.CONFIRM_CELLS_RIGHT_X = ShopDrawer.CONFIRM_ARROWS_X + 
-				ShopDrawer.CONFIRM_ARROWS_IMG.width + ShopDrawer.CELL_EDGE_OFFSET;
-
-		ShopDrawer.CONFIRM_CELLS_RIGHT_Y = ShopDrawer.CONFIRM_BODY_Y + 
-				ShopDrawer.CELL_EDGE_OFFSET;
-
 		ShopDrawer._confirmYesButton = 
 				new Button(ShopDrawer.CONFIRM_YES_BUTTON_IMG, true, function() {
 					ShopDrawer._selectedItem.applyShop();
@@ -216,9 +197,15 @@ ShopDrawer.load = function (callback){
 
 		ShopDrawer.CONFIRM_NO_BUTTON_Y = ShopDrawer.CONFIRM_BODY_Y + 
 				ShopDrawer.CONFIRM_BODY_IMG.height + ShopDrawer.CELL_EDGE_OFFSET;
-		
-		//TODO: make values constants
-		ShopDrawer._valuePicker = new ValuePicker(300, 1, 999);
+
+		// Constant dimmensions for value picker.
+		ShopDrawer.VALUE_PICKER_SCROLLBAR_LENGTH = 200;
+		ShopDrawer.VALUE_PICKER_X =
+				(ScreenProps.EXP_WIDTH - ShopDrawer.VALUE_PICKER_SCROLLBAR_LENGTH) / 2;
+		ShopDrawer.VALUE_PICKER_Y = ShopDrawer.CONFIRM_BODY_Y + 50;
+
+		ShopDrawer._valuePicker = 
+				new ValuePicker(ShopDrawer.VALUE_PICKER_SCROLLBAR_LENGTH, 1, 999);
 	});
 	callback();
 };
@@ -301,15 +288,21 @@ ShopDrawer.updateCurrentScroll = function(delta) {
 
 
 ShopDrawer.onStartClick = function(x, y) {
+	ShopDrawer._lastStartClickX = x;
+	ShopDrawer._lastStartClickY = y;
 	if (!ShopDrawer._isInConfirmationMode) {
-		ShopDrawer._lastStartClickX = x;
-		ShopDrawer._lastStartClickY = y;
 		var normalizedX = x - ShopDrawer.BODY_X;
 		var normalizedY = y - ShopDrawer.BODY_Y;
 		// If in scroll bubble, set scroll mode.
 		if (ShopDrawer._scrollBar.isInBubble(
 				normalizedX - ShopDrawer.SCROLLBAR_OFFSET_X,
 				normalizedY - ShopDrawer.SCROLLBAR_OFFSET_Y)) {
+			ShopDrawer._isDraggingScroll = true;
+		}
+	} else {
+		if (ShopDrawer._valuePicker.scrollBar.isInBubble(
+				x - ShopDrawer.VALUE_PICKER_X, 
+				y - (ShopDrawer.VALUE_PICKER_Y + ValuePicker.SCROLL_BAR_Y_OFFSET))) {
 			ShopDrawer._isDraggingScroll = true;
 		}
 	}
@@ -326,6 +319,12 @@ ShopDrawer.onDrag = function(x, y) {
 					normalizedX - ShopDrawer.SCROLLBAR_OFFSET_X,
 					normalizedY - ShopDrawer.SCROLLBAR_OFFSET_Y);
 		}
+	} else {
+		if (ShopDrawer._isDraggingScroll) {
+			ShopDrawer._valuePicker.scrollBar.updateScrollFromDrag(
+					x - ShopDrawer.VALUE_PICKER_X, 
+					y - (ShopDrawer.VALUE_PICKER_Y + ValuePicker.SCROLL_BAR_Y_OFFSET));
+		}
 	}
 };
 
@@ -336,16 +335,34 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 					MouseTracker.SAME_LOC_TOLERANCE && 
 			Math.abs(ShopDrawer._lastStartClickY - y) < 
 					MouseTracker.SAME_LOC_TOLERANCE;
-	if (ShopDrawer._isInConfirmationMode) {
+	if (ShopDrawer._isInConfirmationMode && startAndEndSameLoc) {
 		if (ShopDrawer._confirmYesButton.isInButton(
 				x - ShopDrawer.CONFIRM_YES_BUTTON_X, 
 				y - ShopDrawer.CONFIRM_YES_BUTTON_Y)) {
-			ShopDrawer._shop.buy();
+			ShopDrawer._shop.buyItemAtIndex(ShopDrawer._selectedItemIndex, 
+					ShopDrawer._valuePicker.currValue);
 			ShopDrawer._isInConfirmationMode = false;
 		} else if (ShopDrawer._confirmNoButton.isInButton(
 				x - ShopDrawer.CONFIRM_NO_BUTTON_X,
 				y - ShopDrawer.CONFIRM_NO_BUTTON_Y)) {
 			ShopDrawer._isInConfirmationMode = false;
+		} else if (ShopDrawer._valuePicker.scrollBar.isInLine(
+				x - ShopDrawer.VALUE_PICKER_X,
+				y - (ShopDrawer.VALUE_PICKER_Y + ValuePicker.SCROLL_BAR_Y_OFFSET)) && 
+						startAndEndSameLoc) {
+			ShopDrawer._valuePicker.scrollBar.updateScrollFromDrag(
+					x - ShopDrawer.VALUE_PICKER_X,
+					y - (ShopDrawer.VALUE_PICKER_Y + ValuePicker.SCROLL_BAR_Y_OFFSET));
+		} else if (ShopDrawer._valuePicker.incrButton.isInButton(
+				x -  (ShopDrawer.VALUE_PICKER_X + ShopDrawer._valuePicker.incrButtonX),
+				y -  (ShopDrawer.VALUE_PICKER_Y + ShopDrawer._valuePicker.incrButtonY))) 
+		{
+			ShopDrawer._valuePicker.incrButton.onClick();
+		} else if (ShopDrawer._valuePicker.decrButton.isInButton(
+				x -  (ShopDrawer.VALUE_PICKER_X + ShopDrawer._valuePicker.decrButtonX),
+				y -  (ShopDrawer.VALUE_PICKER_Y + ShopDrawer._valuePicker.decrButtonY))) 
+		{
+			ShopDrawer._valuePicker.decrButton.onClick();
 		}
 	} else {
 		var normalizedX = x - ShopDrawer.BODY_X;
@@ -355,10 +372,13 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 				ShopDrawer._helperGetShopSlotFromClickCoords(
 						normalizedX, normalizedY)) != -1 && startAndEndSameLoc) {
 			if (ShopDrawer._shopContents[possibleCellIndex] && 
-					ShopDrawer._shop.canBuyItemAtIndex(possibleCellIndex)) {
+					ShopDrawer._shop.canBuyItemAtIndex(possibleCellIndex, 1)) {
 				var selectedItemId = ShopDrawer._shopContents[possibleCellIndex];
 				ShopDrawer._selectedItem = Item.getItem(selectedItemId);
 				ShopDrawer._selectedItemIndex = possibleCellIndex
+				var numCanBuy = 
+						Math.floor(GameState.player.money / ShopDrawer._selectedItem.price);
+				ShopDrawer._valuePicker.reinit(1, numCanBuy);
 				ShopDrawer._isInConfirmationMode = true;
 			}
 		} else if (ShopDrawer._scrollBar.isInLine(
@@ -370,13 +390,6 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 		} else if (ShopDrawer._exitButton.isInButton(x - ShopDrawer.EXIT_BUTTON_X, 
 				y - ShopDrawer.EXIT_BUTTON_Y) && startAndEndSameLoc) {
 			ShopDrawer._exitButton.onClick();
-		} else if (ShopDrawer._valuePicker.scrollBar.isInLine(
-				x - ShopDrawer.CONFIRM_BODY_X,
-				y - (ShopDrawer.CONFIRM_BODY_Y + ValuePicker.SCROLL_BAR_Y_OFFSET)) && startAndEndSameLoc) {
-			// TEST
-			ShopDrawer._valuePicker.scrollBar.updateScrollFromDrag(
-					x - ShopDrawer.CONFIRM_BODY_X,
-					y - (ShopDrawer.CONFIRM_BODY_Y + ValuePicker.SCROLL_BAR_Y_OFFSET));
 		}
 	}
 	ShopDrawer._isDraggingScroll = false;
@@ -422,8 +435,6 @@ ShopDrawer.drawShopOverlay = function(ctx) {
 		}
 
 		// TEST
-		ShopDrawer._valuePicker.draw(ctx, ShopDrawer.CONFIRM_BODY_X, 
-				ShopDrawer.CONFIRM_BODY_Y);
 	}
 };
 
@@ -567,8 +578,11 @@ ShopDrawer._drawConfirmationInterface = function(ctx) {
 	ctx.drawImage(ShopDrawer.CONFIRM_BODY_IMG, ShopDrawer.CONFIRM_BODY_X, 
 			ShopDrawer.CONFIRM_BODY_Y);
 	// Draw Arrows.
-	ctx.drawImage(ShopDrawer.CONFIRM_ARROWS_IMG, ShopDrawer.CONFIRM_ARROWS_X, 
-			ShopDrawer.CONFIRM_ARROWS_Y);
+	// ctx.drawImage(ShopDrawer.CONFIRM_ARROWS_IMG, ShopDrawer.CONFIRM_ARROWS_X, 
+	// 		ShopDrawer.CONFIRM_ARROWS_Y);
+	// Draw Value Picker. 
+	ShopDrawer._valuePicker.draw(ctx, ShopDrawer.VALUE_PICKER_X, 
+				ShopDrawer.VALUE_PICKER_Y);
 	// Draw Buttons.
 	ShopDrawer._confirmYesButton.draw(ctx, ShopDrawer.CONFIRM_YES_BUTTON_X, 
 			ShopDrawer.CONFIRM_YES_BUTTON_Y);
@@ -581,50 +595,19 @@ ShopDrawer._drawConfirmationInterface = function(ctx) {
 			ShopDrawer.CONFIRM_CELLS_LEFT_Y);
 	// Draw item.
 	ctx.drawImage(
-			Item.getItem(ShopDrawer._selectedItem.results[0].itemId).sprite, 
+			ShopDrawer._selectedItem.sprite, 
 			ShopDrawer.CONFIRM_CELLS_LEFT_X, ShopDrawer.CONFIRM_CELLS_LEFT_Y);
-	var itemQuantity = ShopDrawer._selectedItem.results[0].quantity;
+	var itemQuantity = ShopDrawer._valuePicker.currValue;
 	if (itemQuantity > 1) {
 		// Draw Quantity.
-		var quantityStr = itemQuantity.toString();
-		GlyphDrawer.drawText(ctx, ShopDrawer.QUANTITY_FONT, 
-				quantityStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
-						(ShopDrawer.QUANTITY_MAX_GLYPHS - quantityStr.length) * 
-						ShopDrawer.QUANTITY_DELTA_X, 
-				cellY + ShopDrawer.QUANTITY_OFFSET_Y, 
-				ShopDrawer.CELL_IMG.width - ShopDrawer.QUANTITY_OFFSET_X, 
-				ShopDrawer.CELL_IMG.height - ShopDrawer.QUANTITY_OFFSET_Y);
-	}
-	// Ingredients Cells (Right/Player side).
-	var cellX = ShopDrawer.CONFIRM_CELLS_RIGHT_X;
-	var cellY = ShopDrawer.CONFIRM_CELLS_RIGHT_Y;
-	for (var i = 0; i < ShopDrawer.CONFIRM_NUM_ROWS; i++) {
-		for (var j = 0; j < ShopDrawer.CONFIRM_CELLS_PER_ROW; (j++) ) {
-			var currentIndex = i * ShopDrawer.CONFIRM_CELLS_PER_ROW + j
-			// Draw cell.
-			ctx.drawImage(ShopDrawer.CELL_IMG, cellX, cellY);
-			// Draw item.
-			if (ShopDrawer._selectedItem.ingredients[currentIndex]) {
-				ctx.drawImage(Item.getItem(ShopDrawer._selectedItem.ingredients[
-						currentIndex].itemId).sprite, cellX, cellY);
-				var itemQuantity = 
-						ShopDrawer._selectedItem.ingredients[currentIndex].quantity;
-				if (itemQuantity > 1) {
-					// Draw quantity.
-					var quantityStr = itemQuantity.toString();
-					GlyphDrawer.drawText(ctx, ShopDrawer.QUANTITY_FONT, 
-							quantityStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
-									(ShopDrawer.QUANTITY_MAX_GLYPHS - quantityStr.length) * 
-									ShopDrawer.QUANTITY_DELTA_X, 
-							cellY + ShopDrawer.QUANTITY_OFFSET_Y, 
-							ShopDrawer.CELL_IMG.width - ShopDrawer.QUANTITY_OFFSET_X, 
-							ShopDrawer.CELL_IMG.height - ShopDrawer.QUANTITY_OFFSET_Y);
-				}
-			}
-			cellX += ShopDrawer.CELL_POSITION_GAP;
-		}
-		cellY += ShopDrawer.CELL_POSITION_GAP;  
-		cellX = ShopDrawer.CONFIRM_CELLS_RIGHT_X;
+		// var quantityStr = itemQuantity.toString();
+		// GlyphDrawer.drawText(ctx, ShopDrawer.QUANTITY_FONT, 
+		// 		quantityStr, cellX + ShopDrawer.QUANTITY_OFFSET_X + 
+		// 				(ShopDrawer.QUANTITY_MAX_GLYPHS - quantityStr.length) * 
+		// 				ShopDrawer.QUANTITY_DELTA_X, 
+		// 		cellY + ShopDrawer.QUANTITY_OFFSET_Y, 
+		// 		ShopDrawer.CELL_IMG.width - ShopDrawer.QUANTITY_OFFSET_X, 
+		// 		ShopDrawer.CELL_IMG.height - ShopDrawer.QUANTITY_OFFSET_Y);
 	}
 };
 
@@ -676,3 +659,8 @@ ShopDrawer._helperGetShopSlotFromClickCoords = function(
 			Math.floor(normalizedX / cellDelta) + 
 					Math.floor(normalizedY / cellDelta) * ShopDrawer.CELLS_PER_ROW;
 };
+
+
+ShopDrawer.tick = function() {
+	ShopDrawer._valuePicker.tick();
+}
