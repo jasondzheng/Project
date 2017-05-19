@@ -2,7 +2,7 @@
  * Class to store information and methods of a simple clickable button.
  */
 
-var Button = function(sprite, isRounded, onClick) {
+var Button = function(sprite, isRounded, onClick, opt_isEnabled) {
 	this.sprite = sprite;
 	this.isRounded = isRounded;
 	this.onClick = onClick;
@@ -13,6 +13,8 @@ var Button = function(sprite, isRounded, onClick) {
 	
 	this.isClicked = false;
 	this.isHovered = false;
+
+	this.isEnabled = (opt_isEnabled == undefined) ? true : opt_isEnabled;
 };
 
 
@@ -27,6 +29,9 @@ Button.CLICKED_ALPHA = 0.75;
 
 // Returns if the mouse in within the bounds of the button.
 Button.prototype.isInButton = function(relX, relY) {
+	if (!this.isEnabled) {
+		return false;
+	}
 	if (this.isRounded) {
 		return (relX - this.halfWidth) * (relX - this.halfWidth) +
 				(relY - this.halfHeight) * (relY - this.halfHeight) < 
@@ -40,7 +45,7 @@ Button.prototype.isInButton = function(relX, relY) {
 
 // Draws the Button at the specified coordinates.
 Button.prototype.draw = function(ctx, x, y) {
-	if (this.isClicked) {
+	if (this.isClicked || !this.isEnabled) {
 		ctx.globalAlpha = Button.CLICKED_ALPHA;
 	}
 	ctx.drawImage(this.sprite, x - (this.currScale - 1) * this.sprite.width / 2, 
@@ -51,9 +56,11 @@ Button.prototype.draw = function(ctx, x, y) {
 
 
 Button.prototype.tick = function() {
-	if (this.isHovered && this.currScale < Button.SCALE_FACTOR) {
-		this.currScale += Button.SCALE_INCREMENT;
-	} else if (!this.isHovered && this.currScale > 1) {
-		this.currScale -= Button.SCALE_INCREMENT;
+	if (this.isEnabled) {	
+		if (this.isHovered && this.currScale < Button.SCALE_FACTOR) {
+			this.currScale += Button.SCALE_INCREMENT;
+		} else if (!this.isHovered && this.currScale > 1) {
+			this.currScale -= Button.SCALE_INCREMENT;
+		}
 	}
 };

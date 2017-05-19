@@ -13,7 +13,7 @@ var ValuePicker = function(length, min, max) {
 	var that = this;
 	this.incrButton = new Button(ValuePicker.INCR_BTN_IMG, false, 
 			function() {
-				that.scrollBar.setScrollFraction((that.currValue) / that.range);
+				that.scrollBar.updateScroll(1);
 			}
 	);
 	this.incrButtonX = this.halfLength + ValuePicker.INCR_BTN_OFFSET_X;
@@ -21,7 +21,7 @@ var ValuePicker = function(length, min, max) {
 	
 	this.decrButton = new Button(ValuePicker.DECR_BTN_IMG, false, 
 			function() {
-				that.scrollBar.setScrollFraction((that.currValue - 2) / that.range);
+				that.scrollBar.updateScroll(-1);
 			}
 	);
 	this.decrButtonX = this.halfLength + ValuePicker.DECR_BTN_OFFSET_X;
@@ -103,5 +103,5 @@ ValuePicker.prototype.draw = function(ctx, x, y) {
 
 
 ValuePicker.prototype.tick = function(ctx, x, y) {
-	this.currValue = Math.floor(this.min + this.scrollBar.getScroll());
+	this.currValue = Math.round(this.min + this.scrollBar.getScroll());
 };

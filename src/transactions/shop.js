@@ -7,6 +7,27 @@ var Shop = function(shopContents) {
 };
 
 
+// Checks if a player can sell an item; currently only based on if it is a key 
+// item.
+Shop.canSellItemAtIndex = function(index, isFromEquip) {
+	var entries = (isFromEquip) ? GameState.player.inventory.equipEntries : 
+			GameState.player.inventory.itemEntries;
+	return !(entries[index].item.isKeyItem);
+};
+
+
+// Sells an item in the player inventory to the shop. Items are currently sold 
+// back at a constant fraction of price (0.5).
+Shop.sellItemAtIndex = function(index, quantity, isFromEquip) {
+	var entries = (isFromEquip) ? GameState.player.inventory.equipEntries : 
+			GameState.player.inventory.itemEntries;
+	var item = entries[index].item;
+	GameState.player.inventory.remove(index, quantity, isFromEquip)
+	// Consider making MSRP fraction dpecific to the shop.
+	GameState.player.money += Math.floor(item.price  * 0.5) * quantity;
+};
+
+
 // Checks if the player can buy the given quantity of an item.
 Shop.prototype.canBuyItemAtIndex = function(index, quantity) {
 	var item = Item.getItem(this.shopContents[index]);
@@ -21,3 +42,5 @@ Shop.prototype.buyItemAtIndex = function(index, quantity) {
 	GameState.player.inventory.add(this.shopContents[index], quantity);
 	GameState.player.money -= item.price * quantity;
 };
+
+

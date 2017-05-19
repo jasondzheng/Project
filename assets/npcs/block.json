@@ -48,7 +48,7 @@
 								GS.setVar('blockIsAnnoyed', true);
 								ShopDrawer.displayShop(that.getShop('defaultShop'), 
 										that._rsrc('portraitRight'), null, 
-										that._rsrc('portraitLeft'), null);
+										that._rsrc('portraitLeft'), null, null, null, null, false);
 								callback();
 							});
 						}
