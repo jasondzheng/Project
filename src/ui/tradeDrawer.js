@@ -47,9 +47,16 @@ TradeDrawer.CELLS_PER_ROW = 4;
 
 TradeDrawer.MIN_ROWS = 6;
 
-TradeDrawer.CONFIRM_NUM_ROWS = 3;
-TradeDrawer.CONFIRM_CELLS_PER_ROW = 3;
+TradeDrawer.MAX_INGREDIENT_ROWS = 3;
+TradeDrawer.MAX_INGREDIENT_CELLS_PER_ROW = 3;
 
+TradeDrawer.DialogueModes = {
+	WELCOME: 0,
+	HOVER: 1,
+	THANKS: 2
+};
+
+TradeDrawer._currDialogueMode;
 
 // Variable assets needed to display a trade.
 TradeDrawer._trades;
@@ -59,7 +66,10 @@ TradeDrawer._rightPortrait1;
 TradeDrawer._rightPortrait2;
 TradeDrawer._bubbleSize;
 TradeDrawer._bubbleIsFromLeft;
-TradeDrawer._message;
+TradeDrawer._welcomeMessage;
+TradeDrawer._thanksMessage;
+TradeDrawer._hasTraded;
+
 
 // Indicates whether the player has entered a trade.
 TradeDrawer.isOpen = false;
@@ -140,6 +150,10 @@ TradeDrawer.load = function (callback){
 		TradeDrawer.WINDOW_BODY_HEIGHT =
 				TradeDrawer.WINDOW_BODY_BOT - TradeDrawer.WINDOW_BODY_TOP;
 
+		TradeDrawer.SPEECH_BUBBLE_X = TradeDrawer.BODY_X + 
+				TradeDrawer.BODY_IMG.width + 30 /*Maybe make constant*/;
+		TradeDrawer.SPEECH_BUBBLE_Y = DialogDrawer.RIGHT_BUBBLE_ANCHOR.y;
+
 		TradeDrawer._scrollBar = 
 				new ScrollBar(TradeDrawer.SCROLL_BAR_MAX_SCROLL, 
 						TradeDrawer.BODY_IMG.height - 
@@ -196,6 +210,9 @@ TradeDrawer.load = function (callback){
 		TradeDrawer._confirmYesButton = 
 				new Button(TradeDrawer.CONFIRM_YES_BUTTON_IMG, true, function() {
 					TradeDrawer._selectedTrade.applyTrade();
+					TradeDrawer._currDialogueMode = TradeDrawer.DialogueModes.THANKS;
+					TradeDrawer._hasTraded = true;
+					TradeDrawer._isInConfirmationMode = false;
 				});
 
 		TradeDrawer.CONFIRM_YES_BUTTON_X = ScreenProps.EXP_WIDTH / 2 - 
@@ -222,15 +239,15 @@ TradeDrawer.load = function (callback){
 
 // Used to set up the trade to be shown. 
 TradeDrawer.displayTrade = function(trades, leftPortrait1, leftPortrait2, 
-		rightPortrait1, rightPortrait2, bubbleSize, bubbleIsFromLeft, message) {
+		rightPortrait1, rightPortrait2, welcomeMessage, thanksMessage) {
 	TradeDrawer._trades = trades;
 	TradeDrawer._leftPortrait1 = leftPortrait1;
 	TradeDrawer._leftPortrait2 = leftPortrait2;
 	TradeDrawer._rightPortrait1 = rightPortrait1;
 	TradeDrawer._rightPortrait2 = rightPortrait2;
-	TradeDrawer._bubbleSize = bubbleSize;
-	TradeDrawer._bubbleIsFromLeft = bubbleIsFromLeft;
-	TradeDrawer._message = message;
+	TradeDrawer._welcomeMessage = welcomeMessage;
+	TradeDrawer._thanksMessage = thanksMessage;
+	TradeDrawer._hasTraded = false;
 	
 	// Number of rows.
 	TradeDrawer._numRows = Math.max(TradeDrawer.MIN_ROWS, 
@@ -270,7 +287,9 @@ TradeDrawer.exitTrade = function() {
 	TradeDrawer._rightPortrait2 = null;
 	TradeDrawer._bubbleSize = null;
 	TradeDrawer._bubbleIsFromLeft = null;
-	TradeDrawer._message = null;
+	TradeDrawer._welcomeMessage = null;
+	TradeDrawer._thanksMessage = null;
+	TradeDrawer._hasTraded = null;
 
 	TradeDrawer._numRows = null;
 
@@ -333,12 +352,11 @@ TradeDrawer.onEndClick = function(x, y, isDoubleClick) {
 		if (TradeDrawer._confirmYesButton.isInButton(
 				x - TradeDrawer.CONFIRM_YES_BUTTON_X, 
 				y - TradeDrawer.CONFIRM_YES_BUTTON_Y)) {
-			TradeDrawer._selectedTrade.applyTrade();
-			TradeDrawer._isInConfirmationMode = false;
+			TradeDrawer._confirmYesButton.onClick();
 		} else if (TradeDrawer._confirmNoButton.isInButton(
 				x - TradeDrawer.CONFIRM_NO_BUTTON_X,
 				y - TradeDrawer.CONFIRM_NO_BUTTON_Y)) {
-			TradeDrawer._isInConfirmationMode = false;
+			TradeDrawer._confirmNoButton.onClick();
 		}
 	} else {
 		var normalizedX = x - TradeDrawer.BODY_X;
@@ -376,6 +394,7 @@ TradeDrawer.onHover = function(x, y) {
 					TradeDrawer._helperGetTradeSlotFromClickCoords(normalizedX, 
 					normalizedY)) != -1) {
 		TradeDrawer._currentHoveredCellIndex = possibleCellIndex;
+		TradeDrawer._setHoverDialogMode();
 	} else {
 		TradeDrawer._currentHoveredCellIndex = null;
 	}
@@ -399,7 +418,7 @@ TradeDrawer.drawTradeOverlay = function(ctx) {
 			TradeDrawer._drawItemsInterface(ctx, TradeDrawer.BODY_X, 
 					TradeDrawer.BODY_Y);
 			// Draw possible overlay with ingredients list
-			TradeDrawer._maybeDrawIngredients(ctx);
+			TradeDrawer._drawSpeechBubble(ctx);
 			TradeDrawer._maybeDrawDescription(ctx);
 			TradeDrawer._exitButton.draw(ctx, TradeDrawer.EXIT_BUTTON_X, 
 				TradeDrawer.EXIT_BUTTON_Y);
@@ -595,9 +614,9 @@ TradeDrawer._drawConfirmationInterface = function(ctx) {
 	// Ingredients Cells (Right/Player side).
 	var cellX = TradeDrawer.CONFIRM_CELLS_RIGHT_X;
 	var cellY = TradeDrawer.CONFIRM_CELLS_RIGHT_Y;
-	for (var i = 0; i < TradeDrawer.CONFIRM_NUM_ROWS; i++) {
-		for (var j = 0; j < TradeDrawer.CONFIRM_CELLS_PER_ROW; (j++) ) {
-			var currentIndex = i * TradeDrawer.CONFIRM_CELLS_PER_ROW + j
+	for (var i = 0; i < TradeDrawer.MAX_INGREDIENT_ROWS; i++) {
+		for (var j = 0; j < TradeDrawer.MAX_INGREDIENT_CELLS_PER_ROW; j++) {
+			var currentIndex = i * TradeDrawer.MAX_INGREDIENT_CELLS_PER_ROW + j;
 			// Draw cell.
 			ctx.drawImage(TradeDrawer.CELL_IMG, cellX, cellY);
 			// Draw item.
@@ -627,12 +646,73 @@ TradeDrawer._drawConfirmationInterface = function(ctx) {
 
 
 TradeDrawer._drawSpeechBubble = function(ctx) {
+	var textStr;
+	switch (TradeDrawer._currDialogueMode) {
+		case TradeDrawer.DialogueModes.WELCOME:
+			textStr = TradeDrawer._welcomeMessage;
+			DialogDrawer.drawDialogBubble(ctx, DialogDrawer.BUBBLE_MEDIUM, false, 
+					textStr, TradeDrawer.SPEECH_BUBBLE_X, TradeDrawer.SPEECH_BUBBLE_Y);
+			break;
+		case TradeDrawer.DialogueModes.HOVER:
+			textStr = 'I will give you that for ';
+			for (var i = 0; i < trade.ingredients.length; i++) {
+				var quantity = trade.ingredients[i].quantity;
+				textStr += quantity + ' ';
+				textStr += Item.getItem(trade.ingredients[i].itemId).name;
+				if (quantity > 1) {
+					textStr += 's';
+				}
+				if (i < trade.ingredients.length - 2) {
+					textStr += ', ';
+				} else if (i == trade.ingredients.length - 2) {
+					textStr += (trade.ingredients.length == 2) ? ' and ' : ', and ';
+				}
+			}
+			DialogDrawer.drawDialogBubble(ctx, DialogDrawer.BUBBLE_LARGE, false, 
+					textStr, TradeDrawer.SPEECH_BUBBLE_X, TradeDrawer.SPEECH_BUBBLE_Y);
+			break;
+		case TradeDrawer.DialogueModes.THANKS:
+			textStr = TradeDrawer._thanksMessage;
+			DialogDrawer.drawDialogBubble(ctx, DialogDrawer.BUBBLE_MEDIUM, false, 
+					textStr, TradeDrawer.SPEECH_BUBBLE_X, TradeDrawer.SPEECH_BUBBLE_Y);
+			break;
+	}
 };
 
 
-// Maybe draws the igredients list.
-TradeDrawer._maybeDrawIngredients = function(ctx) {
-// Has the trader show ingredients with speech bubble.
+// Draws the igredients list.
+TradeDrawer._drawIngredients = function(ctx, index, x, y) {
+	var currX = x;
+	for (var i = 0; i < TradeDrawer.MAX_INGREDIENT_ROWS; i++) {
+		for (var j = 0; j < TradeDrawer.MAX_INGREDIENT_CELLS_PER_ROW; j++) {
+			var currentIndex = i * TradeDrawer.MAX_INGREDIENT_CELLS_PER_ROW + j;
+			// Draw cell.
+			ctx.drawImage(TradeDrawer.CELL_IMG, currX, y);
+			// Draw item.
+			var trade = TradeDrawer._trades[index];
+			if (trade.ingredients[currentIndex]) {
+				ctx.drawImage(
+						Item.getItem(trade.ingredients[currentIndex].itemId).sprite, currX, 
+								y);
+				var itemQuantity = 
+						trade.ingredients[currentIndex].quantity;
+				if (itemQuantity > 1) {
+					// Draw quantity.
+					var quantityStr = itemQuantity.toString();
+					GlyphDrawer.drawText(ctx, TradeDrawer.QUANTITY_FONT, 
+							quantityStr, currX + TradeDrawer.QUANTITY_OFFSET_X + 
+									(TradeDrawer.QUANTITY_MAX_GLYPHS - quantityStr.length) * 
+									TradeDrawer.QUANTITY_DELTA_X, 
+							y + TradeDrawer.QUANTITY_OFFSET_Y, 
+							TradeDrawer.CELL_IMG.width - TradeDrawer.QUANTITY_OFFSET_X, 
+							TradeDrawer.CELL_IMG.height - TradeDrawer.QUANTITY_OFFSET_Y);
+				}
+			}
+			currX += TradeDrawer.CELL_POSITION_GAP;
+		}
+		y += TradeDrawer.CELL_POSITION_GAP;  
+		currX = x;
+	}
 };
 
 // Maybe draws the description.
@@ -647,6 +727,21 @@ TradeDrawer._maybeDrawDescription = function(ctx) {
 				TradeDrawer.DESCRIPTION_X, TradeDrawer.DESCRIPTION_Y, 
 				TradeDrawer.DESCRIPTION_BACK.width, 
 				TradeDrawer.DESCRIPTION_BACK.height);
+		TradeDrawer._drawIngredients(ctx, TradeDrawer._currentHoveredCellIndex, 
+				TradeDrawer.DESCRIPTION_X,
+				TradeDrawer.DESCRIPTION_Y + TradeDrawer.DESCRIPTION_BACK.height);
+	}
+};
+
+
+// Sets the dialog mode based on the hovered position of the mouse.
+TradeDrawer._setHoverDialogMode = function() {
+	if (TradeDrawer._currentHoveredCellIndex != null && 
+			(trade = TradeDrawer._trades[TradeDrawer._currentHoveredCellIndex])) {
+		TradeDrawer._currDialogueMode = TradeDrawer.DialogueModes.HOVER;
+	} else {
+		TradeDrawer._currDialogueMode = TradeDrawer._hasTraded ? 
+			TradeDrawer.DialogueModes.THANKS : TradeDrawer.DialogueModes.WELCOME;
 	}
 };
 

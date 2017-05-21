@@ -27,7 +27,7 @@ ScrollBar.BAR_LEFT;
 ScrollBar.BAR_RIGHT;
 ScrollBar.BAR_MIDDLE_SIDE;
 
-ScrollBar.PATH = '../assets/img/ui/scrollbar/'
+ScrollBar.PATH = '../assets/img/ui/components/scrollbar/'
 
 // Loads resources needed for scrollbars.
 ScrollBar.load = function(callback) {
@@ -82,6 +82,9 @@ ScrollBar.prototype.disable = function() {
 
 // Updates the scrollbar based on a provided delta.
 ScrollBar.prototype.updateScroll = function(delta) {
+	if (!this._isEnabled) {
+		return;
+	}
 	this._currScroll = Math.min(Math.max(this._currScroll + delta, 0), 
 			this._maxScroll);
 };

@@ -46,7 +46,7 @@ DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS = {
 	offY: 30,
 	widths: [238, 238, 238],
 	heights: [116, 176, 219],
-	glyphset: 'test_2' /* TODO: replace with real glyphset */
+	glyphset: 'test' /* TODO: replace with real glyphset */
 };
 
 // Backshade color
@@ -133,6 +133,31 @@ DialogDrawer.drawDialogOverlay = function(ctx) {
 DialogDrawer.signalAdvance = function() {
 	DialogDrawer._readyToAdvance = true;
 };
+
+
+// Public method to be used by other classes to draw speech bubbles.
+DialogDrawer.drawDialogBubble = function(ctx, bubbleSize, bubbleIsFromLeft, 
+		message, x, y) {
+	var msgWidth = 
+			DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.widths[bubbleSize];
+	var msgHeight = 
+			DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.heights[bubbleSize];
+	var bubbleImg = DialogDrawer._assets[
+			DialogDrawer.BUBBLE_INDEX_TO_ASSET[bubbleSize]];
+	if (this._bubbleIsFromLeft) {
+		ctx.drawImage(DialogDrawer._assets.tailLeft, 
+				x - DialogDrawer._assets.tailLeft.width, 
+				y + DialogDrawer._assets.tailLeft.height);
+	} else {
+		ctx.drawImage(DialogDrawer._assets.tailRight, 
+				x + bubbleImg.width, 
+				y + DialogDrawer._assets.tailRight.height);
+	}
+	ctx.drawImage(bubbleImg, x, y);
+	GlyphDrawer.drawText(ctx, DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.glyphset, 
+			message, x + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offX,
+			y + DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offY, msgWidth, msgHeight);
+}
 
 
 // Queues up a message to be displayed. Requests a set of portraits, bubble

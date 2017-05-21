@@ -14,7 +14,7 @@ ConfirmDialog.TEXT_PADDING = 32
 
 ConfirmDialog.MESSAGE_FONT = 'test';
 
-ConfirmDialog.PATH = '../assets/img/ui/confirmationDialog/'
+ConfirmDialog.PATH = '../assets/img/ui/components/confirmDialog/'
 
 ConfirmDialog.ReturnValues = {
 	NO: 0,

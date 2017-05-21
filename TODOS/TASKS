@@ -8,7 +8,7 @@ Battery
 
 *Combo Visualizations
 
-Shop
+*Shop
 
 Money Visualization
 
@@ -16,9 +16,15 @@ consider Bosses
 
 Player Skills
 
+*TradeDrawer dialog integration
+
+Find dialogue bubble size based on text
+
 Clean-slate save data
 
 SFX
+
+Maybe dont draw unit hp bars unless hit
 
 *Save Map
  - maybe only allow save in shop maps

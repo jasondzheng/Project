@@ -17,6 +17,8 @@ ShopDrawer.PORTRAIT_BOTTOM = 720;
 // Backshade color
 ShopDrawer.BACKSHADE_COLOR = 'rgba(0, 0, 0, 0.25)';
 
+ShopDrawer.DIALOG_FONT = 'test';
+
 ShopDrawer.DESCRIPTION_FONT = 'test';
 
 ShopDrawer.QUANTITY_FONT = 'test';
@@ -51,6 +53,16 @@ ShopDrawer.MIN_ROWS = 6;
 ShopDrawer.CONFIRM_NUM_ROWS = 3;
 ShopDrawer.CONFIRM_CELLS_PER_ROW = 3;
 
+ShopDrawer.DialogueModes = {
+	WELCOME_BUY: 0,
+	WELCOME_SELL: 1,
+	CONFIRM_BUY: 2,
+	CONFIRM_SELL: 3,
+	THANKS_BUY: 4,
+	THANKS_SELL: 5
+};
+
+ShopDrawer._currDialogueMode;
 
 // Variable assets needed to display a shop.
 ShopDrawer._shop;
@@ -60,9 +72,10 @@ ShopDrawer._leftPortrait1;
 ShopDrawer._leftPortrait2;
 ShopDrawer._rightPortrait1;
 ShopDrawer._rightPortrait2;
-ShopDrawer._bubbleSize;
-ShopDrawer._bubbleIsFromLeft;
-ShopDrawer._message;
+ShopDrawer._welcomeMessageBuy;
+ShopDrawer._thanksMessageBuy;
+ShopDrawer._welcomeMessageSell;
+ShopDrawer._thanksMessageSell;
 
 // Indicates whether the player has entered a shop.
 ShopDrawer.isOpen = false;
@@ -79,6 +92,10 @@ ShopDrawer._isBuying = true;
 // Selected resources.
 ShopDrawer._selectedItem;
 ShopDrawer._selectedItemIndex;
+
+// Buttons used to toggle between sell/buy modes.
+ShopDrawer._sellButton;
+ShopDrawer._buyButton;
 
 // Button used to exit the shop interface.
 ShopDrawer._exitButton;
@@ -118,6 +135,8 @@ ShopDrawer.load = function (callback){
 		body: ShopDrawer.PATH + 'body.png',
 		cell: ShopDrawer.PATH + 'cell.png',
 		exitButton: ShopDrawer.PATH + 'exitButton.png',
+		sellButton: ShopDrawer.PATH + 'sellButton.png',
+		buyButton: ShopDrawer.PATH + 'buyButton.png',
 		descriptionBack: ShopDrawer.PATH + 'descriptionBack.png',
 		confirmBody: ShopDrawer.PATH + 'confirmBody.png',
 		confirmYesButton: ShopDrawer.PATH + 'confirmYesButton.png',
@@ -127,17 +146,28 @@ ShopDrawer.load = function (callback){
 		ShopDrawer.BODY_IMG = imgs.body;
 		ShopDrawer.CELL_IMG = imgs.cell;
 		ShopDrawer.EXIT_BUTTON_IMG = imgs.exitButton;
+		ShopDrawer.SELL_BUTTON_IMG = imgs.sellButton;
+		ShopDrawer.BUY_BUTTON_IMG = imgs.buyButton;
 		ShopDrawer.DESCRIPTION_BACK = imgs.descriptionBack;
 		ShopDrawer.CONFIRM_BODY_IMG = imgs.confirmBody;
 		ShopDrawer.CONFIRM_YES_BUTTON_IMG = imgs.confirmYesButton;
 		ShopDrawer.CONFIRM_NO_BUTTON_IMG = imgs.confirmNoButton;
-		
+
 		// Items/Select Shops interface preparations.
 		// Centered coordinates for the body.
 		ShopDrawer.BODY_X = 
 				(ScreenProps.EXP_WIDTH - ShopDrawer.BODY_IMG.width) / 2;
 		ShopDrawer.BODY_Y = 
 				(ScreenProps.EXP_HEIGHT - ShopDrawer.BODY_IMG.height) / 2;
+
+		ShopDrawer.SPEECH_BUBBLE_TEXT_OFFSET_X = 
+				DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offX;
+		ShopDrawer.SPEECH_BUBBLE_TEXT_OFFSET_Y = 
+				DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offY;
+
+		ShopDrawer.SPEECH_BUBBLE_X = ShopDrawer.BODY_X + 
+				ShopDrawer.BODY_IMG.width + 30 /*Maybe make constant*/;
+		ShopDrawer.SPEECH_BUBBLE_Y = DialogDrawer.RIGHT_BUBBLE_ANCHOR.y;
 
 		// Window calculations.
 		ShopDrawer.WINDOW_BODY_TOP = ShopDrawer.CELL_EDGE_OFFSET;
@@ -192,6 +222,36 @@ ShopDrawer.load = function (callback){
 		ShopDrawer.DESCRIPTION_X = ShopDrawer.BODY_X - imgs.descriptionBack.width;
 		ShopDrawer.DESCRIPTION_Y = ShopDrawer.BODY_Y;
 
+		ShopDrawer._sellButton = 
+				new Button(ShopDrawer.SELL_BUTTON_IMG, true, function() {
+					ShopDrawer._isBuying = false;
+					ShopDrawer._sellButton.isEnabled = false;
+					ShopDrawer._buyButton.isEnabled = true;
+					ShopDrawer._currDialogueMode = 
+							ShopDrawer.DialogueModes.WELCOME_SELL;
+				});
+
+		ShopDrawer.SELL_BUTTON_X = ScreenProps.EXP_WIDTH / 2 - 
+				ShopDrawer.CELL_EDGE_OFFSET - ShopDrawer.SELL_BUTTON_IMG.width;
+
+		ShopDrawer.SELL_BUTTON_Y = ShopDrawer.BODY_Y - 
+				(ShopDrawer.CELL_EDGE_OFFSET + imgs.sellButton.height);
+
+		ShopDrawer._buyButton = 
+				new Button(ShopDrawer.BUY_BUTTON_IMG, true, function() {
+					ShopDrawer._isBuying = true;
+					ShopDrawer._buyButton.isEnabled = false;
+					ShopDrawer._sellButton.isEnabled = true;
+					ShopDrawer._currDialogueMode = 
+							ShopDrawer.DialogueModes.WELCOME_BUY;
+				});
+
+		ShopDrawer.BUY_BUTTON_X = ScreenProps.EXP_WIDTH / 2 +
+				ShopDrawer.CELL_EDGE_OFFSET;
+
+		ShopDrawer.BUY_BUTTON_Y = ShopDrawer.BODY_Y - 
+				(ShopDrawer.CELL_EDGE_OFFSET + imgs.buyButton.height);
+
 		// Confirmation dialog-specific preparations.
 		ShopDrawer.CONFIRM_BODY_X = 
 				(ScreenProps.EXP_WIDTH - imgs.confirmBody.width) / 2;
@@ -200,7 +260,18 @@ ShopDrawer.load = function (callback){
 
 		ShopDrawer._confirmYesButton = 
 				new Button(ShopDrawer.CONFIRM_YES_BUTTON_IMG, true, function() {
-					ShopDrawer._selectedItem.applyShop();
+					if (ShopDrawer._isBuying) {
+						ShopDrawer._shop.buyItemAtIndex(ShopDrawer._selectedItemIndex, 
+								ShopDrawer._valuePicker.currValue);
+						ShopDrawer._currDialogueMode = 
+							ShopDrawer.DialogueModes.THANKS_BUY;
+					} else {
+						Shop.sellItemAtIndex(ShopDrawer._selectedItemIndex, 
+								ShopDrawer._valuePicker.currValue, ShopDrawer._isEquipShop);
+						ShopDrawer._currDialogueMode = 
+							ShopDrawer.DialogueModes.THANKS_SELL;
+					}
+					ShopDrawer._isInConfirmationMode = false;
 				});
 
 		ShopDrawer.CONFIRM_YES_BUTTON_X = ScreenProps.EXP_WIDTH / 2 - 
@@ -211,6 +282,9 @@ ShopDrawer.load = function (callback){
 
 		ShopDrawer._confirmNoButton = 
 				new Button(ShopDrawer.CONFIRM_NO_BUTTON_IMG, true, function() {
+					ShopDrawer._currDialogueMode = ShopDrawer._isBuying ?
+							ShopDrawer.DialogueModes.WELCOME_BUY : 
+							ShopDrawer.DialogueModes.WELCOME_SELL;
 					ShopDrawer._isInConfirmationMode = false;
 				});
 
@@ -239,20 +313,22 @@ ShopDrawer.load = function (callback){
 
 // Used to set up the shop to be shown. 
 ShopDrawer.displayShop = function(shop, leftPortrait1, leftPortrait2, 
-		rightPortrait1, rightPortrait2, bubbleSize, bubbleIsFromLeft, message, 
-		isEquipShop) {
+		rightPortrait1, rightPortrait2, welcomeMessageBuy, thanksMessageBuy, 
+		welcomeMessageSell, thanksMessageSell, isEquipShop) {
 	ShopDrawer._shop = shop;
 	ShopDrawer._shopContents = shop.shopContents;
 	ShopDrawer._leftPortrait1 = leftPortrait1;
 	ShopDrawer._leftPortrait2 = leftPortrait2;
 	ShopDrawer._rightPortrait1 = rightPortrait1;
 	ShopDrawer._rightPortrait2 = rightPortrait2;
-	ShopDrawer._bubbleSize = bubbleSize;
-	ShopDrawer._bubbleIsFromLeft = bubbleIsFromLeft;
-	ShopDrawer._message = message;
+	ShopDrawer._welcomeMessageBuy = welcomeMessageBuy;
+	ShopDrawer._thanksMessageBuy = thanksMessageBuy;
+	ShopDrawer._welcomeMessageSell = welcomeMessageSell;
+	ShopDrawer._thanksMessageSell = thanksMessageSell;
 
 	ShopDrawer._isEquipShop = isEquipShop;
 	ShopDrawer._isBuying = true;
+	ShopDrawer._buyButton.onClick();
 	
 	ShopDrawer._sellEntries = isEquipShop ?
 			GameState.player.inventory.equipEntries : 
@@ -296,9 +372,11 @@ ShopDrawer.exitShop = function() {
 	ShopDrawer._leftPortrait2 = null;
 	ShopDrawer._rightPortrait1 = null;
 	ShopDrawer._rightPortrait2 = null;
-	ShopDrawer._bubbleSize = null;
-	ShopDrawer._bubbleIsFromLeft = null;
-	ShopDrawer._message = null;
+	ShopDrawer._welcomeMessageBuy = null;
+	ShopDrawer._thanksMessageBuy = null;
+	ShopDrawer._welcomeMessageSell = null;
+	ShopDrawer._thanksMessageSell = null;
+
 
 	ShopDrawer._isEquipShop = null;
 	ShopDrawer._isBuying = true;
@@ -385,18 +463,11 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 		if (ShopDrawer._confirmYesButton.isInButton(
 				x - ShopDrawer.CONFIRM_YES_BUTTON_X, 
 				y - ShopDrawer.CONFIRM_YES_BUTTON_Y)) {
-			if (ShopDrawer._isBuying) {
-				ShopDrawer._shop.buyItemAtIndex(ShopDrawer._selectedItemIndex, 
-						ShopDrawer._valuePicker.currValue);
-			} else {
-				Shop.sellItemAtIndex(ShopDrawer._selectedItemIndex, 
-						ShopDrawer._valuePicker.currValue, ShopDrawer._isEquipShop);
-			}
-			ShopDrawer._isInConfirmationMode = false;
+			ShopDrawer._confirmYesButton.onClick();
 		} else if (ShopDrawer._confirmNoButton.isInButton(
 				x - ShopDrawer.CONFIRM_NO_BUTTON_X,
 				y - ShopDrawer.CONFIRM_NO_BUTTON_Y)) {
-			ShopDrawer._isInConfirmationMode = false;
+			ShopDrawer._confirmNoButton.onClick();
 		} else if (ShopDrawer._valuePicker.scrollBar.isInLine(
 				x - ShopDrawer.VALUE_PICKER_X,
 				y - (ShopDrawer.VALUE_PICKER_Y + ValuePicker.SCROLL_BAR_Y_OFFSET)) && 
@@ -432,14 +503,17 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 				var numCanBuy = 
 						Math.floor(GameState.player.money / ShopDrawer._selectedItem.price);
 				ShopDrawer._valuePicker.reinit(1, numCanBuy);
+				ShopDrawer._currDialogueMode = ShopDrawer.DialogueModes.CONFIRM_BUY;
 				ShopDrawer._isInConfirmationMode = true;
-			} else if (ShopDrawer._sellEntries[possibleCellIndex] && 
+			} else if (!ShopDrawer._isBuying && 
+					ShopDrawer._sellEntries[possibleCellIndex] && 
 					Shop.canSellItemAtIndex(possibleCellIndex, ShopDrawer._isEquipShop)) {
 				ShopDrawer._selectedItem = 
 						ShopDrawer._sellEntries[possibleCellIndex].item;
 				ShopDrawer._selectedItemIndex = possibleCellIndex
 				var numCanSell = ShopDrawer._sellEntries[possibleCellIndex].quantity;
 				ShopDrawer._valuePicker.reinit(1, numCanSell);
+				ShopDrawer._currDialogueMode = ShopDrawer.DialogueModes.CONFIRM_SELL;
 				ShopDrawer._isInConfirmationMode = true;
 			}
 		} else if (scrollBar.isInLine(
@@ -448,10 +522,16 @@ ShopDrawer.onEndClick = function(x, y, isDoubleClick) {
 			scrollBar.updateScrollFromDrag(
 					normalizedX - ShopDrawer.SCROLLBAR_OFFSET_X,
 					normalizedY - ShopDrawer.SCROLLBAR_OFFSET_Y);
+		} else if (ShopDrawer._sellButton.isInButton(x - ShopDrawer.SELL_BUTTON_X, 
+				y - ShopDrawer.SELL_BUTTON_Y)) {
+			ShopDrawer._sellButton.onClick();
+		} else if (ShopDrawer._buyButton.isInButton(x - ShopDrawer.BUY_BUTTON_X, 
+				y - ShopDrawer.BUY_BUTTON_Y)) {
+			ShopDrawer._buyButton.onClick();
 		} else if (ShopDrawer._exitButton.isInButton(x - ShopDrawer.EXIT_BUTTON_X, 
 				y - ShopDrawer.EXIT_BUTTON_Y) && startAndEndSameLoc) {
 			ShopDrawer._exitButton.onClick();
-		}
+		} 
 	}
 	ShopDrawer._isDraggingScroll = false;
 };
@@ -494,9 +574,14 @@ ShopDrawer.drawShopOverlay = function(ctx) {
 						ShopDrawer.BODY_Y);
 			}
 			ShopDrawer._maybeDrawDescription(ctx);
+			ShopDrawer._sellButton.draw(ctx, ShopDrawer.SELL_BUTTON_X, 
+					ShopDrawer.SELL_BUTTON_Y);
+			ShopDrawer._buyButton.draw(ctx, ShopDrawer.BUY_BUTTON_X, 
+					ShopDrawer.BUY_BUTTON_Y);
 			ShopDrawer._exitButton.draw(ctx, ShopDrawer.EXIT_BUTTON_X, 
-				ShopDrawer.EXIT_BUTTON_Y);
+					ShopDrawer.EXIT_BUTTON_Y);
 		}
+		ShopDrawer._drawSpeechBubble(ctx);
 	}
 };
 
@@ -522,6 +607,38 @@ ShopDrawer._drawPortraits = function(ctx) {
 				DialogDrawer.PORTRAIT_BOTTOM - ShopDrawer._rightPortrait2.height);
 	}
 };
+
+
+// Draws speech bubbles for the shop to display current transaction state.
+ShopDrawer._drawSpeechBubble = function(ctx) {
+	// Draw Text.
+	var textStr;
+	switch (ShopDrawer._currDialogueMode) {
+		case ShopDrawer.DialogueModes.WELCOME_SELL:
+			textStr = ShopDrawer._welcomeMessageSell;
+			break;
+		case ShopDrawer.DialogueModes.WELCOME_BUY:
+			textStr = ShopDrawer._welcomeMessageBuy;
+			break;
+		case ShopDrawer.DialogueModes.CONFIRM_SELL:
+			textStr = ShopDrawer._valuePicker.currValue + '\nI will buy that for ' + 
+					(Math.floor(ShopDrawer._selectedItem.price * Shop.SELL_FRACTION) * 
+							ShopDrawer._valuePicker.currValue);
+			break;
+		case ShopDrawer.DialogueModes.CONFIRM_BUY:
+			textStr = ShopDrawer._valuePicker.currValue + '\nThat will be ' + 
+					(ShopDrawer._selectedItem.price * ShopDrawer._valuePicker.currValue);
+			break;
+		case ShopDrawer.DialogueModes.THANKS_SELL:
+			textStr = ShopDrawer._thanksMessageSell;
+			break;
+		case ShopDrawer.DialogueModes.THANKS_BUY:
+			textStr = ShopDrawer._thanksMessageBuy;
+			break;
+	}
+	DialogDrawer.drawDialogBubble(ctx, DialogDrawer.BUBBLE_MEDIUM, false, textStr, 
+			ShopDrawer.SPEECH_BUBBLE_X, ShopDrawer.SPEECH_BUBBLE_Y);
+}
 
 
 // Draws the Items View/Interface of the Shop UI overlay
@@ -822,10 +939,6 @@ ShopDrawer._drawConfirmationInterface = function(ctx) {
 		
 	}
 
-};
-
-
-ShopDrawer._drawSpeechBubble = function(ctx) {
 };
 
 

@@ -48,7 +48,7 @@ ValuePicker.INCR_BTN_OFFSET_Y;
 ValuePicker.DECR_BTN_OFFSET_X;
 ValuePicker.DECR_BTN_OFFSET_Y;
 
-ValuePicker.PATH = '../assets/img/ui/valuePicker/'
+ValuePicker.PATH = '../assets/img/ui/components/valuePicker/'
 
 ValuePicker.load = function(callback) {
 	ImgUtils.loadImages({

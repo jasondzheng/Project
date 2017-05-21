@@ -7,6 +7,9 @@ var Shop = function(shopContents) {
 };
 
 
+Shop.SELL_FRACTION = 0.5;
+
+
 // Checks if a player can sell an item; currently only based on if it is a key 
 // item.
 Shop.canSellItemAtIndex = function(index, isFromEquip) {
@@ -24,7 +27,8 @@ Shop.sellItemAtIndex = function(index, quantity, isFromEquip) {
 	var item = entries[index].item;
 	GameState.player.inventory.remove(index, quantity, isFromEquip)
 	// Consider making MSRP fraction dpecific to the shop.
-	GameState.player.money += Math.floor(item.price  * 0.5) * quantity;
+	GameState.player.money += Math.floor(item.price  * Shop.SELL_FRACTION) * 
+			quantity;
 };
 
 

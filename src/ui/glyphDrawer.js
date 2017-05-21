@@ -106,10 +106,11 @@ GlyphDrawer.drawText = function(ctx, setName, text, x, y, width, height) {
 		if (charProps.height > height) {
 			return;
 		}
-		if (currChar == ' ') {
+		if (currChar == ' ' || currChar == '\n') {
 			possibleLineEnd = i;
 		}
-		if ((widthLeft -= charProps.width) < 0 || i == text.length - 1) {
+		if ((widthLeft -= charProps.width) <= 0 || i == text.length - 1 || 
+				text.charAt(i) == '\n') {
 			if (i == text.length - 1 && widthLeft >= 0) {
 				possibleLineEnd = text.length;
 			}
