@@ -89,11 +89,27 @@ OverworldScene.reset = function() {
 };
 
 
+// Exits the overworld scene and returns to the menu.
+OverworldScene.exit = function() {
+	OverworldScene.disableInput();
+	ScreenEffectDrawer.fadeOut(function() {
+		ScreenEffectDrawer.stayBlack();
+		CoreModule.switchScene(StartMenuScene);
+		OverworldScene.reset();
+		StartMenuScene.disableInput();
+		ScreenEffectDrawer.fadeIn(function() {
+			StartMenuScene.reenableInput();
+		});
+	});
+};
+
+
 // Draws all the visual elements in the overworld scene.
 OverworldScene.draw = function(ctx) {
 	if (GameState.map) {
 		MapDrawer.drawMap(ctx, GameState.map, Camera.x, Camera.y);
-		if (GameState.map.type != GameMap.Types.NON_BATTLE) {
+		if (GameState.map.type != GameMap.Types.NON_BATTLE /*&& 
+				GameState.player.batteryLevel > 0*/ /*commented for testing*/) {
 			BeatDrawer.drawBeats(ctx, ScreenProps.EXP_WIDTH_HALF, 
 					ScreenProps.EXP_HEIGHT_HALF);
 		}
@@ -123,9 +139,9 @@ OverworldScene.tick = function() {
 		GameState.map.tickAll();
 		if (GameState.map.type != GameMap.Types.NON_BATTLE) {
 			BeatDrawer.tick();
+			UnitBeatManager.tick();
 		}
 	}
-	UnitBeatManager.tick();
 	Camera.tick();
 	UnitHpDrawer.tick();
 	PlayerHpDrawer.tick();

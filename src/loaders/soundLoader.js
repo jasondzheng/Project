@@ -90,14 +90,20 @@ SoundLoader.BEATMAP_PATH = '../assets/tracks/';
 SoundLoader.loadBeatmap = function(name, opt_callback) {
 	SoundLoader.loadTrack(SoundLoader.BEATMAP_PATH + name + '/track.mp3', 
 			function(track) {
-		JSONLoader.load(SoundLoader.BEATMAP_PATH + name + '/beatmap.json', 
-				function(beatmap) {
-			if (opt_callback) {
-				opt_callback({
-					audio: track,
-					beatmap: beatmap
-				});
-			}
+		JSONLoader.load(SoundLoader.BEATMAP_PATH + name + '/playerBeatmap.json', 
+				function(playerBeatmap) {
+			JSONLoader.load(SoundLoader.BEATMAP_PATH + name + '/unitBeatmap.json', 
+					function(unitBeatmap) {
+				if (opt_callback) {
+					opt_callback({
+						audio: track,
+						beatmaps: {
+							playerBeatmap: playerBeatmap,
+							unitBeatmap: unitBeatmap
+						}
+					});
+				}
+			});
 		});
 	});
 };
@@ -114,8 +120,8 @@ SoundLoader.loadBeatmaps = function(names, opt_callback) {
 	}
 	for (var trackName in names) {
 		SoundLoader.loadBeatmap(names[trackName], (function(trackName) {
-			return function(beatmap) {
-				tracks[trackName] = beatmap;
+			return function(beatmaps) {
+				tracks[trackName] = beatmaps;
 				if (--tracksToLoad == 0 && opt_callback) {
 					opt_callback(tracks);
 				}

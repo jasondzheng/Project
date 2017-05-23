@@ -3,6 +3,11 @@ BASIC FUNCTIONALITIES
 (* - done)
 ________________________________________________________________________________
 
+!! consider changing combat system to auto locking onto enemies (player dashes 
+to nearest enemy) and enemies die from combos (in a row hits) or having completed all notes in a certain section instead of normal hp. Songs will be short bursts of same length sequences. Maybe have it like genji dash resets.
+
+Maybe have units attack even if not in range to show them attacking to the beat
+
 Battery
  - *Visualization
 
@@ -10,11 +15,15 @@ Battery
 
 *Shop
 
-Money Visualization
+*Money Visualization
 
 consider Bosses
 
+hotkeys for inventory items
+
 Player Skills
+
+Knockback
 
 *TradeDrawer dialog integration
 
@@ -22,9 +31,12 @@ Find dialogue bubble size based on text
 
 Clean-slate save data
 
+Events
+ - death
+
 SFX
 
 Maybe dont draw unit hp bars unless hit
 
 *Save Map
- - maybe only allow save in shop maps
+ - *maybe only allow save in shop maps

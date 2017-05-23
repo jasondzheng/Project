@@ -35,13 +35,28 @@ ShopDrawer.QUANTITY_DELTA_X = 12;
 ShopDrawer.QUANTITY_OFFSET_Y = 42;
 ShopDrawer.QUANTITY_MAX_GLYPHS = 3;
 
+// Padding for the money glyphs WRT top left corner of money back.
+ShopDrawer.MONEY_OFFSET_X = 10;
+ShopDrawer.MONEY_OFFSET_Y = 10;
+ShopDrawer.MONEY_DELTA_X = 12;
+
+// Max number of money glyphs.
+ShopDrawer.MONEY_MAX_GLYPHS = 24;
+
+// The font to draw money in the inventory display.
+ShopDrawer.MONEY_FONT = 'test';
+
 // Constant assets needed to display a shop.
 ShopDrawer.BODY_IMG;
 ShopDrawer.CELL_IMG;
 ShopDrawer.EXIT_BUTTON_IMG;
+ShopDrawer.SELL_BUTTON_IMG;
+ShopDrawer.BUY_BUTTON_IMG;
+ShopDrawer.DESCRIPTION_BACK;
+ShopDrawer.MONEY_BACK_IMG;
+ShopDrawer.CONFIRM_BODY_IMG;
 ShopDrawer.CONFIRM_YES_BUTTON_IMG;
 ShopDrawer.CONFIRM_NO_BUTTON_IMG;
-ShopDrawer.CONFIRM_BODY_IMG;
 
 ShopDrawer.SCROLL_BAR_MAX_SCROLL = 1000;
 ShopDrawer.CELL_EDGE_OFFSET = 12;
@@ -138,6 +153,7 @@ ShopDrawer.load = function (callback){
 		sellButton: ShopDrawer.PATH + 'sellButton.png',
 		buyButton: ShopDrawer.PATH + 'buyButton.png',
 		descriptionBack: ShopDrawer.PATH + 'descriptionBack.png',
+		moneyBack: ShopDrawer.PATH + 'moneyBack.png',
 		confirmBody: ShopDrawer.PATH + 'confirmBody.png',
 		confirmYesButton: ShopDrawer.PATH + 'confirmYesButton.png',
 		confirmNoButton: ShopDrawer.PATH + 'confirmNoButton.png'
@@ -149,6 +165,7 @@ ShopDrawer.load = function (callback){
 		ShopDrawer.SELL_BUTTON_IMG = imgs.sellButton;
 		ShopDrawer.BUY_BUTTON_IMG = imgs.buyButton;
 		ShopDrawer.DESCRIPTION_BACK = imgs.descriptionBack;
+		ShopDrawer.MONEY_BACK_IMG = imgs.moneyBack;
 		ShopDrawer.CONFIRM_BODY_IMG = imgs.confirmBody;
 		ShopDrawer.CONFIRM_YES_BUTTON_IMG = imgs.confirmYesButton;
 		ShopDrawer.CONFIRM_NO_BUTTON_IMG = imgs.confirmNoButton;
@@ -159,6 +176,9 @@ ShopDrawer.load = function (callback){
 				(ScreenProps.EXP_WIDTH - ShopDrawer.BODY_IMG.width) / 2;
 		ShopDrawer.BODY_Y = 
 				(ScreenProps.EXP_HEIGHT - ShopDrawer.BODY_IMG.height) / 2;
+
+		ShopDrawer.MONEY_X = ShopDrawer.BODY_X;
+		ShopDrawer.MONEY_Y = ShopDrawer.BODY_Y + ShopDrawer.BODY_IMG.height;
 
 		ShopDrawer.SPEECH_BUBBLE_TEXT_OFFSET_X = 
 				DialogDrawer.SPEECH_BUBBLE_CONSTRAINTS.offX;
@@ -581,6 +601,7 @@ ShopDrawer.drawShopOverlay = function(ctx) {
 			ShopDrawer._exitButton.draw(ctx, ShopDrawer.EXIT_BUTTON_X, 
 					ShopDrawer.EXIT_BUTTON_Y);
 		}
+		ShopDrawer._drawMoney(ctx);
 		ShopDrawer._drawSpeechBubble(ctx);
 	}
 };
@@ -892,6 +913,20 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 	// TODO: disable scroll bar if scrollable pixels is 0.
 	ShopDrawer._sellScrollBar.draw(ctx, x + ShopDrawer.SCROLLBAR_OFFSET_X, 
 			y + ShopDrawer.SCROLLBAR_OFFSET_Y);
+};
+
+
+ShopDrawer._drawMoney = function(ctx) {
+	ctx.drawImage(ShopDrawer.MONEY_BACK_IMG, ShopDrawer.MONEY_X, 
+			ShopDrawer.MONEY_Y);
+	var moneyStr = GameState.player.money.toString();
+	GlyphDrawer.drawText(ctx, ShopDrawer.MONEY_FONT, moneyStr, 
+			ShopDrawer.MONEY_X + ShopDrawer.MONEY_OFFSET_X + 
+					(ShopDrawer.MONEY_MAX_GLYPHS - moneyStr.length) * 
+					ShopDrawer.MONEY_DELTA_X, 
+			ShopDrawer.MONEY_Y + ShopDrawer.MONEY_OFFSET_Y, 
+			ShopDrawer.MONEY_BACK_IMG.width, 
+			ShopDrawer.MONEY_BACK_IMG.height);
 };
 
 

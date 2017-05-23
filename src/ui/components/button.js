@@ -23,8 +23,10 @@ var Button = function(sprite, isRounded, onClick, opt_isEnabled) {
 Button.SCALE_FACTOR = 1.1;
 
 Button.SCALE_INCREMENT = 0.05;
-// The alpha of the button when it is being clicked.
+// The opacity of the button when it is being clicked.
 Button.CLICKED_ALPHA = 0.75;
+// The opacity of a disabled button.
+Button.DISABLED_ALPHA = 0.3;
 
 
 // Returns if the mouse in within the bounds of the button.
@@ -45,8 +47,10 @@ Button.prototype.isInButton = function(relX, relY) {
 
 // Draws the Button at the specified coordinates.
 Button.prototype.draw = function(ctx, x, y) {
-	if (this.isClicked || !this.isEnabled) {
+	if (this.isClicked) {
 		ctx.globalAlpha = Button.CLICKED_ALPHA;
+	} else if (!this.isEnabled) {
+		ctx.globalAlpha = Button.DISABLED_ALPHA;
 	}
 	ctx.drawImage(this.sprite, x - (this.currScale - 1) * this.sprite.width / 2, 
 			y - (this.currScale - 1) * this.sprite.height / 2, 

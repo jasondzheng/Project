@@ -127,6 +127,8 @@ GameMap.prototype.deregisterItemDrop = function(dropInstance) {
 GameMap.prototype.registerPlayer = function(player) {
 	this.player = player;
 	player.containingMap = this;
+	// Modify player capabilities based on map.
+	InventoryTabDrawer.setMapDependencies(this);
 };
 
 

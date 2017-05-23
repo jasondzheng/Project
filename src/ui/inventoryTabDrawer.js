@@ -10,6 +10,7 @@ InventoryTabDrawer.PATH = '../assets/img/ui/tabView/';
 InventoryTabDrawer.BODY_IMG;
 InventoryTabDrawer.CELL_IMG;
 InventoryTabDrawer.DESCRIPTION_BACK;
+InventoryTabDrawer.MONEY_BACK_IMG;
 InventoryTabDrawer.TAB_ICON_IMGS;
 InventoryTabDrawer.TAB_BACK_IMGS;
 InventoryTabDrawer.SAVE_BUTTON_IMG;
@@ -26,6 +27,17 @@ InventoryTabDrawer.SCROLL_BAR_MAX_SCROLL = 1000;
 // Offsets to draw the icons wrt the tab back.
 InventoryTabDrawer.TAB_ICON_OFFSET_X;
 InventoryTabDrawer.TAB_ICON_OFFSET_Y;
+
+// Padding for the money glyphs WRT top left corner of money back.
+InventoryTabDrawer.MONEY_OFFSET_X = 10;
+InventoryTabDrawer.MONEY_OFFSET_Y = 10;
+InventoryTabDrawer.MONEY_DELTA_X = 12;
+
+// Max number of money glyphs.
+InventoryTabDrawer.MONEY_MAX_GLYPHS = 24;
+
+// The font to draw money in the inventory display.
+InventoryTabDrawer.MONEY_FONT = 'test';
 
 // Offsets used to draw inventory cells
 InventoryTabDrawer.CELL_EDGE_OFFSET = 12;
@@ -132,6 +144,7 @@ InventoryTabDrawer.init = function(callback) {
 		body: InventoryTabDrawer.PATH + 'body.png',
 		cell: InventoryTabDrawer.PATH + 'cell.png',
 		descriptionBack: InventoryTabDrawer.PATH + 'descriptionBack.png',
+		moneyBack: InventoryTabDrawer.PATH + 'moneyBack.png',
 		itemsIcon: InventoryTabDrawer.PATH + 'itemsIcon.png',
 		equipmentIcon: InventoryTabDrawer.PATH + 'equipmentIcon.png',
 		settingsIcon: InventoryTabDrawer.PATH + 'settingsIcon.png',
@@ -144,6 +157,7 @@ InventoryTabDrawer.init = function(callback) {
 		InventoryTabDrawer.BODY_IMG = imgs.body;
 		InventoryTabDrawer.CELL_IMG = imgs.cell;
 		InventoryTabDrawer.DESCRIPTION_BACK = imgs.descriptionBack;
+		InventoryTabDrawer.MONEY_BACK_IMG = imgs.moneyBack;
 		InventoryTabDrawer.TAB_ICON_IMGS = [
 			imgs.itemsIcon,
 			imgs.equipmentIcon,
@@ -164,16 +178,9 @@ InventoryTabDrawer.init = function(callback) {
 				});
 		InventoryTabDrawer._exitButton = 
 				new Button(InventoryTabDrawer.EXIT_BUTTON_IMG, true, function() {
-					OverworldScene.disableInput();
-					ScreenEffectDrawer.fadeOut(function() {
-						ScreenEffectDrawer.stayBlack();
-						CoreModule.switchScene(StartMenuScene);
-						OverworldScene.reset();
-						StartMenuScene.disableInput();
-						ScreenEffectDrawer.fadeIn(function() {
-							StartMenuScene.reenableInput();
-						});
-					});
+					ConfirmDialog.display(
+							'Exit? All progress after last save will be lost.', 
+							OverworldScene.exit);
 				});
 		// Settings buttons positions.
 		InventoryTabDrawer.SAVE_BUTTON_Y = 2 /* REPLACE WITH MEANIGFUL CONSTANT*/ * 
@@ -284,6 +291,12 @@ InventoryTabDrawer.setInventory = function(inventory) {
 InventoryTabDrawer.setEquippedItems = function(equippedItems) {
 	InventoryTabDrawer._equippedItems = equippedItems;
 };
+
+
+// Changes wha tht eplayer can do based on the map they are in.
+InventoryTabDrawer.setMapDependencies = function(map) {
+	InventoryTabDrawer._saveButton.isEnabled = map.type == GameMap.Types.SHOP;
+}
 
 // Initializes the volume scrollbars to match the current settings in the save 
 // data.
@@ -595,16 +608,22 @@ InventoryTabDrawer.draw = function(ctx) {
 				InventoryTabDrawer._y + 
 						InventoryTabDrawer.TAB_ICON_OFFSET_Y);
 	}
+	var bodyY = 
+			InventoryTabDrawer._y + InventoryTabDrawer.TAB_BACK_IMGS[0].height;
 	ctx.drawImage(InventoryTabDrawer.BODY_IMG, InventoryTabDrawer._x, 
-			InventoryTabDrawer._y + InventoryTabDrawer.TAB_BACK_IMGS[0].height);
+			bodyY);
 	switch (InventoryTabDrawer.currentTab) {
 		case InventoryTabDrawer.ITEMS_TAB:
 			InventoryTabDrawer._drawItems(ctx, InventoryTabDrawer._x, 
 					InventoryTabDrawer._y);
+			InventoryTabDrawer._drawMoney(ctx, InventoryTabDrawer._x, 
+					bodyY + InventoryTabDrawer.BODY_IMG.height);
 			break;
 		case InventoryTabDrawer.EQUIPMENT_TAB:
 			InventoryTabDrawer._drawEquipment(ctx, InventoryTabDrawer._x, 
 					InventoryTabDrawer._y);
+			InventoryTabDrawer._drawMoney(ctx, InventoryTabDrawer._x, 
+					bodyY + InventoryTabDrawer.BODY_IMG.height);
 			break;
 		case InventoryTabDrawer.SETTINGS_TAB:
 			InventoryTabDrawer._drawSettings(ctx, InventoryTabDrawer._x, 
@@ -648,6 +667,19 @@ InventoryTabDrawer._drawEquipment = function(ctx, x, y) {
 	InventoryTabDrawer._helperMaybeDrawDescription(ctx, x, y);
 	InventoryTabDrawer._helperMaybeDrawDraggedItem(ctx, x, y, 
 			true /* isEquips */);
+};
+
+
+InventoryTabDrawer._drawMoney = function(ctx, x, y) {
+	ctx.drawImage(InventoryTabDrawer.MONEY_BACK_IMG, x, y);
+	var moneyStr = GameState.player.money.toString();
+	GlyphDrawer.drawText(ctx, InventoryTabDrawer.MONEY_FONT, moneyStr, 
+			x + InventoryTabDrawer.MONEY_OFFSET_X + 
+					(InventoryTabDrawer.MONEY_MAX_GLYPHS - moneyStr.length) * 
+					InventoryTabDrawer.MONEY_DELTA_X, 
+			y + InventoryTabDrawer.MONEY_OFFSET_Y, 
+			InventoryTabDrawer.MONEY_BACK_IMG.width, 
+			InventoryTabDrawer.MONEY_BACK_IMG.height);
 };
 
 
