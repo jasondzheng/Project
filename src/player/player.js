@@ -214,6 +214,15 @@ Player.prototype.basicAttack = function() {
 };
 
 
+// Sets the animation and animation state of the player to BASIC_ATTACKING
+Player.prototype.DEBUGBasicSkill = function() {
+	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
+			DynamicMapEntity.getActionDirectionFamilyName(
+					Player.AnimationStates.BASIC_ATTACKING, this._direction)));
+	this._animationState = Player.AnimationStates.BASIC_ATTACKING;
+};
+
+
 // Checks if player is able to issue a talk command
 Player.prototype.canTalk = function() {
 	return this._animationState == Player.AnimationStates.IDLE || 

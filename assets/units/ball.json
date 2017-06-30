@@ -2,6 +2,8 @@
 	"name": "Ball",
 	"maxHp": 10,
 	"atk": 20,
+	"attackDistance": 1,
+	"speed": 3,
 	"behaviorPattern": "passiveBehavior",
 	"attackPattern": " ",
 	"stateMachine": {

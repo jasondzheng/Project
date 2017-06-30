@@ -38,7 +38,8 @@ KeyInputRouter.KeyMapping = {
  	ITEMS: 'i'.toUpperCase().charCodeAt(0),
  	EQUIPMENT: 'e'.toUpperCase().charCodeAt(0),
  	SETTINGS: 192,
- 	EXIT_TABS: 27
+ 	EXIT_TABS: 27,
+ 	DEBUG_SKILL: 16
 };
 
 
@@ -83,6 +84,11 @@ KeyInputRouter._helperHandlePlayerMovement = function() {
 						KeyTracker.KeyStatus.DOWN;
 		player.basicAttack();
 		PlayerAttackApplier.BasicCloseRangedAttack.applyAttack(player, 
+				keyPressWasDown);
+	} else if (KeyTracker.getValue(KeyInputRouter.KeyMapping.DEBUG_SKILL) == 
+			KeyTracker.KeyStatus.UP /*&& player.canTalk()*/) {
+		player.DEBUGBasicSkill();
+		PlayerAttackApplier.DEBUGBasicSkill.applyAttack(player, 
 				keyPressWasDown);
 	} else if (KeyTracker.getValue(KeyInputRouter.KeyMapping.TALK) == 
 			KeyTracker.KeyStatus.UP && player.canTalk()) {

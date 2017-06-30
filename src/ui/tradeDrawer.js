@@ -749,7 +749,8 @@ TradeDrawer._setHoverDialogMode = function() {
 // Helper to get the item slot index of a click location.
 TradeDrawer._helperGetTradeSlotFromClickCoords = function(
 		normalizedX, normalizedY) {
-	var cellDelta = TradeDrawer.CELL_POSITION_GAP;
+	var cellPositionGap = TradeDrawer.CELL_POSITION_GAP;
+	var cellDelta = cellPositionGap;
 	if (normalizedX < TradeDrawer.WINDOW_BODY_LEFT || 
 			normalizedX >= TradeDrawer.WINDOW_BODY_RIGHT || 
 			normalizedY < TradeDrawer.WINDOW_BODY_TOP || 
@@ -758,15 +759,15 @@ TradeDrawer._helperGetTradeSlotFromClickCoords = function(
 	}
 	var pixOffset = TradeDrawer._scrollBar.getScrollFraction() * 
 			TradeDrawer._scrollablePixels;
-	var cellPositionGap = 
-			TradeDrawer.CELL_IMG.height + TradeDrawer.CELL_SPACING;
 	var offset = pixOffset % cellPositionGap;
+	var numCellsOffset = Math.floor(pixOffset / cellPositionGap); 
 	normalizedX -= TradeDrawer.WINDOW_BODY_LEFT;
 	normalizedY += offset - TradeDrawer.WINDOW_BODY_TOP;
 	return (normalizedX % cellDelta >= TradeDrawer.CELL_IMG.width || 
 			normalizedY % cellDelta >= TradeDrawer.CELL_IMG.height) ? -1 : 
 			Math.floor(normalizedX / cellDelta) + 
-					Math.floor(normalizedY / cellDelta) * TradeDrawer.CELLS_PER_ROW;
+					(Math.floor(normalizedY / cellDelta) + numCellsOffset) * 
+					TradeDrawer.CELLS_PER_ROW;
 };
 
 

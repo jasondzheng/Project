@@ -1,4 +1,4 @@
-var DISABLE_CORRECTIVE_TICKING = false;
+var DISABLE_CORRECTIVE_TICKING = true;
 
 
 window.onload = function() {

@@ -9,7 +9,7 @@
 UnitActionManager.BasicAttackAction = function(uam, direction) {
 	this._uam = uam;
 	this._direction = direction;
-	this._attackRadius = 1;
+	this._attackRadius = uam.unit.unitEntity.attackDistance;
 	this._isCompleted = false;
 };
 

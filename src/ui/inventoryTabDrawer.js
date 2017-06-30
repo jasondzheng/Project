@@ -271,7 +271,8 @@ InventoryTabDrawer.init = function(callback) {
 		InventoryTabDrawer.SETTINGS_SCROLL_X = InventoryTabDrawer.WINDOW_BODY_LEFT +
 				ScrollBar.BUBBLE.width / 2;
 
-		InventoryTabDrawer.EQUIPPED_ITEMS_X = -InventoryTabDrawer.CELL_POSITION_GAP;
+		InventoryTabDrawer.EQUIPPED_ITEMS_X = InventoryTabDrawer.BODY_IMG.width + 
+				InventoryTabDrawer.CELL_POSITION_GAP;
 		InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS = [];
 		for (var i = 0; i < EquippedItems.NUM_SLOTS; i++) {
 			InventoryTabDrawer.EQUIPPED_ITEMS_Y_POSITIONS.push(
@@ -580,12 +581,23 @@ InventoryTabDrawer.onEndClick = function(x, y, isDoubleClick) {
 InventoryTabDrawer.onHover = function(x, y) {
 	var normalizedX = x - InventoryTabDrawer._x;
 	var normalizedY = y - InventoryTabDrawer._y;
-	if (InventoryTabDrawer._dragMode == null && 
-			(InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB || 
-			InventoryTabDrawer.currentTab == InventoryTabDrawer.EQUIPMENT_TAB)) {
-		InventoryTabDrawer._currentHoveredCellIndex = 
-				InventoryTabDrawer._helperGetInventorySlotFromClickCoords(normalizedX, 
-						normalizedY);
+	if (InventoryTabDrawer._dragMode == null) {
+		if (InventoryTabDrawer.currentTab == InventoryTabDrawer.ITEMS_TAB) {
+			InventoryTabDrawer._currentHoveredCellIndex = 
+					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(normalizedX, 
+							normalizedY);
+		} else if (InventoryTabDrawer.currentTab == 
+				InventoryTabDrawer.EQUIPMENT_TAB) {
+			var possibleItemIndex;
+			if ((possibleItemIndex = 
+					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(normalizedX, 
+							normalizedY) != -1)) {
+				InventoryTabDrawer._currentHoveredCellIndex = 
+						InventoryTabDrawer._helperEquippedItemSlotFromClickCoords(
+							normalizedX, normalizedY);
+			}
+			/*TODO handle selection for equipped items*/
+		}
 	} else {
 		InventoryTabDrawer._currentHoveredCellIndex = null;
 	}
@@ -928,7 +940,8 @@ InventoryTabDrawer._helperMaybeDrawDescription = function(ctx, x, y) {
 // Helper to get the item slot index of a click location.
 InventoryTabDrawer._helperGetInventorySlotFromClickCoords = function(
 		normalizedX, normalizedY) {
-	var cellXDelta = InventoryTabDrawer.CELL_POSITION_GAP;
+	var cellPositionGap = InventoryTabDrawer.CELL_POSITION_GAP;
+	var cellXDelta = cellPositionGap;
 	if (normalizedX < InventoryTabDrawer.WINDOW_BODY_LEFT || 
 			normalizedX >= InventoryTabDrawer.WINDOW_BODY_RIGHT || 
 			normalizedY < InventoryTabDrawer.WINDOW_BODY_TOP || 
@@ -936,18 +949,17 @@ InventoryTabDrawer._helperGetInventorySlotFromClickCoords = function(
 		return -1;
 	}
 	var pixOffset = InventoryTabDrawer._scrollBars[
-			InventoryTabDrawer.ITEMS_TAB].getScrollFraction() * 
+			InventoryTabDrawer.currentTab].getScrollFraction() * 
 			InventoryTabDrawer.SCROLLABLE_PIXELS;
-	var cellPositionGap = 
-			InventoryTabDrawer.CELL_IMG.height + InventoryTabDrawer.CELL_SPACING;
 	var offset = pixOffset % cellPositionGap;
+	var numCellsOffset = Math.floor(pixOffset / cellPositionGap);
 	normalizedX -= InventoryTabDrawer.WINDOW_BODY_LEFT;
 	normalizedY += offset - InventoryTabDrawer.WINDOW_BODY_TOP;
 	return (normalizedX % cellXDelta >= InventoryTabDrawer.CELL_IMG.width || 
 			normalizedY % cellXDelta >= InventoryTabDrawer.CELL_IMG.height) ? -1 : 
 			Math.floor(normalizedX / cellXDelta) + 
-					Math.floor(normalizedY / cellXDelta) * 
-							InventoryTabDrawer.CELLS_PER_ROW;
+					(Math.floor(normalizedY / cellXDelta) + numCellsOffset) * 
+					InventoryTabDrawer.CELLS_PER_ROW;
 };
 
 

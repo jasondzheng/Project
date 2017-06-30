@@ -642,12 +642,16 @@ ShopDrawer._drawSpeechBubble = function(ctx) {
 			textStr = ShopDrawer._welcomeMessageBuy;
 			break;
 		case ShopDrawer.DialogueModes.CONFIRM_SELL:
-			textStr = ShopDrawer._valuePicker.currValue + '\nI will buy that for ' + 
+			var quantityConfirmation = (ShopDrawer._valuePicker.max > 1) ? 
+					ShopDrawer._valuePicker.currValue + '\n' : '';
+			textStr = quantityConfirmation + 'I will buy that for ' + 
 					(Math.floor(ShopDrawer._selectedItem.price * Shop.SELL_FRACTION) * 
 							ShopDrawer._valuePicker.currValue);
 			break;
 		case ShopDrawer.DialogueModes.CONFIRM_BUY:
-			textStr = ShopDrawer._valuePicker.currValue + '\nThat will be ' + 
+			var quantityConfirmation = (ShopDrawer._valuePicker.max > 1) ? 
+					ShopDrawer._valuePicker.currValue + '\n' : '';
+			textStr = quantityConfirmation + 'That will be ' + 
 					(ShopDrawer._selectedItem.price * ShopDrawer._valuePicker.currValue);
 			break;
 		case ShopDrawer.DialogueModes.THANKS_SELL:
@@ -803,7 +807,8 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 					// Grayed-out image if cannot shop.
 					if (!Shop.canSellItemAtIndex(itemIndex, ShopDrawer._isEquipShop)) {
 						ctx.globalAlpha = ShopDrawer.CANNOT_SELL_OPACITY;
-					}					// Draw item
+					}					
+					// Draw item
 					var item = itemEntry.item
 					var cellX = x + ShopDrawer.CELL_EDGE_OFFSET + 
 							i * (ShopDrawer.CELL_POSITION_GAP);
@@ -826,7 +831,8 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 					}
 					// Draw price
 					clipY = -yPos;
-					var priceStr = (item.price).toString();
+					var priceStr = 
+							(Math.floor(item.price * Shop.SELL_FRACTION)).toString();
 					GlyphDrawer.drawCutText(ctx, ShopDrawer.PRICE_FONT, priceStr, 
 							cellX, drawY, 0, clipY, 
 							ShopDrawer.CELL_IMG.width, cellPartialHeight);
@@ -866,7 +872,8 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 								cellPartialHeight - ShopDrawer.QUANTITY_OFFSET_Y);
 					}
 					// Draw price
-					var priceStr = (item.price).toString();
+					var priceStr = 
+							(Math.floor(item.price * Shop.SELL_FRACTION)).toString();
 					GlyphDrawer.drawCutText(ctx, ShopDrawer.PRICE_FONT, priceStr, 
 							cellX, cellY, 0, 0, ShopDrawer.CELL_IMG.width, cellPartialHeight);
 					// Reset alpha
@@ -899,7 +906,8 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 								ShopDrawer.CELL_IMG.height - ShopDrawer.QUANTITY_OFFSET_Y);
 					}
 					// Draw price
-					var priceStr = (item.price).toString();
+					var priceStr = 
+							(Math.floor(item.price * Shop.SELL_FRACTION)).toString();
 					GlyphDrawer.drawText(ctx, ShopDrawer.PRICE_FONT, priceStr, cellX, 
 							cellY, ShopDrawer.CELL_IMG.width, ShopDrawer.CELL_IMG.height);
 					// Reset alpha
@@ -910,7 +918,6 @@ ShopDrawer._drawSellItemsInterface = function(ctx, x, y) {
 		}	
 	} 
 	// Draw Scroll Bar.
-	// TODO: disable scroll bar if scrollable pixels is 0.
 	ShopDrawer._sellScrollBar.draw(ctx, x + ShopDrawer.SCROLLBAR_OFFSET_X, 
 			y + ShopDrawer.SCROLLBAR_OFFSET_Y);
 };
@@ -1013,7 +1020,8 @@ ShopDrawer._maybeDrawDescription = function(ctx) {
 // Helper to get the item slot index of a click location.
 ShopDrawer._helperGetShopSlotFromClickCoords = function(
 		normalizedX, normalizedY) {
-	var cellDelta = ShopDrawer.CELL_POSITION_GAP;
+	var cellPositionGap = TradeDrawer.CELL_POSITION_GAP;
+	var cellDelta = cellPositionGap;
 	if (normalizedX < ShopDrawer.WINDOW_BODY_LEFT || 
 			normalizedX >= ShopDrawer.WINDOW_BODY_RIGHT || 
 			normalizedY < ShopDrawer.WINDOW_BODY_TOP || 
@@ -1027,12 +1035,14 @@ ShopDrawer._helperGetShopSlotFromClickCoords = function(
 	var cellPositionGap = 
 			ShopDrawer.CELL_IMG.height + ShopDrawer.CELL_SPACING;
 	var offset = pixOffset % cellPositionGap;
+	var numCellsOffset = Math.floor(pixOffset / cellPositionGap); 
 	normalizedX -= ShopDrawer.WINDOW_BODY_LEFT;
 	normalizedY += offset - ShopDrawer.WINDOW_BODY_TOP;
 	return (normalizedX % cellDelta >= ShopDrawer.CELL_IMG.width || 
 			normalizedY % cellDelta >= ShopDrawer.CELL_IMG.height) ? -1 : 
 			Math.floor(normalizedX / cellDelta) + 
-					Math.floor(normalizedY / cellDelta) * ShopDrawer.CELLS_PER_ROW;
+					(Math.floor(normalizedY / cellDelta) + numCellsOffset) * 
+					ShopDrawer.CELLS_PER_ROW;
 };
 
 

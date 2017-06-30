@@ -5,12 +5,14 @@
  */
 
 
-var UnitEntity = function(id, name, maxHp, atk, behaviorPattern, attackPattern, 
-		stateMachine, visualEntity, hpBarWidth) {
+var UnitEntity = function(id, name, maxHp, atk, attackDistance, speed, 
+		behaviorPattern, attackPattern, stateMachine, visualEntity, hpBarWidth) {
 	this.id = id;
 	this.name = name;
 	this.maxHp = maxHp;
 	this.atk = atk;
+	this.attackDistance = attackDistance;
+	this.speed = speed;
 	this.behaviorPattern = behaviorPattern;
 	this.attackPattern = attackPattern;
 	this.stateMachine = stateMachine;

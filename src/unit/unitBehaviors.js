@@ -29,8 +29,8 @@ UnitBehaviors.PassiveBehavior.getNextAction = function(uam) {
 	var distance = GridCalcs.getDistance(
 			unitVisualInstance.x - playerVisualInstance.x, 
 			unitVisualInstance.y - playerVisualInstance.y);
-	var unitSpeed = 3 /* TODO: get actual speed */;
-	var unitAttackDistance = 1 /* TODO: get actual attack distance */;
+	var unitSpeed = uam.unit.unitEntity.speed /* TODO: get actual speed */;
+	var unitAttackDistance = uam.unit.unitEntity.attackDistance /* TODO: get actual attack distance */;
 	// Increment by player width / 2
 	unitAttackDistance += 0.5;
 	if (distance < unitAttackDistance) {
@@ -76,7 +76,7 @@ UnitBehaviors._createAggressiveBehavior = function(minChaseDistance,
 		var distance = GridCalcs.getDistance(
 				unitVisualInstance.x - playerVisualInstance.x, 
 				unitVisualInstance.y - playerVisualInstance.y);
-		var unitSpeed = 3 /* TODO: get actual speed */;
+		var unitSpeed = uam.unit.unitEntity.speed /* TODO: get actual speed */;
 		if (distance < minChaseDistance) {
 			// conditions for attacking
 			if (UnitBeatManager.isInBeat() && 
