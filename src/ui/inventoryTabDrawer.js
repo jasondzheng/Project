@@ -593,7 +593,7 @@ InventoryTabDrawer.onHover = function(x, y) {
 					InventoryTabDrawer._helperGetInventorySlotFromClickCoords(normalizedX, 
 							normalizedY) != -1)) {
 				InventoryTabDrawer._currentHoveredCellIndex = 
-						InventoryTabDrawer._helperEquippedItemSlotFromClickCoords(
+						InventoryTabDrawer._helperGetEquippedItemSlotFromClickCoords(
 							normalizedX, normalizedY);
 			}
 			/*TODO handle selection for equipped items*/

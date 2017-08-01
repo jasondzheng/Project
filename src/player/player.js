@@ -3,9 +3,10 @@
  * for manipulating the character.
  */
 
-var Player = function(id, visualInstance, x, y, saveData) {
+var Player = function(id, visualInstance, sounds, x, y, saveData) {
 	this.id = id;
 	this.visualInstance = visualInstance;
+	this.sounds = sounds;
 	this.containingMap;
 	this._animationState = Player.AnimationStates.IDLE;
 	this._direction = Direction.DOWN;
@@ -207,6 +208,7 @@ Player.prototype.canBasicAttack = function() {
 
 // Sets the animation and animation state of the player to BASIC_ATTACKING
 Player.prototype.basicAttack = function() {
+	this.sounds[Player.AnimationStates.BASIC_ATTACKING].play();
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
 			DynamicMapEntity.getActionDirectionFamilyName(
 					Player.AnimationStates.BASIC_ATTACKING, this._direction)));
@@ -216,6 +218,7 @@ Player.prototype.basicAttack = function() {
 
 // Sets the animation and animation state of the player to BASIC_ATTACKING
 Player.prototype.DEBUGBasicSkill = function() {
+	this.sounds[Player.AnimationStates.BASIC_ATTACKING].play();
 	this.visualInstance.setAnimation(this.visualInstance.getAnimNameFromFamily(
 			DynamicMapEntity.getActionDirectionFamilyName(
 					Player.AnimationStates.BASIC_ATTACKING, this._direction)));

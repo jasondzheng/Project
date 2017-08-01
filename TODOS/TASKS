@@ -53,3 +53,5 @@ Maybe dont draw unit hp bars unless hit
  Longterm: multiple beatmaps per track
 
 put beatmarkers under the enemy based on closest to player
+
+JSWorkers for faster loading.

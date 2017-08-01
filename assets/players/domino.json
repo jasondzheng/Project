@@ -831,6 +831,9 @@
 		"collisionHeight": 1,
 		"isRounded": true,
 		"defaultUiTop": 0
-	}
+	},
+	"sounds": [
+		"basicAttack"
+	]
 }
 

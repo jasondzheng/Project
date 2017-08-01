@@ -5,14 +5,22 @@
 
 var PlayerLoader = {};
 
-PlayerLoader.PLAYER_PATH = '../assets/players/'
+PlayerLoader.PLAYER_PATH = '../assets/players/';
+PlayerLoader.SOUND_DIR = '../assets/sounds/players/';
 
 // Loads a player given its id
 PlayerLoader.load = function(id, callback) {
 	JSONLoader.load(PlayerLoader.PLAYER_PATH + id + '.json', function(data) {
 		DynamicMapEntityLoader.load(id, data.entity, 
 				DynamicMapEntityLoader.Types.PLAYER, function(entity) {
-			callback(new Player(id, new DynamicMapInstance(entity, 0, 0)));
+			var soundUrls = {};
+			for (var i = 0; i < data.sounds.length; i++) {
+				var soundName = data.sounds[i];
+				soundUrls[soundName] = PlayerLoader.SOUND_DIR + soundName + '.mp3';
+			}
+			SoundUtils.loadSounds(soundUrls, function(sounds) {
+				callback(new Player(id, new DynamicMapInstance(entity, 0, 0), sounds));
+			});	
 		});
 	});
 };
