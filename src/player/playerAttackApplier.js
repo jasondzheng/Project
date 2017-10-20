@@ -66,12 +66,16 @@ PlayerAttackApplier.DEBUGBasicSkill = {
 		var closestUnit = undefined;
 		var closestUnitDistance = Number.MAX_VALUE;
 		for (var i = 0; i < unitsInRange.length; i++) {
+			var unit = unitsInRange[i];
 			var distance = GridCalcs.getDistance(
-					unitsInRange[i].visualInstance.x - player.visualInstance.x,
-					unitsInRange[i].visualInstance.y - player.visualInstance.y);
-			if (distance < closestUnitDistance) {
+					unit.visualInstance.x - player.visualInstance.x,
+					unit.visualInstance.y - player.visualInstance.y);
+			if (distance < closestUnitDistance && Direction.getDirectionFromCoords(
+							unit.visualInstance.x - player.visualInstance.x, 
+							unit.visualInstance.y - player.visualInstance.y) == 
+					player._direction) {
 				closestUnitDistance = distance;
-				closestUnit = unitsInRange[i];
+				closestUnit = unit;
 			}
 		}
 		if (closestUnit != undefined) {

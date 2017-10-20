@@ -28,7 +28,7 @@
 		"price": 200,
 		"isKeyItem": false
 	},
-	"armor": {
+	"armor": 		{
 		"name": "Armor",
 		"description": "This is armor",
 		"isUseable": false,

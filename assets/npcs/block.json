@@ -27,7 +27,7 @@
 							// Swapping dialog to the other NPC portrait
 							DialogDrawer.showMessage(this._rsrc('portraitRight'), null, 
 									this._rsrc('portraitLeft'), null, DialogDrawer.BUBBLE_MEDIUM, 
-									false /* bubbleIsFromLeft */, 'agl agl agl agl\"');
+									false /* bubbleIsFromLeft */, 'agl agl agl agl');
 							DialogDrawer.endDialog(function() {
 								GS.setVar('blockIsAnnoyed', true);
 								callback();

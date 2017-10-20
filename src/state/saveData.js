@@ -4,7 +4,7 @@
  */
 
 var SaveData = function() {
-	this.saveProfiles = [];
+	this.saveProfiles = [undefined, undefined, undefined];
 	this._currProfileIndex = 0;
 	this.settingsInfo;
 };
@@ -35,7 +35,7 @@ SaveData.prototype.newGameInit = function(profileSlot, callback) {
 	// TODO: initialize proper new game states and variables.
 	var saveProfile = this.saveProfiles[profileSlot] = {
 		variables: null,
-		playerInfo: {}
+		playerInfo: Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG
 	};
 	JSONLoader.load(SaveData.GAME_VARS_PATH, function(data) {
 		saveProfile.variables = data;

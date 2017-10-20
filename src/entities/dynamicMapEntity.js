@@ -4,7 +4,7 @@
  * appearance of the entity based on which frame is being played.
  */
 
-var DynamicMapEntity = function(name, frames, animations, collisionWidth, 
+var DynamicMapEntity = function(name, frames, animations, collisionWidth,
 		collisionHeight, isRounded, defaultUiTop) {
 	this.name = name;
 	this.frames = frames;
@@ -180,7 +180,8 @@ DynamicMapInstance.prototype._helperGetCurrAnimation = function() {
 
 var DynamicMapEntityLoader = {};
 
-DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR = '../assets/img/';
+DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_IMG_DIR = '../assets/img/';
+
 
 // A list of possible DynamicMapEntity types possible. The value is a string
 // representation of the type.
@@ -194,24 +195,26 @@ DynamicMapEntityLoader.Types = {
 
 // Loads dynamic map entities from JSON
 DynamicMapEntityLoader.load = function(name, json, type, callback) {
-	var urls = {};
+	var imgUrls = {};
 	for (var frameName in json.frames) {
 		if (!json.frames.hasOwnProperty(frameName)) {
 			continue;
 		}
-		urls[json.frames[frameName].sprite] = 
-				DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_DIR + type + '/' + name + 
-				'/' + json.frames[frameName].sprite + '.png';
+		imgUrls[json.frames[frameName].sprite] = 
+				DynamicMapEntityLoader.DYNAMIC_MAP_ENTITY_IMG_DIR + type + '/' + name + 
+						'/' + json.frames[frameName].sprite + '.png';
 	}
-	ImgUtils.loadImages(urls, function(images) {
+
+	ImgUtils.loadImages(imgUrls, function(images) {
 		for (var frameName in json.frames) {
 			if (!json.frames.hasOwnProperty(frameName)) {
 				continue;
 			}
 			json.frames[frameName].sprite = images[json.frames[frameName].sprite];
 		}
+
 		var entity = new DynamicMapEntity(name, json.frames, json.animations, 
-				json.collisionWidth, json.collisionHeight, json.isRounded, 
+				json.collisionWidth, json.collisionHeight, json.isRounded,
 				json.defaultUiTop);
 		callback(entity);
 	});
