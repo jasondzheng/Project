@@ -1,5 +1,5 @@
 /**
- * Contains actions for the player
+ * Contains actions for the player; CURRENTLY NOT IN USE
  */
 
 var PlayerActionManager = function(player) {

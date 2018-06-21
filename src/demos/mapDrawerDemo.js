@@ -4,11 +4,11 @@ var DISABLE_CORRECTIVE_TICKING = true;
 window.onload = function() {
 	var deferrer = new CallbackDeferrer();
 	deferrer.addUnparametered(CoreModule.load);
-	deferrer.addUnparametered(StartMenuScene.init);
+	deferrer.addUnparametered(OverworldScene.init);
 	deferrer.after(function() {
 		initDrawLoop();
 		setupTickCycle();
-		CoreModule.switchScene(StartMenuScene);
+		CoreModule.switchScene(OverworldScene);
 	});
 };
 

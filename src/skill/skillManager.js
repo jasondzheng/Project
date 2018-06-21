@@ -1,19 +1,32 @@
-SkillManager = function() {
-	this.unit = unit;
-	this._actionQueue = [];
-	// TODO: Remove forced idle behavior
-	this._animationState;
-	this._collisionIgnoreList = [unit];
-	this._oldQueueLength = 0;
-	this._attackParity = true;
-};
-
-SkillManager.canUse = function(skill) {
-	if (this._actionQueue.length != 0) {
-		return false;
+SkillManager = function(user, skills) {
+	this._user = user;
+	this._skillsArray = skills;
+	this._skillsLookupTable = {};
+	for (var  i = 0; i < skills.length; i++) {
+		this._skillsLookupTable[skills[i].skilId] = skill[i];
 	}
-	return skill.canUse();
+	this._currentSkill = undefined;
 };
 
-SkillManager.use = function(skill) {
-}
+SkillManager.prototype.canUseSkill = function(skillId) {
+	return this.skillsLookupTable[skillId].canUse();
+};
+
+SkillManager.prototype.useSkill = function(skillId) {
+	this._currentSkill = this.skillsLookupTable[skillId];
+	return this.skillsLookupTable[skillId].onStart();
+};
+
+SkillManager.prototype.tick = function() {
+	for (var  i = 0; i < this._skillsArray.length; i++) {
+		this._skillsArray[i].passiveEffect();
+	}
+	if (this._currentSkill != undefined) {
+		if (this._currentSkill.isDone()) {
+			this._currentSkill.onEnd();
+			this._currentSkill = undefined;
+		} else {
+			this._currentSkill.tick();
+		}
+	}
+};
