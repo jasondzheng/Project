@@ -51,7 +51,7 @@ Player.DEFAULT_SAVE_DATA_DEBUG_DEBUG = {
 	money: 0,
 	inventory: null,
 	equippedItems: null,
-	containingMap: 'testShop',
+	containingMap: 'palletTown',
 	x: 2.5,
 	y: 2.5
 };
